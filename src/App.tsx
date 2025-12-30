@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import Layout from './components/Layout'
 import Home from './home/Home'
-import About from './components/About'
+import About from './about/About'
 import Services from './components/Services'
 import Ministries from './components/Ministries'
-import Contact from './components/Contact'
+import Contact from './contact/Contact'
 
 type PageType = 'home' | 'about' | 'services' | 'ministries' | 'contact'
 

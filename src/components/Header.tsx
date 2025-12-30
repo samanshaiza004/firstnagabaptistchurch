@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 const navigation = [
   { name: "Home", href: "#home" },
   { name: "About", href: "#about" },
-  { name: "Services", href: "#services" },
+  { name: "Events", href: "#services" },
   { name: "Contact", href: "#contact" },
 ]
 
@@ -38,9 +38,9 @@ export function Header() {
                 {item.name}
               </a>
             ))}
-            <Button asChild className="bg-primary hover:bg-primary/90">
+            {/*<Button asChild className="bg-primary hover:bg-primary/90">
               <a href="#contact">Join Us</a>
-            </Button>
+            </Button>*/}
           </div>
 
           {/* Mobile Menu Button */}

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Calendar, Clock, MapPin } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -59,7 +59,7 @@ const events = [
   },
 ]
 
-const Services: React.FC = () => {
+export default function EventsPage() {
   return (
     <>
       {/* Hero */}
@@ -177,7 +177,5 @@ const Services: React.FC = () => {
         </div>
       </section>
     </>
-  );
-};
-
-export default Services;
+  )
+}
