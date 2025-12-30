@@ -22,7 +22,7 @@ export function Header() {
               <span className="font-serif text-lg font-bold text-primary-foreground">F</span>
             </div>
             <div className="hidden sm:block">
-              <p className="font-serif text-lg font-semibold text-foreground">First Naga Baptist</p>
+              <p className="font-serif text-lg font-semibold text-foreground">First Naga Baptist Church</p>
               <p className="text-xs text-muted-foreground">DFW, Texas</p>
             </div>
           </a>
