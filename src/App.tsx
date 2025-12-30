@@ -1,34 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
+import Layout from './components/Layout'
+import Home from './components/Home'
+import About from './components/About'
+import Services from './components/Services'
+import Ministries from './components/Ministries'
+import Contact from './components/Contact'
 import './App.css'
 
+type PageType = 'home' | 'about' | 'services' | 'ministries' | 'contact'
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentPage, setCurrentPage] = useState<PageType>('home')
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'home':
+        return <Home />
+      case 'about':
+        return <About />
+      case 'services':
+        return <Services />
+      case 'ministries':
+        return <Ministries />
+      case 'contact':
+        return <Contact />
+      default:
+        return <Home />
+    }
+  }
+
+  // Handle navigation clicks
+  const handleNavigation = (pageId: string) => {
+    const pageMap: { [key: string]: PageType } = {
+      'home': 'home',
+      'about': 'about',
+      'services': 'services',
+      'ministries': 'ministries',
+      'contact': 'contact'
+    }
+    setCurrentPage(pageMap[pageId] || 'home')
+  }
+
+  // Override global click handler for navigation
+  useEffect(() => {
+    const handleClick = (e: Event) => {
+      const target = e.target as HTMLElement
+      if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
+        e.preventDefault()
+        const href = target.getAttribute('href')?.substring(1)
+        if (href) {
+          handleNavigation(href)
+        }
+      }
+    }
+
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
+  }, [])
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Layout>
+      {renderPage()}
+    </Layout>
   )
 }
 
