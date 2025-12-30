@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 lg:px-8 py-12 lg:py-16">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 pt-6">
           {/* About Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
