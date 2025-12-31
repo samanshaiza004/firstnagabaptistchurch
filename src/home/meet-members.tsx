@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 const teamMembers = [
   {
     name: "Pastor Mathingmi Hongchui",
-    role: "Pastor",
+    role: "Interim Pastor",
     category: "Pastoral Staff",
     bio: "An ordained theologian and chaplain who served as the first pastor of First Naga Baptist Church. Despite the challenges posed by the global pandemic during the church's early years, Pastor Lanu successfully guided the congregation through that tumultuous period, leading to steady and gradual growth.",
     image: "/pastor-portrait-professional-headshot-male.jpg",
@@ -18,14 +18,14 @@ const teamMembers = [
   },
   {
     name: "Kinoto",
-    role: "Music Director",
+    role: "Music Minister",
     category: "Ministry Staff",
     bio: "Brings his passion for worship and music ministry to life, creating an atmosphere of heartfelt praise. Kinoto leads the worship team, arranges music, and guides the church through a blend of hymns, contemporary worship, and traditional songs.",
     image: "/worship-leader-musician-portrait-male.jpg",
   },
   {
     name: "Ms. Katensangla Longchar",
-    role: "Sunday School Coordinator",
+    role: "Children Minister",
     category: "Ministry Staff",
     bio: "Coordinator of Children's Ministry with over six years of dedicated service to children. Currently pursuing a Master of Arts in Biblical Counseling at Southwestern Baptist Theological Seminary, passionate about leading children to Christ.",
     image: "/woman-teacher-professional-portrait-friendly.jpg",
@@ -42,6 +42,13 @@ const teamMembers = [
     role: "Deacon & Worship Leader",
     category: "Deacons",
     bio: "Pursuing a PhD in Worship Studies at Southwestern Baptist Theological Seminary. Married to Jihye Cheon from South Korea. Also leads worship at First Baptist Church, Everman and previously served as a youth pastor in India.",
+    image: "/worship-leader-man-portrait-professional.jpg",
+  },
+  {
+    name: "Hosea Riamei",
+    role: "Deacon",
+    category: "Deacons",
+    bio: "",
     image: "/worship-leader-man-portrait-professional.jpg",
   },
   {
