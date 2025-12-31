@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom"
 
 export function HeroSection() {
   return (
@@ -29,7 +30,7 @@ export function HeroSection() {
             size="lg"
             className="bg-secondary text-secondary-foreground hover:bg-secondary/90 font-semibold"
           >
-            <a href="#about">Learn Our Story</a>
+            <Link to="/about">Learn Our Story</Link>
           </Button>
           <Button
             asChild
@@ -37,7 +38,7 @@ export function HeroSection() {
             variant="outline"
             className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 bg-transparent"
           >
-            <a href="#contact">Join Us Sunday</a>
+            <Link to="/contact">Join Us Sunday</Link>
           </Button>
         </div>
       </div>

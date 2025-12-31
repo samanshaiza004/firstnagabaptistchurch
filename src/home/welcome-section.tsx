@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom"
 
 export function WelcomeSection() {
   return (
@@ -28,7 +29,7 @@ export function WelcomeSection() {
               </p>
             </div>
             <Button asChild className="mt-8 bg-primary hover:bg-primary/90">
-              <a href="#about">Read Full History</a>
+              <Link to="/about">Read Full History</Link>
             </Button>
           </div>
 

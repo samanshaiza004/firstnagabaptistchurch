@@ -1,6 +1,7 @@
 
 import { BookOpen, Users, Globe, HandHeart, Link2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom"
 
 const objectives = [
   {
@@ -73,7 +74,7 @@ export function ObjectivesDetail() {
 
         <div className="text-center mt-12">
           <Button asChild className="bg-primary hover:bg-primary/90">
-            <a href="#contact">Get Involved</a>
+            <Link to="/contact">Get Involved</Link>
           </Button>
         </div>
       </div>

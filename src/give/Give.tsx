@@ -1,7 +1,7 @@
 import React from 'react';
-import './Ministries.css';
+import './Give.css';
 
-const Ministries: React.FC = () => {
+const Give: React.FC = () => {
   return (
     <div className="ministries">
       <div className="ministries-hero">
@@ -106,4 +106,4 @@ const Ministries: React.FC = () => {
   );
 };
 
-export default Ministries;
+export default Give;

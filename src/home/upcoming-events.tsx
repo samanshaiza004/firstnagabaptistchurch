@@ -37,7 +37,7 @@ export function UpcomingEvents() {
             variant="outline"
             className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 w-fit bg-transparent"
           >
-            <a href="#events">
+            <a href="/events">
               View All Events
               <ArrowRight className="ml-2 h-4 w-4" />
             </a>
