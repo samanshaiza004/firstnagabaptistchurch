@@ -3,6 +3,13 @@ import { Badge } from "@/components/ui/badge"
 
 const teamMembers = [
   {
+    name: "Pastor Mathingmi Hongchui",
+    role: "Associate Pastor",
+    category: "Pastoral Staff",
+    bio: "An ordained theologian and chaplain who served as the first pastor of First Naga Baptist Church. Despite the challenges posed by the global pandemic during the church's early years, Pastor Lanu successfully guided the congregation through that tumultuous period, leading to steady and gradual growth.",
+    image: "/pastor-portrait-professional-headshot-male.jpg",
+  },
+  {
     name: "Pastor Lanu Lemtur",
     role: "Associate Pastor",
     category: "Pastoral Staff",
