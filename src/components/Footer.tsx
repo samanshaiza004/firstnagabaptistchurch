@@ -76,7 +76,7 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 pt-8 border-t border-primary-foreground/20 pb-4">
+        <div className="mt-12 pt-8 border-t border-primary-foreground/20">
           <p className="text-sm text-center text-primary-foreground/60">
             &copy; {new Date().getFullYear()} First Naga Baptist Church. All rights reserved.
           </p>

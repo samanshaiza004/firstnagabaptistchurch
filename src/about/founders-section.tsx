@@ -1,15 +1,18 @@
 const founders = [
+  "Mr. Lanutenzuk Lemtur",
+  "Mr. Kughaho Chishi",
+  "Mr. Ningreithan Shaiza",
+  "Mr. Kinoto Chishi",
+  "Mr. Nikoto Chishi",
+  "Mr. Chuingachan Shokwungnao",
+  "Mr. Mathingmi Hongchui",
+  "Mr. Mairising Damai",
     "Mr. Brian Kashung",
-    "Mr. Lanutenzuk Lemtur",
-    "Mr. Chuingachan Shokwungnao",
+    "Mrs. Themsing Wungsek",
+    "Mrs. Tosheni Chishi",
+    "Ms. Tolina Chishi",
     "Mr. Visedelie Seyie",
     "Mr. Theishing Konghar",
-    "Mr. Kughaho Chishi",
-    "Ms. Peraly Meyer",
-    "Mr. Mairising Damai",
-    "Mr. Ningreithan Shaiza",
-    "Ms. Abotoli Tuccu Sehgal",
-    "Mr. Kaiser Kiirii (Monsang)",
   ]
   
   export function FoundersSection() {
@@ -24,21 +27,34 @@ const founders = [
               America.
             </p>
           </div>
-  
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            {founders.map((founder) => (
-              <div
-                key={founder}
-                className="bg-card rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-shadow border border-border"
-              >
-                <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="font-serif text-lg font-semibold text-primary">
-                    {founder.charAt(founder.indexOf(" ") + 1)}
-                  </span>
+          <div className="max-w-4xl mx-auto mb-8">
+            <img
+              src="/foundingmembers.jpg"
+              alt="First Naga Baptist Church Founding Members"
+              className="w-full h-96 object-cover rounded-lg shadow-lg"
+            />
+            <p className="text-center text-sm text-muted-foreground mt-3 italic">
+              *13 founding members present in this photo. Mr. Theishing Konghar is taking the picture.
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            <h3 className="font-serif text-2xl font-bold text-center text-foreground mb-8">Founding Members (From right to left then left to right)</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {founders.map((founder) => (
+                <div
+                  key={founder}
+                  className="bg-card rounded-lg p-5 text-center shadow-sm hover:shadow-md transition-shadow border border-border"
+                >
+                  <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="font-serif text-xl font-semibold text-primary">
+                      {founder.charAt(founder.indexOf(" ") + 1)}
+                    </span>
+                  </div>
+                  <p className="text-sm font-medium text-card-foreground leading-relaxed">{founder}</p>
                 </div>
-                <p className="text-sm font-medium text-card-foreground">{founder}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>

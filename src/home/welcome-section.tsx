@@ -36,7 +36,7 @@ export function WelcomeSection() {
           {/* Image */}
           <div className="relative">
             <div className="aspect-[4/3] relative rounded-lg overflow-hidden shadow-xl">
-
+              <img src="/bgoption.webp" alt="Church Worship" className="w-full h-full object-cover" />
             </div>
             {/* Decorative accent */}
             <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-secondary/20 rounded-lg -z-10" />

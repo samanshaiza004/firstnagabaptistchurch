@@ -8,7 +8,7 @@ export function HeroSection() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('/church-worship-community-gathering-warm-light-stai.jpg')`,
+          backgroundImage: `url('/bgoption2.webp')`,
         }}
       >
         <div className="absolute inset-0 bg-primary/70" />

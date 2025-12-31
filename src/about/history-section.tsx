@@ -35,7 +35,8 @@ export function HistorySection() {
               <div className="lg:col-span-2">
                 <div className="relative aspect-[3/4] rounded-lg overflow-hidden shadow-xl bg-muted">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <p className="text-muted-foreground text-sm">Church worship image</p>
+                  <img src="/bgoption3.webp" alt="Church Worship" className="w-full h-full object-cover" />
+
                   </div>
                 </div>
               </div>
