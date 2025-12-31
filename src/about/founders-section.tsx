@@ -39,7 +39,7 @@ const founders = [
           </div>
 
           <div className="max-w-5xl mx-auto">
-            <h3 className="font-serif text-2xl font-bold text-center text-foreground mb-8">Founding Members (From right to left then left to right)</h3>
+            <h3 className="font-serif text-2xl font-bold text-center text-foreground mb-8">Founding Members (From top right to left then bottom left to right)</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {founders.map((founder) => (
                 <div
