@@ -17,18 +17,11 @@ const teamMembers = [
     image: "/pastor-portrait-professional-headshot-male.jpg",
   },
   {
-    name: "Kinoto",
-    role: "Music Minister",
-    category: "Ministry Staff",
-    bio: "Brings his passion for worship and music ministry to life, creating an atmosphere of heartfelt praise. Kinoto leads the worship team, arranges music, and guides the church through a blend of hymns, contemporary worship, and traditional songs.",
-    image: "/worship-leader-musician-portrait-male.jpg",
-  },
-  {
-    name: "Ms. Katensangla Longchar",
-    role: "Children Minister",
-    category: "Ministry Staff",
-    bio: "Coordinator of Children's Ministry with over six years of dedicated service to children. Currently pursuing a Master of Arts in Biblical Counseling at Southwestern Baptist Theological Seminary, passionate about leading children to Christ.",
-    image: "/woman-teacher-professional-portrait-friendly.jpg",
+    name: "Livi Yepthomi",
+    role: "Church Secretary",
+    category: "Administration",
+    bio: "With a passion for ministry and serving others, Livi supports the mission and vision of the church community. She is pursuing a Master of Arts in Christian Education at Southwestern Baptist Theological Seminary.",
+    image: "/professional-woman-secretary-portrait-friendly.jpg",
   },
   {
     name: "Mr. Theishing Konghar",
@@ -52,11 +45,18 @@ const teamMembers = [
     image: "/worship-leader-man-portrait-professional.jpg",
   },
   {
-    name: "Livi Yepthomi",
-    role: "Church Secretary",
-    category: "Administration",
-    bio: "With a passion for ministry and serving others, Livi supports the mission and vision of the church community. She is pursuing a Master of Arts in Christian Education at Southwestern Baptist Theological Seminary.",
-    image: "/professional-woman-secretary-portrait-friendly.jpg",
+    name: "Kinoto",
+    role: "Worship Leader",
+    category: "Ministry Staff",
+    bio: "Brings his passion for worship and music ministry to life, creating an atmosphere of heartfelt praise. Kinoto leads the worship team, arranges music, and guides the church through a blend of hymns, contemporary worship, and traditional songs.",
+    image: "/worship-leader-musician-portrait-male.jpg",
+  },
+  {
+    name: "Ms. Katensangla Longchar",
+    role: "Children Ministry Leader",
+    category: "Ministry Staff",
+    bio: "Coordinator of Children's Ministry with over six years of dedicated service to children. Currently pursuing a Master of Arts in Biblical Counseling at Southwestern Baptist Theological Seminary, passionate about leading children to Christ.",
+    image: "/woman-teacher-professional-portrait-friendly.jpg",
   },
   {
     name: "Hokali Kumar",
@@ -82,7 +82,7 @@ export function MeetTheTeam() {
         </div>
 
         {/* Team Members Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mb-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-8 mb-12">
           {teamMembers.map((member) => (
             <Card
               key={member.name}

@@ -6,7 +6,7 @@ const events = [
   {
     title: "Sunday Worship Service",
     date: "Every Sunday",
-    time: "2:00 PM",
+    time: "3:00 PM",
     location: "Burton Hill Baptist Church",
     description:
       "Join us for our weekly worship gathering with praise, prayer, Scripture reading, and teaching from God's Word.",
@@ -40,8 +40,17 @@ const events = [
     recurring: true,
   },
   {
-    title: "Annual Thanksgiving Celebration",
-    date: "November",
+    title: "Church Anniversary Celebration",
+    date: "January 4th",
+    time: "3:00 PM",
+    location: "Burton Hill Baptist Church",
+    description:
+      "Celebrating the establishment of First Naga Baptist Church with special worship, guest speakers, and remembrance of God's faithfulness.",
+    recurring: false,
+  },
+  {
+    title: "Cultural Fundraising Day",
+    date: "August 9th",
     time: "TBA",
     location: "Burton Hill Baptist Church",
     description:
@@ -49,14 +58,15 @@ const events = [
     recurring: false,
   },
   {
-    title: "Church Anniversary Celebration",
-    date: "November 4th",
-    time: "2:00 PM",
+    title: "Christmas Celebration",
+    date: "December 25th",
+    time: "TBA",
     location: "Burton Hill Baptist Church",
     description:
-      "Celebrating the establishment of First Naga Baptist Church with special worship, guest speakers, and remembrance of God's faithfulness.",
+      "Our annual gathering to give thanks to God, share testimonies of His faithfulness, and enjoy fellowship over a traditional meal.",
     recurring: false,
   },
+  
 ]
 
 export default function EventsPage() {

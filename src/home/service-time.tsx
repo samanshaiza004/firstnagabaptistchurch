@@ -4,14 +4,14 @@ import { Card, CardContent } from "@/components/ui/card"
 const services = [
   {
     title: "Sunday Worship",
-    time: "2:00 PM",
+    time: "3:00 PM",
     description: "Join us for our main worship service with praise, prayer, and teaching.",
     icon: Clock,
   },
   {
     title: "Location",
-    time: "Burton Hill Baptist Church",
-    description: "Fort Worth, TX — We are grateful to Burton Hill Baptist Church for hosting us.",
+    time: "308 Burton Hill Rd, Westworth Village, TX 76114",
+    description: "We are grateful to Burton Hill Baptist Church for hosting us.",
     icon: MapPin,
   },
   {

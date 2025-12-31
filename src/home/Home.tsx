@@ -10,10 +10,12 @@ const Home: React.FC = () => {
   return (
     <div className="home">
       <HeroSection />
-      <WelcomeSection />
       <ServiceTimes />
-      <ObjectivesSection />
       <MeetTheTeam />
+      
+      
+      <ObjectivesSection />
+      <WelcomeSection />
       <UpcomingEvents />
     </div>
   );

@@ -6,7 +6,7 @@ const events = [
   {
     title: "Sunday Worship Service",
     date: "Every Sunday",
-    time: "2:00 PM",
+    time: "3:00 PM",
     description: "Join us for our weekly worship gathering with praise, prayer, and the Word.",
   },
   {
