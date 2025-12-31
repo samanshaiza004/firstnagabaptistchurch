@@ -49,12 +49,29 @@ const events = [
     recurring: false,
   },
   {
-    title: "Cultural Fundraising Day",
+    title: "World Sunday School Day",
+    date: "June/July",
+    time: "TBA",
+location: "Burton Hill Baptist Church",
+description: "Celebration of Sunday School Day",
+recurring: false,
+  },
+  {
+    title: "Fundraising Cultural Event",
     date: "August 9th",
     time: "TBA",
     location: "Burton Hill Baptist Church",
     description:
       "Our annual gathering to give thanks to God, share testimonies of His faithfulness, and enjoy fellowship over a traditional meal.",
+    recurring: false,
+  },
+  {
+    title: "Church-wide Seminar",
+    date: "October",
+    time: "TBA",
+    location: "TBA",
+    description:
+      "",
     recurring: false,
   },
   {
@@ -66,6 +83,16 @@ const events = [
       "Our annual gathering to give thanks to God, share testimonies of His faithfulness, and enjoy fellowship over a traditional meal.",
     recurring: false,
   },
+  {
+    title: "Mission Sunday",
+    date: "First Sunday of December",
+    time: "TBA",
+    location: "Burton Hill Baptist Church",
+    description:
+      "Focus areas: Refugees, Homeless, Senior Citizens.",
+    recurring: false,
+  },
+  
   
 ]
 
