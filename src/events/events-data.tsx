@@ -9,30 +9,21 @@ export const events = [
     recurring: true,
   },
   {
-    title: "Monthly Fellowship Lunch",
-    date: "First Sunday of Each Month",
+    title: "Sunday Fellowship and Refreshments",
+    date: "Every Sunday",
     time: "After Service",
     location: "Fellowship Hall",
     description:
-      "A time for the community to share a meal together, strengthen bonds of fellowship, and welcome newcomers to our church family.",
+      "A time for the community to share a meal and strengthen bonds of fellowship.",
     recurring: true,
   },
   {
-    title: "Wednesday Prayer Meeting",
-    date: "Every Wednesday",
-    time: "7:00 PM",
+    title: "Monthly Prayer and Fasting",
+    date: "Last Satuday of the Month",
+    time: "10:00 AM",
     location: "Online / In-Person",
     description:
-      "Gather together for corporate prayer, intercession for our community, and spiritual encouragement throughout the week.",
-    recurring: true,
-  },
-  {
-    title: "Youth Fellowship",
-    date: "Second Saturday of Each Month",
-    time: "4:00 PM",
-    location: "Burton Hill Baptist Church",
-    description:
-      "A special gathering for young people to connect, study Scripture together, and build lasting friendships in Christ.",
+      "Gather together for corporate prayer, testimony, reflection, and intercession for our community.",
     recurring: true,
   },
   {
