@@ -24,7 +24,7 @@ const services = [
 
 export function ServiceTimes() {
   return (
-    <section className="py-16 lg:py-24 bg-muted">
+    <section className="py-16 lg:py-24">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-12">
           <p className="text-secondary font-medium mb-2 tracking-wide uppercase text-sm">Join Us</p>

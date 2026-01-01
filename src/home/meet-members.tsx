@@ -7,7 +7,7 @@ const teamMembers = [
     role: "Interim Pastor",
     category: "Pastoral Staff",
     bio: "An ordained theologian and chaplain who served as the first pastor of First Naga Baptist Church. Despite the challenges posed by the global pandemic during the church's early years, Pastor Lanu successfully guided the congregation through that tumultuous period, leading to steady and gradual growth.",
-    image: "/mathingmi.JPG",
+    image: "/mathingmi2.JPEG",
   },
   {
     name: "Pastor Lanu Lemtur",
