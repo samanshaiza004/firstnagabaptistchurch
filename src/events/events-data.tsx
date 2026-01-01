@@ -19,25 +19,62 @@ export const events = [
   },
   {
     title: "Monthly Prayer and Fasting",
-    date: "Last Satuday of the Month",
+    date: "Last Saturday of the Month",
     time: "10:00 AM",
     location: "Online / In-Person",
     description:
       "Gather together for corporate prayer, testimony, reflection, and intercession for our community.",
     recurring: true,
   },
+
   {
-    title: "Church Anniversary Celebration",
+    title: "Anniversary and GBM",
     date: "January 4th",
     time: "3:00 PM",
     location: "Burton Hill Baptist Church",
     description:
-      "Celebrating the establishment of First Naga Baptist Church with special worship, guest speakers, and remembrance of God's faithfulness.",
+      "Celebrating the establishment of First Naga Baptist Church, followed by our GBM (General Body Meeting).",
     recurring: false,
   },
   {
-    title: "World Sunday School Day",
-    date: "June/July",
+    title: "Fellowship with Baylor Students",
+    date: "TBA",
+    time: "TBA",
+    location: "TBA",
+    description:
+      "A time of fellowship and encouragement with Baylor students.",
+    recurring: false,
+  },
+  {
+    title: "Outreach Mission Trip",
+    date: "TBA",
+    time: "TBA",
+    location: "Houston & Florida",
+    description:
+      "Outreach mission trip for evangelism, service, and partnership with local ministries.",
+    recurring: false,
+  },
+  {
+    title: "Church Picnic",
+    date: "May 9th",
+    time: "TBA",
+    location: "TBA",
+    description:
+      "A church-wide picnic for fellowship, food, and fun with the whole church family.",
+    recurring: false,
+  },
+  {
+    title: "Half Yearly GBM",
+    date: "Mid-Year (TBA)",
+    time: "TBA",
+    location: "TBA",
+    description:
+      "Our half-yearly GBM (General Body Meeting) to review ministry updates and plans.",
+    recurring: false,
+  },
+  {
+    title: "World Sunday School Celebration",
+    date: "June",
     time: "TBA",
     location: "Burton Hill Baptist Church",
     description: "Celebration of Sunday School Day",
@@ -53,21 +90,20 @@ export const events = [
     recurring: false,
   },
   {
-    title: "Church-wide Seminar",
-    date: "October",
+    title: "Church-wide Seminar (Fall Break)",
+    date: "Fall Break (TBA)",
     time: "TBA",
     location: "TBA",
-    description:
-      "",
+    description: "",
     recurring: false,
   },
   {
-    title: "Christmas Celebration",
+    title: "Christmas Celebration with DFW Nagas",
     date: "December 25th",
     time: "TBA",
     location: "Burton Hill Baptist Church",
     description:
-      "Our annual gathering to give thanks to God, share testimonies of His faithfulness, and enjoy fellowship over a traditional meal.",
+      "Christmas celebration with all DFW Nagas for worship, fellowship, and thanksgiving.",
     recurring: false,
   },
   {
@@ -75,8 +111,33 @@ export const events = [
     date: "First Sunday of December",
     time: "TBA",
     location: "Burton Hill Baptist Church",
+    description: "Focus areas: Refugees, Homeless, Senior Citizens.",
+    recurring: false,
+  },
+  {
+    title: "Lord’s Supper",
+    date: "Quarterly",
+    time: "During Service",
+    location: "Burton Hill Baptist Church",
+    description: "A quarterly observance of the Lord’s Supper as a church family.",
+    recurring: false,
+  },
+  {
+    title: "Executive Meets",
+    date: "Quarterly",
+    time: "TBA",
+    location: "TBA",
     description:
-      "Focus areas: Refugees, Homeless, Senior Citizens.",
+      "Quarterly executive meeting for planning, coordination, and ministry leadership updates.",
+    recurring: false,
+  },
+  {
+    title: "Missions Team Meet",
+    date: "Bimonthly",
+    time: "TBA",
+    location: "Online / In-Person",
+    description:
+      "Bimonthly missions team meeting for planning, prayer, and preparation.",
     recurring: false,
   },
 ];
