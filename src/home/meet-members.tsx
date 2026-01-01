@@ -12,13 +12,6 @@ const teamMembers = [
     image: "/mathingmi2.JPEG",
   },
   {
-    name: "Pastor Lanu Lemtur",
-    role: "Mission Pastor",
-    category: "Pastoral Staff",
-    bio: "An ordained theologian and chaplain who served as the first pastor of First Naga Baptist Church. Despite the challenges posed by the global pandemic during the church's early years, Pastor Lanu successfully guided the congregation through that tumultuous period, leading to steady and gradual growth.",
-    image: "/lanu.JPG",
-  },
-  {
     name: "Livi Yepthomi",
     role: "Church Secretary",
     category: "Administration",
@@ -26,39 +19,33 @@ const teamMembers = [
     image: "/Livi.jpg",
   },
   {
+    name: "Pastor Lanu Lemtur",
+    role: "Mission Pastor",
+    category: "Missions Team",
+    bio: "An ordained theologian and chaplain who served as the first pastor of First Naga Baptist Church. Despite the challenges posed by the global pandemic during the church's early years, Pastor Lanu successfully guided the congregation through that tumultuous period, leading to steady and gradual growth.",
+    image: "/lanu.JPG",
+  },
+  
+  {
     name: "Mr. Theishing Konghar",
     role: "Deacon",
-    category: "Deacons",
+    category: "Deacon",
     bio: "Pursuing his PhD in World Christian Studies at Southwestern Baptist Theological Seminary, Texas. Married to Maya, and they have a daughter named Phasun.",
     image: "/theishing.jpg",
   },
   {
     name: "Joseph Ngulie",
     role: "Deacon & Worship Leader",
-    category: "Deacons",
+    category: "Deacon",
     bio: "Pursuing a PhD in Worship Studies at Southwestern Baptist Theological Seminary. Married to Jihye Cheon from South Korea. Also leads worship at First Baptist Church, Everman and previously served as a youth pastor in India.",
     image: "/joseph.JPG",
   },
   {
     name: "Hosea Riamei",
     role: "Deacon",
-    category: "Deacons",
+    category: "Deacon",
     bio: "Pursuing a PhD in Worship Studies at Southwestern Baptist Theological Seminary. Married to Jihye Cheon from South Korea. Also leads worship at First Baptist Church, Everman and previously served as a youth pastor in India.",
     image: "/hosea.JPG",
-  },
-  {
-    name: "Kinoto",
-    role: "Worship Leader",
-    category: "Ministry Staff",
-    bio: "Brings his passion for worship and music ministry to life, creating an atmosphere of heartfelt praise. Kinoto leads the worship team, arranges music, and guides the church through a blend of hymns, contemporary worship, and traditional songs.",
-    image: "/kinoto.jpg",
-  },
-  {
-    name: "Ms. Katensangla Longchar",
-    role: "Children Ministry Leader",
-    category: "Ministry Staff",
-    bio: "Coordinator of Children's Ministry with over six years of dedicated service to children. Currently pursuing a Master of Arts in Biblical Counseling at Southwestern Baptist Theological Seminary, passionate about leading children to Christ.",
-    image: "/Katensangla.jpg",
   },
   {
     name: "Hokali Kumar",
@@ -67,59 +54,86 @@ const teamMembers = [
     bio: "Originally from Nagaland, now married to Atul Kumar from North India. They have made Texas their home with their two daughters, Rhea and Nilivi. Passionate about serving the church and hosting events.",
     image: "/kumar.JPG",
   },
+  {
+    name: "Mr. Kinoto Chishi",
+    role: "Worship Leader",
+    category: "Ministry Team",
+    bio: "Brings his passion for worship and music ministry to life, creating an atmosphere of heartfelt praise. Kinoto leads the worship team, arranges music, and guides the church through a blend of hymns, contemporary worship, and traditional songs.",
+    image: "/kinoto.jpg",
+  },
+  {
+    name: "Ms. Katensangla Longchar",
+    role: "Children Ministry Leader",
+    category: "Ministry Team",
+    bio: "Coordinator of Children's Ministry with over six years of dedicated service to children. Currently pursuing a Master of Arts in Biblical Counseling at Southwestern Baptist Theological Seminary, passionate about leading children to Christ.",
+    image: "/Katensangla.jpg",
+  },
+  
 ];
 
 const trustees = [
   { name: "Peraly Sam Meyer", image: "/peraly.jpg" },
-  { name: "Chuingachan Showungnao", image: "/wungseks.jpeg" },
   { name: "Kughaho Chishi", image: "/chishis.JPG" },
+  { name: "Chuingachan Showungnao", image: "/wungseks.jpeg" },
+  
 ];
 
 function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <Card
-      className="overflow-hidden group hover:shadow-lg transition-shadow duration-300 bg-card cursor-pointer"
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
-      onClick={() => setIsExpanded(!isExpanded)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault()
-          setIsExpanded(!isExpanded)
-        }
-      }}
-      aria-expanded={isExpanded}
-    >
-      <div className="aspect-square overflow-hidden bg-muted">
-        <img
-          src={member.image || "/placeholder.svg"}
-          alt={`Portrait of ${member.name}`}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-      <CardContent className="p-5">
-        <Badge variant="secondary" className="mb-2 text-xs font-normal">
-          {member.category}
-        </Badge>
-        <h3 className="font-serif text-lg font-semibold text-foreground mb-1">{member.name}</h3>
-        <p className="text-secondary font-medium text-sm mb-3">{member.role}</p>
-
-        <div
-          className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? "max-h-96" : "max-h-20"}`}
-        >
-          <p className="text-muted-foreground text-sm leading-relaxed">{member.bio}</p>
+    <div className="relative h-[600px] sm:h-[500px]">
+      <Card
+        className={`
+          overflow-hidden group transition-all duration-300 ease-in-out bg-card cursor-pointer
+          absolute top-0 left-0 right-0
+          ${isExpanded ? "shadow-2xl z-50" : "shadow-sm hover:shadow-lg z-10"}
+        `}
+        onMouseEnter={() => setIsExpanded(true)}
+        onMouseLeave={() => setIsExpanded(false)}
+        onClick={() => setIsExpanded(!isExpanded)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault()
+            setIsExpanded(!isExpanded)
+          }
+        }}
+        aria-expanded={isExpanded}
+      >
+        <div className="aspect-square overflow-hidden bg-muted">
+          <img
+            src={member.image || "/placeholder.svg"}
+            alt={`Portrait of ${member.name}`}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
         </div>
+        <CardContent className="p-5">
+          <Badge variant="secondary" className="mb-2 text-xs font-normal">
+            {member.category}
+          </Badge>
+          <h3 className="font-serif text-lg font-semibold text-foreground mb-1">{member.name}</h3>
+          <p className="text-secondary font-medium text-sm mb-3">{member.role}</p>
 
-        <div className="flex items-center justify-center mt-3 text-muted-foreground">
-          <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
-          <span className="text-xs ml-1">{isExpanded ? "Less" : "More"}</span>
-        </div>
-      </CardContent>
-    </Card>
+          <div className="relative">
+            <div
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? "max-h-96" : "max-h-12"}`}
+            >
+              <p className="text-muted-foreground text-sm leading-relaxed">{member.bio}</p>
+            </div>
+            {!isExpanded && (
+              <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-card to-transparent pointer-events-none" />
+            )}
+          </div>
+
+          <div className="flex items-center justify-center mt-3 text-muted-foreground">
+            <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
+            <span className="text-xs ml-1">{isExpanded ? "Less" : "More"}</span>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
