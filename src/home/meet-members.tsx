@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
 const teamMembers = [
@@ -80,34 +80,51 @@ const trustees = [
 
 function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768
+      setIsMobile(mobile)
+      if (mobile) {
+        setIsExpanded(true)
+      }
+    }
+
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
   
   return (
     <div className="relative h-[750px] sm:h-[550px] lg:h-[620px] md:h-[690px]">
       <Card
         className={`
           overflow-hidden group transition-all duration-300 ease-in-out bg-card
-          absolute top-0 left-0 right-0
-          ${isExpanded ? "shadow-2xl z-50" : "shadow-sm hover:shadow-lg z-10"}
+          ${
+            isMobile
+              ? "relative shadow-sm"
+              : `absolute top-0 left-0 right-0 cursor-pointer ${isExpanded ? "shadow-2xl z-50" : "shadow-sm hover:shadow-lg z-10"}`
+          }
         `}
-        onMouseEnter={() => setIsExpanded(true)}
-        onMouseLeave={() => setIsExpanded(false)}
-        onClick={() => setIsExpanded(!isExpanded)}
-        role="button"
-        tabIndex={0}
+        onMouseEnter={() => !isMobile && setIsExpanded(true)}
+        onMouseLeave={() => !isMobile && setIsExpanded(false)}
+        onClick={() => !isMobile && setIsExpanded(!isExpanded)}
+        role={isMobile ? undefined : "button"}
+        tabIndex={isMobile ? undefined : 0}
         onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          if (!isMobile && (e.key === "Enter" || e.key === " ")) {
             e.preventDefault()
             setIsExpanded(!isExpanded)
           }
         }}
-        aria-expanded={isExpanded}
+        aria-expanded={isMobile ? undefined : isExpanded}
       >
         <div className="aspect-square overflow-hidden bg-muted">
           <img
             src={member.image || "/placeholder.svg"}
             alt={`Portrait of ${member.name}`}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className={`w-full h-full object-cover transition-transform duration-300 ${!isMobile ? "group-hover:scale-105" : ""}`}
           />
         </div>
         <CardContent className="p-5">
@@ -128,10 +145,12 @@ function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
             )}
           </div>
 
-          <div className="flex items-center justify-center mt-3 text-muted-foreground">
-            <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
-            <span className="text-xs ml-1">{isExpanded ? "Less" : "More"}</span>
-          </div>
+          {!isMobile && (
+            <div className="flex items-center justify-center mt-3 text-muted-foreground">
+              <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
+              <span className="text-xs ml-1">{isExpanded ? "Less" : "More"}</span>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
