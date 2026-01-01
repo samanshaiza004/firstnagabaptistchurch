@@ -80,9 +80,10 @@ const trustees = [
 
 function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
   const [isExpanded, setIsExpanded] = useState(false);
-
+  
+  
   return (
-    <div className="relative h-[600px] sm:h-[500px]">
+    <div className="relative h-[750px] sm:h-[550px] lg:h-[620px] md:h-[690px]">
       <Card
         className={`
           overflow-hidden group transition-all duration-300 ease-in-out bg-card
