@@ -1,5 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 
 const teamMembers = [
   {
@@ -73,6 +75,54 @@ const trustees = [
   { name: "Kughaho Chishi", image: "/chishis.JPG" },
 ];
 
+function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <Card
+      className="overflow-hidden group hover:shadow-lg transition-shadow duration-300 bg-card cursor-pointer"
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
+      onClick={() => setIsExpanded(!isExpanded)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault()
+          setIsExpanded(!isExpanded)
+        }
+      }}
+      aria-expanded={isExpanded}
+    >
+      <div className="aspect-square overflow-hidden bg-muted">
+        <img
+          src={member.image || "/placeholder.svg"}
+          alt={`Portrait of ${member.name}`}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+      <CardContent className="p-5">
+        <Badge variant="secondary" className="mb-2 text-xs font-normal">
+          {member.category}
+        </Badge>
+        <h3 className="font-serif text-lg font-semibold text-foreground mb-1">{member.name}</h3>
+        <p className="text-secondary font-medium text-sm mb-3">{member.role}</p>
+
+        <div
+          className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? "max-h-96" : "max-h-20"}`}
+        >
+          <p className="text-muted-foreground text-sm leading-relaxed">{member.bio}</p>
+        </div>
+
+        <div className="flex items-center justify-center mt-3 text-muted-foreground">
+          <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
+          <span className="text-xs ml-1">{isExpanded ? "Less" : "More"}</span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function MeetTheTeam() {
   return (
     <section className="py-16 lg:py-24 bg-muted/30">
@@ -93,37 +143,7 @@ export function MeetTheTeam() {
         {/* Team Members Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-8 mb-12">
           {teamMembers.map((member) => (
-            <Card
-              key={member.name}
-              tabIndex={0}
-              className="overflow-hidden group hover:shadow-lg transition-shadow duration-300 bg-card"
-            >
-              <div className="aspect-square overflow-hidden bg-muted">
-                <img
-                  src={member.image || "/placeholder.svg"}
-                  alt={`Portrait of ${member.name}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <CardContent className="p-5 flex flex-col min-h-[220px]">
-                <Badge variant="secondary" className="mb-2 text-xs font-normal">
-                  {member.category}
-                </Badge>
-                <h3 className="font-serif text-lg font-semibold text-foreground mb-1">
-                  {member.name}
-                </h3>
-                <p className="text-secondary font-medium text-sm mb-3">
-                  {member.role}
-                </p>
-                <div className="flex-1 min-h-0">
-                  <div className="text-muted-foreground text-sm leading-relaxed overflow-hidden transition-[max-height] duration-300 ease-in-out max-h-20 group-hover:max-h-full group-focus:max-h-full group-hover:overflow-y-auto group-focus:overflow-y-auto">
-                    <p className="line-clamp-4 group-hover:line-clamp-none group-focus:line-clamp-none">
-                      {member.bio}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <TeamMemberCard member={member} />
           ))}
         </div>
 
