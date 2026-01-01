@@ -74,7 +74,7 @@ const teamMembers = [
 const trustees = [
   { name: "Peraly Sam Meyer", image: "/peraly.jpg" },
   { name: "Kughaho Chishi", image: "/chishis.JPG" },
-  { name: "Chuingachan Showungnao", image: "/wungseks.jpeg" },
+  { name: "Chuingachan Showungnao", image: "/achan.jpg" },
   
 ];
 
