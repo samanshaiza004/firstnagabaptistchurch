@@ -19,7 +19,7 @@ const events = [
     title: "Monthly Prayer and Fasting",
     date: "Last Saturday of the month",
     time: "10:00 AM",
-    description: "Gather together for corporate prayer and intercession for our community.",
+    description: "Gather together for corporate prayer, testimony, reflection, and intercession for our community.",
   },
 ]
 
