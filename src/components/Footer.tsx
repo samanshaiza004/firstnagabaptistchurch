@@ -1,10 +1,10 @@
 import { MapPin, Mail, Clock } from "lucide-react";
 
 const quickLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About Us", href: "#about" },
-  { name: "Events", href: "#services" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "/" },
+  { name: "About Us", href: "/about" },
+  { name: "Events", href: "/events" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export function Footer() {

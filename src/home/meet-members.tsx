@@ -85,7 +85,7 @@ function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
     <div className="relative h-[600px] sm:h-[500px]">
       <Card
         className={`
-          overflow-hidden group transition-all duration-300 ease-in-out bg-card cursor-pointer
+          overflow-hidden group transition-all duration-300 ease-in-out bg-card
           absolute top-0 left-0 right-0
           ${isExpanded ? "shadow-2xl z-50" : "shadow-sm hover:shadow-lg z-10"}
         `}
