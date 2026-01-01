@@ -6,7 +6,7 @@ const teamMembers = [
     name: "Pastor Mathingmi Hongchui",
     role: "Interim Pastor",
     category: "Pastoral Staff",
-    bio: "An ordained theologian and chaplain who served as the first pastor of First Naga Baptist Church. Despite the challenges posed by the global pandemic during the church's early years, Pastor Lanu successfully guided the congregation through that tumultuous period, leading to steady and gradual growth.",
+    bio: "Mathingmi Hongchui, married to Yami Asai Shimray for three years, is a SWBTS PhD student and father to Hesed (2) and Thanzat (6 months). He served as Secretary, then Deacon (3 years), and previously as Children’s Coordinator at Richland Hill Baptist Church (3 years). Driven by love for Christ, Mathing is passionate about disciple-making through Jesus’ model and pursuing conformity to His image.",
     image: "/mathingmi2.JPEG",
   },
   {
@@ -95,6 +95,7 @@ export function MeetTheTeam() {
           {teamMembers.map((member) => (
             <Card
               key={member.name}
+              tabIndex={0}
               className="overflow-hidden group hover:shadow-lg transition-shadow duration-300 bg-card"
             >
               <div className="aspect-square overflow-hidden bg-muted">
@@ -104,7 +105,7 @@ export function MeetTheTeam() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <CardContent className="p-5">
+              <CardContent className="p-5 flex flex-col min-h-[220px]">
                 <Badge variant="secondary" className="mb-2 text-xs font-normal">
                   {member.category}
                 </Badge>
@@ -114,9 +115,13 @@ export function MeetTheTeam() {
                 <p className="text-secondary font-medium text-sm mb-3">
                   {member.role}
                 </p>
-                <p className="text-muted-foreground text-sm leading-relaxed line-clamp-4">
-                  {member.bio}
-                </p>
+                <div className="flex-1 min-h-0">
+                  <div className="text-muted-foreground text-sm leading-relaxed overflow-hidden transition-[max-height] duration-300 ease-in-out max-h-20 group-hover:max-h-full group-focus:max-h-full group-hover:overflow-y-auto group-focus:overflow-y-auto">
+                    <p className="line-clamp-4 group-hover:line-clamp-none group-focus:line-clamp-none">
+                      {member.bio}
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -127,7 +132,7 @@ export function MeetTheTeam() {
           <h3 className="font-serif text-xl font-semibold text-foreground mb-2">
             Board of Trustees
           </h3>
-          <p className="text-muted-foreground text-sm mb-6 max-w-xl mx-auto">
+          <p className="text-muted-foreground text-sm mb-6 max-w-xl">
             Our trustees oversee the church's budget and financial matters. As
             pioneers and elders, they provide invaluable guidance for our future
             goals and vision.
