@@ -71,9 +71,21 @@ const teamMembers = [
 ];
 
 const trustees = [
-  { name: "Peraly Sam Meyer", image: "/peraly.jpg" },
-  { name: "Kughaho Chishi", image: "/chishis.JPG" },
-  { name: "Chuingachan Showungnao", image: "/achan.jpg" },
+  {
+    name: "Peraly Sam Meyer",
+    image: "/peraly.jpg",
+    bio: "Perary Sam Meyer works at Medical City Denton (16 years) as a PCT and Phlebotomist in the Surgical Trauma Unit and Laboratory. Trekking in nature and meditation give her peace.",
+  },
+  {
+    name: "Kughaho Chishi",
+    image: "/chishis.JPG",
+    bio: "Kughaho Chishi has been married to Tosheni for over 30 years and has three grown children: Kinito, Nikoto, and Tolina. Chishi has served as the music minister for over a decade at Burton Hill Baptist Church, which allowed FNBC to use its church premises for seven years at no cost.",
+  },
+  {
+    name: "Chuingachan Showungnao",
+    image: "/achan.jpg",
+    bio: "Mr. Chuingachan Shokwungnao has been married to Themsing Wungsek for ten years. Achan and Themsing have served the church with radical generosity and wholehearted commitment since its inception.",
+  },
 ];
 
 function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
@@ -215,8 +227,8 @@ export function MeetTheTeam() {
                 key={trustee.name}
                 className="overflow-hidden group hover:shadow-lg transition-shadow duration-300 bg-card"
               >
-                <div className="flex flex-row">
-                  <div className="w-32 h-32 overflow-hidden bg-muted flex-shrink-0">
+                <div className="flex flex-row h-full">
+                  <div className="w-32 overflow-hidden bg-muted flex-shrink-0 h-full">
                     <img
                       src={trustee.image || "/placeholder.svg"}
                       alt={`Portrait of ${trustee.name}`}
@@ -233,6 +245,7 @@ export function MeetTheTeam() {
                     <h3 className="font-serif text-lg font-semibold text-foreground mb-1">
                       {trustee.name}
                     </h3>
+                    <p>{trustee.bio}</p>
                   </CardContent>
                 </div>
               </Card>
