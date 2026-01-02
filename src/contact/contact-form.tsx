@@ -1,27 +1,55 @@
-import type React from "react";
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
-import { useContactForm } from "@/hooks/useContactForm";
+
+// Validation schema
+const validationSchema = Yup.object({
+  firstName: Yup.string()
+    .trim()
+    .min(2, "First name must be at least 2 characters")
+    .required("First name is required"),
+  lastName: Yup.string()
+    .trim()
+    .min(2, "Last name must be at least 2 characters")
+    .required("Last name is required"),
+  email: Yup.string()
+    .email("Please enter a valid email address")
+    .required("Email is required"),
+  phone: Yup.string()
+    .nullable()
+    .notRequired()
+    .matches(/^[+]?[1-9]\d{0,15}$/, {
+      message: "Please enter a valid phone number",
+      excludeEmptyString: true,
+    }),
+
+  subject: Yup.string()
+    .trim()
+    .min(5, "Subject must be at least 5 characters")
+    .required("Subject is required"),
+  message: Yup.string()
+    .trim()
+    .min(10, "Message must be at least 10 characters")
+    .required("Message is required"),
+});
+
+// Initial form values
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  subject: "",
+  message: "",
+};
 
 export function ContactForm() {
-  const {
-    formData,
-    errors,
-    isSubmitting,
-    isSubmitted,
-    submitError,
-    updateField,
-    submitForm,
-    resetForm,
-  } = useContactForm();
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await submitForm(true); // Use Netlify Function for better email handling
-  };
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
 
   if (isSubmitted) {
     return (
@@ -33,10 +61,10 @@ export function ContactForm() {
           Message Sent Successfully!
         </h3>
         <p className="text-muted-foreground mb-6">
-          Thank you for reaching out, {formData.firstName}! We will get back to
-          you as soon as possible.
+          Thank you for reaching out! We will get back to you as soon as
+          possible.
         </p>
-        <Button onClick={resetForm} variant="outline">
+        <Button onClick={() => setIsSubmitted(false)} variant="outline">
           Send Another Message
         </Button>
       </div>
@@ -44,210 +72,249 @@ export function ContactForm() {
   }
 
   return (
-    <div>
-      <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-2">
-        Send Us a Message
-      </h2>
-      <p className="text-muted-foreground mb-8">
-        Fill out the form below and we will respond as soon as we can.
-      </p>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={async (values, { setSubmitting, setStatus, resetForm }) => {
+        try {
+          const response = await fetch("/.netlify/functions/contact-email", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+          });
 
-      {/* Netlify Form Configuration */}
-      <form
-        name="contact"
-        method="POST"
-        data-netlify="true"
-        data-netlify-honeypot="bot-field"
-        onSubmit={handleSubmit}
-        className="space-y-6"
-      >
-        {/* Hidden input for Netlify Forms */}
-        <input type="hidden" name="form-name" value="contact" />
+          const result = await response.json();
 
-        {/* Honeypot field for spam protection */}
-        <div style={{ display: "none" }}>
-          <label>
-            Don't fill this out if you're human: <input name="bot-field" />
-          </label>
-        </div>
+          if (!response.ok || !result.success) {
+            throw new Error(
+              result.error || "Failed to send message. Please try again."
+            );
+          }
 
-        {/* Error Alert */}
-        {submitError && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
-            <div>
-              <h4 className="font-medium text-red-800 mb-1">
-                Error Sending Message
-              </h4>
-              <p className="text-sm text-red-700">{submitError}</p>
-            </div>
-          </div>
-        )}
-
-        {/* Name Fields */}
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="firstName">
-              First Name <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={(e) => updateField("firstName", e.target.value)}
-              placeholder="John"
-              className={
-                errors.firstName ? "border-red-500 focus:border-red-500" : ""
-              }
-            />
-            {errors.firstName && (
-              <p className="text-sm text-red-600 flex items-center gap-1">
-                <AlertCircle className="h-3 w-3" />
-                {errors.firstName}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="lastName">
-              Last Name <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={(e) => updateField("lastName", e.target.value)}
-              placeholder="Doe"
-              className={
-                errors.lastName ? "border-red-500 focus:border-red-500" : ""
-              }
-            />
-            {errors.lastName && (
-              <p className="text-sm text-red-600 flex items-center gap-1">
-                <AlertCircle className="h-3 w-3" />
-                {errors.lastName}
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Email Field */}
-        <div className="space-y-2">
-          <Label htmlFor="email">
-            Email Address <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => updateField("email", e.target.value)}
-            placeholder="john@example.com"
-            className={
-              errors.email ? "border-red-500 focus:border-red-500" : ""
-            }
-          />
-          {errors.email && (
-            <p className="text-sm text-red-600 flex items-center gap-1">
-              <AlertCircle className="h-3 w-3" />
-              {errors.email}
-            </p>
-          )}
-        </div>
-
-        {/* Phone Field */}
-        <div className="space-y-2">
-          <Label htmlFor="phone">Phone Number</Label>
-          <Input
-            id="phone"
-            name="phone"
-            type="tel"
-            value={formData.phone}
-            onChange={(e) => updateField("phone", e.target.value)}
-            placeholder="(555) 123-4567"
-            className={
-              errors.phone ? "border-red-500 focus:border-red-500" : ""
-            }
-          />
-          {errors.phone && (
-            <p className="text-sm text-red-600 flex items-center gap-1">
-              <AlertCircle className="h-3 w-3" />
-              {errors.phone}
-            </p>
-          )}
-          <p className="text-xs text-muted-foreground">
-            Optional, but helpful for us to contact you
+          setIsSubmitted(true);
+          resetForm();
+        } catch (error) {
+          console.error("Form submission error:", error);
+          setStatus({
+            error:
+              error instanceof Error
+                ? error.message
+                : "An unexpected error occurred. Please try again.",
+          });
+        } finally {
+          setSubmitting(false);
+        }
+      }}
+    >
+      {({ isSubmitting, status, errors, touched }) => (
+        <div>
+          <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-2">
+            Send Us a Message
+          </h2>
+          <p className="text-muted-foreground mb-8">
+            Fill out the form below and we will respond as soon as we can.
           </p>
-        </div>
 
-        {/* Subject Field */}
-        <div className="space-y-2">
-          <Label htmlFor="subject">
-            Subject <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="subject"
-            name="subject"
-            value={formData.subject}
-            onChange={(e) => updateField("subject", e.target.value)}
-            placeholder="How can we help?"
-            className={
-              errors.subject ? "border-red-500 focus:border-red-500" : ""
-            }
-          />
-          {errors.subject && (
-            <p className="text-sm text-red-600 flex items-center gap-1">
-              <AlertCircle className="h-3 w-3" />
-              {errors.subject}
+          {/* Error Alert */}
+          {status?.error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3 mb-6">
+              <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+              <div>
+                <h4 className="font-medium text-red-800 mb-1">
+                  Error Sending Message
+                </h4>
+                <p className="text-sm text-red-700">{status.error}</p>
+              </div>
+            </div>
+          )}
+
+          <Form className="space-y-6">
+            {/* Name Fields */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">
+                  First Name <span className="text-red-500">*</span>
+                </Label>
+                <Field
+                  as={Input}
+                  id="firstName"
+                  name="firstName"
+                  placeholder="John"
+                  className={
+                    errors.firstName && touched.firstName
+                      ? "border-red-500 focus:border-red-500"
+                      : ""
+                  }
+                />
+                <ErrorMessage name="firstName">
+                  {(msg) => (
+                    <p className="text-sm text-red-600 flex items-center gap-1">
+                      <AlertCircle className="h-3 w-3" />
+                      {msg}
+                    </p>
+                  )}
+                </ErrorMessage>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">
+                  Last Name <span className="text-red-500">*</span>
+                </Label>
+                <Field
+                  as={Input}
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Doe"
+                  className={
+                    errors.lastName && touched.lastName
+                      ? "border-red-500 focus:border-red-500"
+                      : ""
+                  }
+                />
+                <ErrorMessage name="lastName">
+                  {(msg) => (
+                    <p className="text-sm text-red-600 flex items-center gap-1">
+                      <AlertCircle className="h-3 w-3" />
+                      {msg}
+                    </p>
+                  )}
+                </ErrorMessage>
+              </div>
+            </div>
+
+            {/* Email Field */}
+            <div className="space-y-2">
+              <Label htmlFor="email">
+                Email Address <span className="text-red-500">*</span>
+              </Label>
+              <Field
+                as={Input}
+                id="email"
+                name="email"
+                type="email"
+                placeholder="john@example.com"
+                className={
+                  errors.email && touched.email
+                    ? "border-red-500 focus:border-red-500"
+                    : ""
+                }
+              />
+              <ErrorMessage name="email">
+                {(msg) => (
+                  <p className="text-sm text-red-600 flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3" />
+                    {msg}
+                  </p>
+                )}
+              </ErrorMessage>
+            </div>
+
+            {/* Phone Field */}
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone Number</Label>
+              <Field
+                as={Input}
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="(555) 123-4567"
+                className={
+                  errors.phone && touched.phone
+                    ? "border-red-500 focus:border-red-500"
+                    : ""
+                }
+              />
+              <ErrorMessage name="phone">
+                {(msg) => (
+                  <p className="text-sm text-red-600 flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3" />
+                    {msg}
+                  </p>
+                )}
+              </ErrorMessage>
+              <p className="text-xs text-muted-foreground">
+                Optional, but helpful for us to contact you
+              </p>
+            </div>
+
+            {/* Subject Field */}
+            <div className="space-y-2">
+              <Label htmlFor="subject">
+                Subject <span className="text-red-500">*</span>
+              </Label>
+              <Field
+                as={Input}
+                id="subject"
+                name="subject"
+                placeholder="How can we help?"
+                className={
+                  errors.subject && touched.subject
+                    ? "border-red-500 focus:border-red-500"
+                    : ""
+                }
+              />
+              <ErrorMessage name="subject">
+                {(msg) => (
+                  <p className="text-sm text-red-600 flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3" />
+                    {msg}
+                  </p>
+                )}
+              </ErrorMessage>
+            </div>
+
+            {/* Message Field */}
+            <div className="space-y-2">
+              <Label htmlFor="message">
+                Message <span className="text-red-500">*</span>
+              </Label>
+              <Field
+                as={Textarea}
+                id="message"
+                name="message"
+                placeholder="Tell us more about your inquiry, prayer request, or question..."
+                rows={5}
+                className={
+                  errors.message && touched.message
+                    ? "border-red-500 focus:border-red-500"
+                    : ""
+                }
+              />
+              <ErrorMessage name="message">
+                {(msg) => (
+                  <p className="text-sm text-red-600 flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3" />
+                    {msg}
+                  </p>
+                )}
+              </ErrorMessage>
+            </div>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              className="w-full bg-primary hover:bg-primary/90"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Sending Message...
+                </>
+              ) : (
+                "Send Message"
+              )}
+            </Button>
+
+            {/* Privacy Notice */}
+            <p className="text-xs text-muted-foreground text-center">
+              Your information is secure and will only be used to respond to
+              your message.
             </p>
-          )}
+          </Form>
         </div>
-
-        {/* Message Field */}
-        <div className="space-y-2">
-          <Label htmlFor="message">
-            Message <span className="text-red-500">*</span>
-          </Label>
-          <Textarea
-            id="message"
-            name="message"
-            value={formData.message}
-            onChange={(e) => updateField("message", e.target.value)}
-            placeholder="Tell us more about your inquiry, prayer request, or question..."
-            rows={5}
-            className={
-              errors.message ? "border-red-500 focus:border-red-500" : ""
-            }
-          />
-          {errors.message && (
-            <p className="text-sm text-red-600 flex items-center gap-1">
-              <AlertCircle className="h-3 w-3" />
-              {errors.message}
-            </p>
-          )}
-        </div>
-
-        {/* Submit Button */}
-        <Button
-          type="submit"
-          className="w-full bg-primary hover:bg-primary/90"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Sending Message...
-            </>
-          ) : (
-            "Send Message"
-          )}
-        </Button>
-
-        {/* Privacy Notice */}
-        <p className="text-xs text-muted-foreground text-center">
-          Your information is secure and will only be used to respond to your
-          message.
-        </p>
-      </form>
-    </div>
+      )}
+    </Formik>
   );
 }
