@@ -79,7 +79,7 @@ export function Footer() {
                   href="mailto:info@firstnagabaptist.org"
                   className="text-sm text-primary-foreground/80 hover:text-secondary transition-colors"
                 >
-                  firstnagabaptist@yahoo.com
+                  firstnagabaptistchurch@yahoo.com
                 </a>
               </li>
             </ul>
