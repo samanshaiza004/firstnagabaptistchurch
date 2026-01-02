@@ -95,7 +95,7 @@ function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
   }, []);
 
   return (
-    <div className="relative h-[750px] sm:h-[550px] lg:h-[620px] md:h-[690px]">
+    <div className="relative flex sm:h-[700px] md:h-[690px] lg:h-[620px]">
       <Card
         className={`
           overflow-hidden group transition-all duration-300 ease-in-out bg-card
