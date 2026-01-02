@@ -184,7 +184,7 @@ export const handler: Handler = async (event) => {
       if (process.env.EMAIL_APP_PASSWORD) {
         // Use Nodemailer if credentials are available
         emailResult = await sendEmailWithNodemailer({
-          to: "firstnagabaptistchurch@yahoo.com",
+          to: "mathinghong@yahoo.com",
           subject: `Contact Form: ${formData.subject}`,
           html: htmlContent,
           text: textContent,
@@ -192,7 +192,7 @@ export const handler: Handler = async (event) => {
       } else {
         // Fallback to Netlify's email service (if available)
         emailResult = await sendEmailWithNetlify({
-          to: "firstnagabaptistchurch@yahoo.com",
+          to: "mathinghong@yahoo.com",
           subject: `Contact Form: ${formData.subject}`,
           html: htmlContent,
           text: textContent,
