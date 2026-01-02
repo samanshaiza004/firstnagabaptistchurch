@@ -1,11 +1,11 @@
-import { Handler } from '@netlify/functions';
-import nodemailer from 'nodemailer';
+import { Handler } from "@netlify/functions";
+import nodemailer from "nodemailer";
 
 // Email configuration
 const EMAIL_CONFIG = {
-  service: 'gmail', // or your email service
+  service: "yahoo", // or your email service
   auth: {
-    user: process.env.EMAIL_USER || 'firstnagabaptist@yahoo.com',
+    user: process.env.EMAIL_USER || "firstnagabaptist@yahoo.com",
     pass: process.env.EMAIL_APP_PASSWORD, // App-specific password for Gmail
   },
 };
@@ -19,8 +19,8 @@ const sendEmailWithNetlify = async (emailData: {
 }) => {
   // This is a fallback implementation
   // In production, you'd want to use a proper email service
-  console.log('Email would be sent:', emailData);
-  return { success: true, messageId: 'netlify-fallback' };
+  console.log("Email would be sent:", emailData);
+  return { success: true, messageId: "netlify-fallback" };
 };
 
 const sendEmailWithNodemailer = async (emailData: {
@@ -29,7 +29,7 @@ const sendEmailWithNodemailer = async (emailData: {
   html: string;
   text: string;
 }) => {
-  const transporter = nodemailer.createTransporter(EMAIL_CONFIG);
+  const transporter = nodemailer.createTransport(EMAIL_CONFIG);
 
   const mailOptions = {
     from: `"First Naga Baptist Church" <${EMAIL_CONFIG.auth.user}>`,
@@ -54,7 +54,9 @@ const createEmailContent = (formData: any) => {
     formattedMessage,
   } = formData;
 
-  const fullName = `${firstName?.trim() || ''} ${lastName?.trim() || ''}`.trim();
+  const fullName = `${firstName?.trim() || ""} ${
+    lastName?.trim() || ""
+  }`.trim();
 
   // HTML version for better formatting
   const htmlContent = `
@@ -84,18 +86,18 @@ const createEmailContent = (formData: any) => {
             <span class="label">From:</span> ${fullName}
           </div>
           <div class="field">
-            <span class="label">Email:</span> ${email || 'Not provided'}
+            <span class="label">Email:</span> ${email || "Not provided"}
           </div>
           <div class="field">
-            <span class="label">Phone:</span> ${phone || 'Not provided'}
+            <span class="label">Phone:</span> ${phone || "Not provided"}
           </div>
           <div class="field">
-            <span class="label">Subject:</span> ${subject || 'No subject'}
+            <span class="label">Subject:</span> ${subject || "No subject"}
           </div>
           <div class="field">
             <span class="label">Message:</span>
             <div class="message-box">
-              ${message?.replace(/\n/g, '<br>') || 'No message content'}
+              ${message?.replace(/\n/g, "<br>") || "No message content"}
             </div>
           </div>
           <hr style="margin: 20px 0; border: none; border-top: 1px solid #dee2e6;">
@@ -109,16 +111,18 @@ const createEmailContent = (formData: any) => {
   `;
 
   // Plain text version
-  const textContent = formattedMessage || `
+  const textContent =
+    formattedMessage ||
+    `
 New Contact Form Submission - First Naga Baptist Church
 
 From: ${fullName}
-Email: ${email || 'Not provided'}
-Phone: ${phone || 'Not provided'}
-Subject: ${subject || 'No subject'}
+Email: ${email || "Not provided"}
+Phone: ${phone || "Not provided"}
+Subject: ${subject || "No subject"}
 
 Message:
-${message || 'No message content'}
+${message || "No message content"}
 
 ---
 This message was sent from the First Naga Baptist Church website contact form.
@@ -129,26 +133,34 @@ This message was sent from the First Naga Baptist Church website contact form.
 
 export const handler: Handler = async (event) => {
   // Only allow POST requests
-  if (event.httpMethod !== 'POST') {
+  if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: 'Method not allowed' }),
+      body: JSON.stringify({ error: "Method not allowed" }),
     };
   }
 
   try {
     // Parse form data
-    const formData = JSON.parse(event.body || '{}');
+    const formData = JSON.parse(event.body || "{}");
 
     // Validate required fields
-    const requiredFields = ['firstName', 'lastName', 'email', 'subject', 'message'];
-    const missingFields = requiredFields.filter(field => !formData[field]?.trim());
+    const requiredFields = [
+      "firstName",
+      "lastName",
+      "email",
+      "subject",
+      "message",
+    ];
+    const missingFields = requiredFields.filter(
+      (field) => !formData[field]?.trim()
+    );
 
     if (missingFields.length > 0) {
       return {
         statusCode: 400,
         body: JSON.stringify({
-          error: `Missing required fields: ${missingFields.join(', ')}`,
+          error: `Missing required fields: ${missingFields.join(", ")}`,
         }),
       };
     }
@@ -158,7 +170,7 @@ export const handler: Handler = async (event) => {
     if (!emailRegex.test(formData.email)) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'Invalid email format' }),
+        body: JSON.stringify({ error: "Invalid email format" }),
       };
     }
 
@@ -171,7 +183,7 @@ export const handler: Handler = async (event) => {
       if (process.env.EMAIL_APP_PASSWORD) {
         // Use Nodemailer if credentials are available
         emailResult = await sendEmailWithNodemailer({
-          to: 'firstnagabaptist@yahoo.com',
+          to: "firstnagabaptist@yahoo.com",
           subject: `Contact Form: ${formData.subject}`,
           html: htmlContent,
           text: textContent,
@@ -179,18 +191,18 @@ export const handler: Handler = async (event) => {
       } else {
         // Fallback to Netlify's email service (if available)
         emailResult = await sendEmailWithNetlify({
-          to: 'firstnagabaptist@yahoo.com',
+          to: "firstnagabaptist@yahoo.com",
           subject: `Contact Form: ${formData.subject}`,
           html: htmlContent,
           text: textContent,
         });
       }
     } catch (emailError) {
-      console.error('Email sending failed:', emailError);
+      console.error("Email sending failed:", emailError);
       return {
         statusCode: 500,
         body: JSON.stringify({
-          error: 'Failed to send email. Please try again later.',
+          error: "Failed to send email. Please try again later.",
         }),
       };
     }
@@ -200,17 +212,16 @@ export const handler: Handler = async (event) => {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        message: 'Email sent successfully',
+        message: "Email sent successfully",
         messageId: emailResult.messageId,
       }),
     };
-
   } catch (error) {
-    console.error('Function error:', error);
+    console.error("Function error:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({
-        error: 'Internal server error. Please try again later.',
+        error: "Internal server error. Please try again later.",
       }),
     };
   }
