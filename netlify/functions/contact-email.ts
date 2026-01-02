@@ -6,7 +6,7 @@ const EMAIL_CONFIG = {
   port: 465,
   secure: true, // true for 465, false for other ports
   auth: {
-    user: process.env.EMAIL_USER || "firstnagabaptist@yahoo.com",
+    user: process.env.EMAIL_USER || "firstnagabaptistchurch@yahoo.com",
     pass: process.env.EMAIL_APP_PASSWORD,
   },
 };

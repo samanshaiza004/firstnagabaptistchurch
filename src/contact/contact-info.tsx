@@ -19,8 +19,8 @@ const contactDetails = [
   {
     icon: Mail,
     title: "Email",
-    primary: "firstnagabaptist@yahoo.com",
-    link: "mailto:firstnagabaptist@yahoo.com",
+    primary: "firstnagabaptistchurch@yahoo.com",
+    link: "mailto:firstnagabaptistchurch@yahoo.com",
   },
   {
     icon: Phone,
