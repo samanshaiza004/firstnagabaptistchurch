@@ -1,12 +1,13 @@
 import { Handler } from "@netlify/functions";
 import nodemailer from "nodemailer";
 
-// Email configuration
 const EMAIL_CONFIG = {
-  service: "yahoo", // or your email service
+  host: "smtp.mail.yahoo.com",
+  port: 465,
+  secure: true, // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL_USER || "firstnagabaptist@yahoo.com",
-    pass: process.env.EMAIL_APP_PASSWORD, // App-specific password for Gmail
+    pass: process.env.EMAIL_APP_PASSWORD,
   },
 };
 
