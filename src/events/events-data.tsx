@@ -1,4 +1,4 @@
-type Event = {
+export type Event = {
   title: string;
   date: string;
   time?: string;
