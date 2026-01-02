@@ -56,14 +56,14 @@ const teamMembers = [
   },
   {
     name: "Mr. Kinoto Chishi",
-    role: "Worship Leader",
+    role: "Worship Minister",
     category: "Ministry Team",
     bio: "Brings his passion for worship and music ministry to life, creating an atmosphere of heartfelt praise. Kinoto leads the worship team, arranges music, and guides the church through a blend of hymns, contemporary worship, and traditional songs.",
     image: "/kinoto2.jpg",
   },
   {
     name: "Ms. Katensangla Longchar",
-    role: "Children Ministry Leader",
+    role: "Children Minister",
     category: "Ministry Team",
     bio: "Coordinator of Children's Ministry with over six years of dedicated service to children. Currently pursuing a Master of Arts in Biblical Counseling at Southwestern Baptist Theological Seminary, passionate about leading children to Christ.",
     image: "/katensangla2.jpg",
