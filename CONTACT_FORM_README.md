@@ -4,35 +4,37 @@ This guide explains how to set up the robust email-sending functionality for the
 
 ## Overview
 
-The contact form uses a hybrid approach combining:
-- **Netlify Forms** for basic form handling and spam protection
-- **Netlify Functions** for advanced email processing and formatting
-- **Custom validation** and user feedback
-- **Professional email templates**
+The contact form uses a modern approach combining:
+- **Formik** for form state management and validation
+- **Yup** for schema-based validation
+- **Netlify Functions** for serverless email processing
+- **Professional email templates** with HTML and plain text versions
 
 ## Features
 
-✅ **Comprehensive Form Validation**
-- Required field validation
-- Email format validation
-- Phone number validation (optional)
-- Real-time error feedback
+✅ **Formik-Powered Form Management**
+- Declarative form state management
+- Yup schema-based validation
+- Real-time field validation
+- Automatic form reset on success
 
-✅ **Professional Email Formatting**
-- HTML and plain text versions
+✅ **Professional Email Processing**
+- HTML and plain text email templates
+- SMTP-based delivery (Gmail/Yahoo)
 - Structured contact information
-- Custom email templates
+- Serverless function processing
 
-✅ **User Experience**
-- Loading states during submission
-- Success/error feedback
-- Form reset after successful submission
-- Accessibility features
+✅ **Enhanced User Experience**
+- Real-time validation feedback
+- Loading states with animations
+- Success/error state management
+- Accessibility-compliant components
 
-✅ **Security & Spam Protection**
-- Netlify Forms built-in spam filtering
-- Honeypot field for bot detection
-- Input sanitization
+✅ **Robust Error Handling**
+- Client-side validation errors
+- Server-side validation in functions
+- Network error handling
+- Graceful degradation
 
 ## Setup Instructions
 
@@ -65,22 +67,31 @@ You can modify the Netlify function to use other services like:
 - AWS SES
 - Postmark
 
-### 3. Netlify Forms Setup
+### 3. Formik & Validation Setup
 
-The form is already configured with Netlify Forms. To view submissions in Netlify:
+The form uses **Formik** for state management and **Yup** for validation:
 
-1. Go to your Netlify site dashboard
-2. Navigate to **Forms** tab
-3. You'll see submissions under the "contact" form
+- **Real-time validation** as users type
+- **Field-level error display** with visual indicators
+- **Form-level validation** before submission
+- **Loading states** and **error handling**
+- **Success state** with form reset capability
+
+### 4. Netlify Functions Setup
+
+The serverless function handles email processing:
+
+- Receives JSON payload from Formik
+- Validates data server-side
+- Formats professional HTML/plain text emails
+- Sends via SMTP (Gmail/Yahoo) or falls back gracefully
 
 ## File Structure
 
 ```
 src/
 ├── contact/
-│   └── contact-form.tsx          # Main contact form component
-├── hooks/
-│   └── useContactForm.ts         # Form logic and validation hook
+│   └── contact-form.tsx          # Main contact form component (Formik-based)
 └── routes.tsx                    # Route configuration
 
 netlify/
@@ -89,17 +100,20 @@ netlify/
 
 public/
 └── _redirects                    # SPA routing configuration
+
+package.json                     # Dependencies: formik, yup
 ```
 
 ## How It Works
 
 ### Form Submission Flow
 
-1. **User fills out form** → Client-side validation runs
-2. **Form validates** → If invalid, show errors; if valid, proceed
-3. **Submit to Netlify Function** → Custom email processing
-4. **Function processes data** → Formats email and sends to destination
-5. **User gets feedback** → Success message or error details
+1. **User fills out form** → Formik handles state, Yup validates in real-time
+2. **Form validates** → Field-level validation with immediate error display
+3. **User submits** → Formik validates entire form, shows loading state
+4. **Submit to Netlify Function** → JSON payload sent to serverless function
+5. **Function processes data** → Formats professional email and sends via SMTP
+6. **User gets feedback** → Success state with reset option or error details
 
 ### Email Content Structure
 
