@@ -12,7 +12,7 @@ const teamMembers = [
     image: "/mathingmi2.JPEG",
   },
   {
-    name: "Livi Yepthomi",
+    name: "Ms. Livi Yepthomi",
     role: "Church Secretary",
     category: "Administration",
     bio: "With a passion for ministry and serving others, Livi supports the mission and vision of the church community. She is pursuing a Master of Arts in Christian Education at Southwestern Baptist Theological Seminary.",
@@ -25,7 +25,7 @@ const teamMembers = [
     bio: "An ordained theologian and chaplain who served as the first pastor of First Naga Baptist Church. Despite the challenges posed by the global pandemic during the church's early years, Pastor Lanu successfully guided the congregation through that tumultuous period, leading to steady and gradual growth.",
     image: "/lanu.JPG",
   },
-  
+
   {
     name: "Mr. Theishing Konghar",
     role: "Deacon",
@@ -34,21 +34,21 @@ const teamMembers = [
     image: "/theishing.jpg",
   },
   {
-    name: "Joseph Ngulie",
+    name: "Mr. Joseph Ngulie",
     role: "Deacon & Worship Leader",
     category: "Deacon",
     bio: "Pursuing a PhD in Worship Studies at Southwestern Baptist Theological Seminary. Married to Jihye Cheon from South Korea. Also leads worship at First Baptist Church, Everman and previously served as a youth pastor in India.",
     image: "/joseph.JPG",
   },
   {
-    name: "Hosea Riamei",
+    name: "Mr. Hosea Riamei",
     role: "Deacon",
     category: "Deacon",
     bio: "Pursuing a PhD in Worship Studies at Southwestern Baptist Theological Seminary. Married to Jihye Cheon from South Korea. Also leads worship at First Baptist Church, Everman and previously served as a youth pastor in India.",
     image: "/hosea.JPG",
   },
   {
-    name: "Hokali Kumar",
+    name: "Mrs. Hokali Kumar",
     role: "Treasurer",
     category: "Administration",
     bio: "Originally from Nagaland, now married to Atul Kumar from North India. They have made Texas their home with their two daughters, Rhea and Nilivi. Passionate about serving the church and hosting events.",
@@ -59,43 +59,41 @@ const teamMembers = [
     role: "Worship Leader",
     category: "Ministry Team",
     bio: "Brings his passion for worship and music ministry to life, creating an atmosphere of heartfelt praise. Kinoto leads the worship team, arranges music, and guides the church through a blend of hymns, contemporary worship, and traditional songs.",
-    image: "/kinoto.jpg",
+    image: "/kinoto2.jpg",
   },
   {
     name: "Ms. Katensangla Longchar",
     role: "Children Ministry Leader",
     category: "Ministry Team",
     bio: "Coordinator of Children's Ministry with over six years of dedicated service to children. Currently pursuing a Master of Arts in Biblical Counseling at Southwestern Baptist Theological Seminary, passionate about leading children to Christ.",
-    image: "/Katensangla.jpg",
+    image: "/katensangla2.jpg",
   },
-  
 ];
 
 const trustees = [
   { name: "Peraly Sam Meyer", image: "/peraly.jpg" },
   { name: "Kughaho Chishi", image: "/chishis.JPG" },
   { name: "Chuingachan Showungnao", image: "/achan.jpg" },
-  
 ];
 
 function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
-      const mobile = window.innerWidth < 768
-      setIsMobile(mobile)
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
       if (mobile) {
-        setIsExpanded(true)
+        setIsExpanded(true);
       }
-    }
+    };
 
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
-    return () => window.removeEventListener("resize", checkMobile)
-  }, [])
-  
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
     <div className="relative h-[750px] sm:h-[550px] lg:h-[620px] md:h-[690px]">
       <Card
@@ -104,7 +102,11 @@ function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
           ${
             isMobile
               ? "relative shadow-sm"
-              : `absolute top-0 left-0 right-0 cursor-pointer ${isExpanded ? "shadow-2xl z-50" : "shadow-sm hover:shadow-lg z-10"}`
+              : `absolute top-0 left-0 right-0 cursor-pointer ${
+                  isExpanded
+                    ? "shadow-2xl z-50"
+                    : "shadow-sm hover:shadow-lg z-10"
+                }`
           }
         `}
         onMouseEnter={() => !isMobile && setIsExpanded(true)}
@@ -114,8 +116,8 @@ function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
         tabIndex={isMobile ? undefined : 0}
         onKeyDown={(e) => {
           if (!isMobile && (e.key === "Enter" || e.key === " ")) {
-            e.preventDefault()
-            setIsExpanded(!isExpanded)
+            e.preventDefault();
+            setIsExpanded(!isExpanded);
           }
         }}
         aria-expanded={isMobile ? undefined : isExpanded}
@@ -124,21 +126,31 @@ function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
           <img
             src={member.image || "/placeholder.svg"}
             alt={`Portrait of ${member.name}`}
-            className={`w-full h-full object-cover transition-transform duration-300 ${!isMobile ? "group-hover:scale-105" : ""}`}
+            className={`w-full h-full object-cover transition-transform duration-300 ${
+              !isMobile ? "group-hover:scale-105" : ""
+            }`}
           />
         </div>
         <CardContent className="p-5">
           <Badge variant="secondary" className="mb-2 text-xs font-normal">
             {member.category}
           </Badge>
-          <h3 className="font-serif text-lg font-semibold text-foreground mb-1">{member.name}</h3>
-          <p className="text-secondary font-medium text-sm mb-3">{member.role}</p>
+          <h3 className="font-serif text-lg font-semibold text-foreground mb-1">
+            {member.name}
+          </h3>
+          <p className="text-secondary font-medium text-sm mb-3">
+            {member.role}
+          </p>
 
           <div className="relative">
             <div
-              className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? "max-h-96" : "max-h-12"}`}
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                isExpanded ? "max-h-96" : "max-h-12"
+              }`}
             >
-              <p className="text-muted-foreground text-sm leading-relaxed">{member.bio}</p>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                {member.bio}
+              </p>
             </div>
             {!isExpanded && (
               <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-card to-transparent pointer-events-none" />
@@ -147,8 +159,14 @@ function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
 
           {!isMobile && (
             <div className="flex items-center justify-center mt-3 text-muted-foreground">
-              <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
-              <span className="text-xs ml-1">{isExpanded ? "Less" : "More"}</span>
+              <ChevronDown
+                className={`h-4 w-4 transition-transform duration-300 ${
+                  isExpanded ? "rotate-180" : ""
+                }`}
+              />
+              <span className="text-xs ml-1">
+                {isExpanded ? "Less" : "More"}
+              </span>
             </div>
           )}
         </CardContent>
