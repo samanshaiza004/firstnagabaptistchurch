@@ -35,7 +35,7 @@ const teamMembers = [
   },
   {
     name: "Mr. Joseph Ngulie",
-    role: "Deacon & Worship Leader",
+    role: "Deacon",
     category: "Deacon",
     bio: "Pursuing a PhD in Worship Studies at Southwestern Baptist Theological Seminary. Married to Jihye Cheon from South Korea. Also leads worship at First Baptist Church, Everman and previously served as a youth pastor in India.",
     image: "/joseph.JPG",
