@@ -116,21 +116,22 @@ export function SpecialEvents() {
                       </div>
 
                       <div className="flex-1">
-                        <span className="inline-block text-xs font-semibold text-secondary bg-secondary/10 px-2 py-1 rounded mb-2">
-                          Special Event
-                        </span>
                         <h4 className="font-serif text-lg font-semibold text-card-foreground mb-2">
                           {event.title}
                         </h4>
                         <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-3">
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            {event.time || "TBA"}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <MapPin className="h-4 w-4" />
-                            {event.location}
-                          </span>
+                          {event.time && (
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              {event.time}
+                            </span>
+                          )}
+                          {event.time && (
+                            <span className="flex items-center gap-1">
+                              <MapPin className="h-4 w-4" />
+                              {event.location}
+                            </span>
+                          )}
                         </div>
                         <p className="text-muted-foreground text-sm">
                           {event.description}

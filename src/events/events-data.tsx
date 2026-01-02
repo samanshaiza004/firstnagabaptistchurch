@@ -119,4 +119,58 @@ export const events: Event[] = [
     month: null,
     day: null,
   },
+  {
+    title: "Palm Sunday",
+    date: "March 29th",
+    location: "Burton Hill Baptist Church",
+    description:
+      "Our annual gathering to give thanks to God, share testimonies of His faithfulness, and enjoy fellowship over a traditional meal.",
+    recurring: false,
+    month: 3,
+    day: 29,
+    year: 2026,
+  },
+  {
+    title: "Easter Sunday",
+    date: "April 5th",
+    location: "Burton Hill Baptist Church",
+    description:
+      "Our annual gathering to give thanks to God, share testimonies of His faithfulness, and enjoy fellowship over a traditional meal.",
+    recurring: false,
+    month: 4,
+    day: 5,
+    year: 2026,
+  },
+  {
+    title: "Mother's Day",
+    date: "May 10th",
+    location: "Burton Hill Baptist Church",
+    description:
+      "Our annual gathering to give thanks to God, share testimonies of His faithfulness, and enjoy fellowship over a traditional meal.",
+    recurring: false,
+    month: 5,
+    day: 10,
+    year: 2026,
+  },
+  {
+    title: "Father's Day",
+    date: "June 21st",
+    location: "Burton Hill Baptist Church",
+    description:
+      "Our annual gathering to give thanks to God, share testimonies of His faithfulness, and enjoy fellowship over a traditional meal.",
+    recurring: false,
+    month: 6,
+    day: 21,
+    year: 2026,
+  },
+  {
+    title: "Carol",
+    date: "December",
+    location: "Burton Hill Baptist Church",
+    description:
+      "Our annual gathering to give thanks to God, share testimonies of His faithfulness, and enjoy fellowship over a traditional meal.",
+    recurring: false,
+    month: 12,
+    year: 2026,
+  },
 ];
