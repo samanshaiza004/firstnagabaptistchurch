@@ -4,8 +4,13 @@ import { events } from "./events-data"
 
 export function RegularServices() {
   return (
-    <div className="mb-12">
-      <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-6">Regular Services</h2>
+    <div className="mb-16">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+          <Calendar className="h-5 w-5 text-primary" />
+        </div>
+        <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground">Regular Services</h2>
+      </div>
       <div className="space-y-4">
         {events
           .filter((e) => e.recurring)
