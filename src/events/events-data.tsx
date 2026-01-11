@@ -277,4 +277,44 @@ export const events: Event[] = [
       "Regular meetings for missions and deacon teams to coordinate outreach activities and ministry planning.",
     recurring: true,
   },
+  {
+    title: "Vacation Bible School",
+    date: "June",
+    location: "Burton Hill Baptist Church",
+    description:
+      "Year-end leadership meeting to review the year's activities, plan for the coming year, and set church goals.",
+    recurring: false,
+    month: 6,
+    year: 2026,
+  },
+  {
+    title: "World Sunday School Celebration",
+    date: "November",
+    location: "Burton Hill Baptist Church",
+    description:
+      "Year-end leadership meeting to review the year's activities, plan for the coming year, and set church goals.",
+    recurring: false,
+    month: 11,
+    year: 2026,
+  },
+  {
+    title: "Mission Trip to Florida",
+    date: "October",
+    location: "Burton Hill Baptist Church",
+    description:
+      "Year-end leadership meeting to review the year's activities, plan for the coming year, and set church goals.",
+    recurring: false,
+    month: 10,
+    year: 2026,
+  },
+  {
+    title: "Fellowship with Chin Baptist Church",
+    date: "November",
+    location: "Lewisville",
+    description:
+      "Year-end leadership meeting to review the year's activities, plan for the coming year, and set church goals.",
+    recurring: false,
+    month: 11,
+    year: 2026,
+  },
 ];

@@ -15,7 +15,7 @@ const teamMembers = [
     name: "Ms. Livi Yepthomi",
     role: "Church Secretary",
     category: "Administration",
-    bio: "With a passion for ministry and serving others, Livi supports the mission and vision of the church community. She is pursuing a Master of Arts in Christian Education at Southwestern Baptist Theological Seminary.",
+    bio: "With a passion for ministry and serving others, Livi supports the mission and vision of the church community. She is pursuing a ThM in Biblical Counseling.",
     image: "/Livi.jpg",
   },
   {
@@ -30,7 +30,7 @@ const teamMembers = [
     name: "Mr. Theishing Konghar",
     role: "Deacon",
     category: "Deacon",
-    bio: "Pursuing his PhD in World Christian Studies at Southwestern Baptist Theological Seminary, Texas. Married to Maya, and they have a daughter named Phasun.",
+    bio: "Pursuing his PhD in World Christian Studies at Southwestern Baptist Theological Seminary, Texas. Married to Maiya, and they have a daughter named Phashun.",
     image: "/theishing.jpg",
   },
   {
@@ -44,7 +44,7 @@ const teamMembers = [
     name: "Mr. Hosea Riamei",
     role: "Deacon",
     category: "Deacon",
-    bio: "Pursuing a PhD in Worship Studies at Southwestern Baptist Theological Seminary. Married to Jihye Cheon from South Korea. Also leads worship at First Baptist Church, Everman and previously served as a youth pastor in India.",
+    bio: "Hosea Riamei is pursuing a ThM in Preaching. He is married to Riangguiliu Gangmei, and they are blessed with two children, Luke and Gratia",
     image: "/hosea.JPG",
   },
   {
