@@ -88,12 +88,12 @@ export const events: Event[] = [
     day: null,
   },
   {
-    title: "Vocational Bible School",
+    title: "Vacation Bible School",
     date: "June",
     time: "TBA",
     location: "Burton Hill Baptist Church",
     description:
-      "A vocational Bible school for the community to learn about the Bible and how to apply it to their daily lives.",
+      "A Vacation Bible school for children ministry and members to learn about the Bible and how to apply it to their daily lives. ",
     recurring: false,
     month: 6,
     day: null,
@@ -120,7 +120,7 @@ export const events: Event[] = [
     day: 5
   },
   {
-    title: "Mission Sunday",
+    title: "Missions Sunday",
     date: "December 6th",
     time: "TBA",
     location: "Burton Hill Baptist Church",
@@ -302,13 +302,13 @@ export const events: Event[] = [
   },
   {
     title: "Mission Trip to Florida",
-    date: "October",
+    date: "October 3rd Week",
     location: "Burton Hill Baptist Church",
     description:
       "Mission trip to Florida to conduct outreach, evangelism, and community service projects.",
     recurring: false,
     month: 10,
-    day: 10,
+    day: 18,
     year: 2026,
   },
   {
