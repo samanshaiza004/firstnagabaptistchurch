@@ -49,7 +49,7 @@ export function ObjectivesDetail() {
         </div>
 
         <div className="space-y-6 max-w-4xl mx-auto">
-          {objectives.map((objective, index) => (
+          {objectives.map((objective) => (
             <div
               key={objective.title}
               className="flex gap-6 p-6 rounded-lg bg-muted/30 border border-border hover:border-secondary/50 transition-colors"
