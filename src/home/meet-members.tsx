@@ -78,7 +78,7 @@ const trustees = [
   },
   {
     name: "Kughaho Chishi",
-    image: "/chishis.JPG",
+    image: "/chishi.jpeg",
     bio: "Kughaho Chishi has been married to Tosheni for over 30 years and has three grown children: Kinito, Nikoto, and Tolina. Chishi has served as the music minister for over a decade at Burton Hill Baptist Church, which allowed FNBC to use its church premises for seven years at no cost.",
   },
   {
