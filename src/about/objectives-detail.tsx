@@ -61,9 +61,7 @@ export function ObjectivesDetail() {
               </div>
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="text-xs font-semibold text-secondary bg-secondary/10 px-2 py-1 rounded">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+                  
                   <h3 className="font-serif text-lg font-semibold text-foreground">{objective.title}</h3>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">{objective.description}</p>

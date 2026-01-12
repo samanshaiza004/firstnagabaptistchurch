@@ -22,7 +22,7 @@ const teamMembers = [
     name: "Pastor Lanu Lemtur",
     role: "Mission Pastor",
     category: "Missions Team",
-    bio: "An ordained theologian and chaplain who served as the first pastor of First Naga Baptist Church. Despite the challenges posed by the global pandemic during the church's early years, Pastor Lanu successfully guided the congregation through that tumultuous period, leading to steady and gradual growth.",
+    bio: "An ordained theologian and chaplain who served as the first pastor of First Naga Baptist Church. Despite the challenges of the global pandemic during the church's early years, Pastor Lanu guided the congregation through that tumultuous period. Currently he serves as a mission pastor.",
     image: "/lanu.JPG",
   },
 
@@ -65,7 +65,7 @@ const teamMembers = [
     name: "Ms. Katensangla Longchar",
     role: "Children Minister",
     category: "Ministry Team",
-    bio: "Coordinator of Children's Ministry with over six years of dedicated service to children. Currently pursuing a Master of Arts in Biblical Counseling at Southwestern Baptist Theological Seminary, passionate about leading children to Christ.",
+    bio: "Coordinator of Children's Ministry with over six years of dedicated service to children. Currently pursuing a DEdMin in Biblical Counseling at Southwestern Baptist Theological Seminary, passionate about leading children to Christ.",
     image: "/katensangla2.jpg",
   },
 ];
@@ -79,12 +79,12 @@ const trustees = [
   {
     name: "Kughaho Chishi",
     image: "/chishis.jpeg",
-    bio: "Kughaho Chishi has been married to Tosheni for over 30 years and has three grown children: Kinito, Nikoto, and Tolina. Chishi has served as the music minister for over a decade at Burton Hill Baptist Church, which allowed FNBC to use its church premises for seven years at no cost.",
+    bio: "Kughaho Chishi has been married to Tosheni for over 30 years and has three grown children: Kinito, Nikoto, and Tolina. Chishi has served as the worship minister for over a decade at Burton Hill Baptist Church, which allowed FNBC to use its church premises for seven years at no cost.",
   },
   {
     name: "Chuingachan Showungnao",
     image: "/achan.jpg",
-    bio: "Mr. Chuingachan Shokwungnao has been married to Themsing Wungsek for ten years. Achan and Themsing have served the church with radical generosity and wholehearted commitment since its inception.",
+    bio: "Mr. Chuingachan Shokwungnao has been married to Themsing Wungsek for ten years. Achan and Themsing have served the church with radical generosity and wholehearted commitment since its inception. Businessman by profession.",
   },
 ];
 
