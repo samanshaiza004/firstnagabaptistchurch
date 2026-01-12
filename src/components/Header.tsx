@@ -1,7 +1,7 @@
-import { useState } from "react"
-import { Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom"
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -9,22 +9,29 @@ const navigation = [
   { name: "Events", href: "/events" },
   { name: "Give", href: "/give" },
   { name: "Contact", href: "/contact" },
-]
+];
 
 export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-      <nav className="container mx-auto px-4 lg:px-8" aria-label="Main navigation">
+      <nav
+        className="container mx-auto px-4 lg:px-8"
+        aria-label="Main navigation"
+      >
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-              <span className="font-serif text-lg font-bold text-primary-foreground">F</span>
+              <span className="font-serif text-lg font-bold text-primary-foreground">
+                F
+              </span>
             </div>
             <div className="hidden sm:block">
-              <p className="font-serif text-lg font-semibold text-foreground">First Naga Baptist Church</p>
+              <p className="font-serif text-lg font-semibold text-foreground">
+                First Naga Baptist Church
+              </p>
               <p className="text-xs text-muted-foreground">DFW, Texas</p>
             </div>
           </Link>
@@ -54,7 +61,11 @@ export function Header() {
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {mobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </Button>
         </div>
 
@@ -72,7 +83,10 @@ export function Header() {
                   {item.name}
                 </Link>
               ))}
-              <Button asChild className="w-full bg-primary hover:bg-primary/90 mt-2">
+              <Button
+                asChild
+                className="w-full bg-primary hover:bg-primary/90 mt-2"
+              >
                 <Link to="/contact">Join Us</Link>
               </Button>
             </div>
@@ -80,5 +94,5 @@ export function Header() {
         )}
       </nav>
     </header>
-  )
+  );
 }
