@@ -10,16 +10,16 @@ const events = [
     description: "Join us for our weekly worship gathering with praise, prayer, and the Word.",
   },
   {
-    title: "Monthly Fellowship Lunch",
-    date: "First Sunday",
+    title: "Sunday Fellowship and Refreshments",
+    date: "Every Sunday",
     time: "After Service",
     description: "A time for the community to share a meal and strengthen bonds of fellowship.",
   },
   {
-    title: "Prayer Meeting",
-    date: "Every Wednesday",
-    time: "7:00 PM",
-    description: "Gather together for corporate prayer and intercession for our community.",
+    title: "Monthly Prayer and Fasting",
+    date: "Last Saturday of the month",
+    time: "10:00 AM",
+    description: "Gather together for corporate prayer, testimony, reflection, and intercession for our community.",
   },
 ]
 

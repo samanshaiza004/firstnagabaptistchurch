@@ -4,7 +4,7 @@ export function AboutHero() {
         <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('/bgoption6.webp')`,
+          backgroundImage: `url('/bgoption6.jpg')`,
         }}
       >
         <div className="absolute inset-0 bg-primary/70" />

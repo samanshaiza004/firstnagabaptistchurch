@@ -1,11 +1,11 @@
-import { MapPin, Mail, Clock } from "lucide-react"
+import { MapPin, Mail, Clock } from "lucide-react";
 
 const quickLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About Us", href: "#about" },
-  { name: "Events", href: "#services" },
-  { name: "Contact", href: "#contact" },
-]
+  { name: "Home", href: "/" },
+  { name: "About Us", href: "/about" },
+  { name: "Events", href: "/events" },
+  { name: "Contact", href: "/contact" },
+];
 
 export function Footer() {
   return (
@@ -16,22 +16,29 @@ export function Footer() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary">
-                <span className="font-serif text-lg font-bold text-secondary-foreground">F</span>
+                <span className="font-serif text-lg font-bold text-secondary-foreground">
+                  F
+                </span>
               </div>
               <div>
-                <p className="font-serif text-lg font-semibold">First Naga Baptist Church</p>
+                <p className="font-serif text-lg font-semibold">
+                  First Naga Baptist Church
+                </p>
                 <p className="text-sm text-primary-foreground/70">DFW, Texas</p>
               </div>
             </div>
             <p className="text-sm text-primary-foreground/80 leading-relaxed max-w-md">
-              The first Naga church established in America, dedicated to sharing the Word, supporting Naga families, and
-              building bridges between communities.
+              The first Naga church established in America, dedicated to sharing
+              the Word, supporting Naga families, and building bridges between
+              communities.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-serif text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="font-serif text-lg font-semibold mb-4">
+              Quick Links
+            </h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
@@ -48,7 +55,9 @@ export function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="font-serif text-lg font-semibold mb-4">Contact Us</h3>
+            <h3 className="font-serif text-lg font-semibold mb-4">
+              Contact Us
+            </h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
                 <MapPin className="h-4 w-4 mt-1 text-secondary shrink-0" />
@@ -60,7 +69,9 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Clock className="h-4 w-4 text-secondary shrink-0" />
-                <span className="text-sm text-primary-foreground/80">Sundays at 10:00 AM</span>
+                <span className="text-sm text-primary-foreground/80">
+                  Sundays at 3:00 PM
+                </span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-4 w-4 text-secondary shrink-0" />
@@ -68,7 +79,7 @@ export function Footer() {
                   href="mailto:info@firstnagabaptist.org"
                   className="text-sm text-primary-foreground/80 hover:text-secondary transition-colors"
                 >
-                  info@firstnagabaptist.org
+                  firstnagabaptistchurch@yahoo.com
                 </a>
               </li>
             </ul>
@@ -78,10 +89,11 @@ export function Footer() {
         {/* Copyright */}
         <div className="mt-12 pt-8 border-t border-primary-foreground/20">
           <p className="text-sm text-center text-primary-foreground/60">
-            &copy; {new Date().getFullYear()} First Naga Baptist Church. All rights reserved.
+            &copy; {new Date().getFullYear()} First Naga Baptist Church. All
+            rights reserved.
           </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
