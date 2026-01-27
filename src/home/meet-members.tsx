@@ -100,7 +100,7 @@ const ministryTeams = [
     icon: Heart,
     members: [
       "Kumsangmar Moainla",
-      "Keyilungdank Hieme",
+      "Keyilungdaule Hieme",
       "Lhouvi Mezhu",
       "Yami Asai Shimray"
     ]
