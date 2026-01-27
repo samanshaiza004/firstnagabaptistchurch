@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Heart, Music } from "lucide-react";
 
 const teamMembers = [
   {
@@ -22,7 +22,7 @@ const teamMembers = [
     name: "Pastor Lanu Lemtur",
     role: "Mission Pastor",
     category: "Missions Team",
-    bio: "An ordained theologian and chaplain who served as the first pastor of First Naga Baptist Church. Despite the challenges posed by the global pandemic during the church's early years, Pastor Lanu successfully guided the congregation through that tumultuous period, leading to steady and gradual growth.",
+    bio: "An ordained theologian and chaplain who served as the first pastor of First Naga Baptist Church. Despite the challenges of the global pandemic during the church's early years, Pastor Lanu guided the congregation through that tumultuous period. Currently he serves as a mission pastor.",
     image: "/lanu.JPG",
   },
 
@@ -48,26 +48,21 @@ const teamMembers = [
     image: "/hosea.JPG",
   },
   {
+    name: "Mr. Rhite Tsido",
+    role: "Financial Secretary",
+    category: "Finance",
+    bio: "Rhite Tsido is the financial secretary of First Naga Baptist Church. He is pursuing a ThM in Educational Ministries.",
+    image: "/rhite.png",
+  },
+  {
     name: "Mrs. Hokali Kumar",
     role: "Treasurer",
-    category: "Administration",
+    category: "Finance",
     bio: "Originally from Nagaland, now married to Atul Kumar from North India. They have made Texas their home with their two daughters, Rhea and Nilivi. Passionate about serving the church and hosting events.",
     image: "/kumar.JPG",
   },
-  {
-    name: "Mr. Kinoto Chishi",
-    role: "Worship Minister",
-    category: "Ministry Team",
-    bio: "Brings his passion for worship and music ministry to life, creating an atmosphere of heartfelt praise. Kinoto leads the worship team, arranges music, and guides the church through a blend of hymns, contemporary worship, and traditional songs.",
-    image: "/kinoto2.jpg",
-  },
-  {
-    name: "Ms. Katensangla Longchar",
-    role: "Children Minister",
-    category: "Ministry Team",
-    bio: "Coordinator of Children's Ministry with over six years of dedicated service to children. Currently pursuing a Master of Arts in Biblical Counseling at Southwestern Baptist Theological Seminary, passionate about leading children to Christ.",
-    image: "/katensangla2.jpg",
-  },
+  
+  
 ];
 
 const trustees = [
@@ -78,14 +73,38 @@ const trustees = [
   },
   {
     name: "Kughaho Chishi",
-    image: "/chishis.JPG",
-    bio: "Kughaho Chishi has been married to Tosheni for over 30 years and has three grown children: Kinito, Nikoto, and Tolina. Chishi has served as the music minister for over a decade at Burton Hill Baptist Church, which allowed FNBC to use its church premises for seven years at no cost.",
+    image: "/chishis.jpeg",
+    bio: "Kughaho Chishi has been married to Tosheni for over 30 years and has three grown children: Kinito, Nikoto, and Tolina. Chishi has served as the worship minister for over a decade at Burton Hill Baptist Church, which allowed FNBC to use its church premises for seven years at no cost.",
   },
   {
     name: "Chuingachan Showungnao",
     image: "/achan.jpg",
-    bio: "Mr. Chuingachan Shokwungnao has been married to Themsing Wungsek for ten years. Achan and Themsing have served the church with radical generosity and wholehearted commitment since its inception.",
+    bio: "Mr. Chuingachan Shokwungnao has been married to Themsing Wungsek for ten years. Achan and Themsing have served the church with radical generosity and wholehearted commitment since its inception. Businessman by profession.",
   },
+];
+
+const ministryTeams = [
+  {
+    leader: { name: "Mr. Kinoto Chishi", role: "Worship Minister", image: "/kinoto2.jpg" },
+    teamName: "Worship Team",
+    icon: Music,
+    members: [
+      "Shanchuiphy Keishing",
+      "Wewalhi Thopi",
+      "Joseph Nguille"
+    ]
+  },
+  {
+    leader: { name: "Ms. Katensangla Longchar", role: "Children Minister", image: "/katensangla2.jpg" },
+    teamName: "Children Ministry Team",
+    icon: Heart,
+    members: [
+      "Kumsangmar Moainla",
+      "Keyilungdank Hieme",
+      "Lhouvi Mezhu",
+      "Yami Asai Shimray"
+    ]
+  }
 ];
 
 function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
@@ -107,7 +126,7 @@ function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
   }, []);
 
   return (
-    <div className="relative flex sm:h-[700px] md:h-[690px] lg:h-[620px]">
+    <div className="relative flex sm:h-[700px] md:h-[690px] lg:h-[600px]">
       <Card
         className={`
           overflow-hidden group transition-all duration-300 ease-in-out bg-card
@@ -205,9 +224,21 @@ export function MeetTheTeam() {
         </div>
 
         {/* Team Members Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-8 mb-12">
-          {teamMembers.map((member) => (
-            <TeamMemberCard member={member} />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-4 mb-12">
+          {teamMembers.map((member, index) => (
+            <div
+              key={member.name}
+              className={index >= 8 ? "xl:col-span-2" : ""}
+            >
+              <TeamMemberCard member={member} />
+            </div>
+          ))}
+        </div>
+
+        {/* Ministry Teams */}
+        <div className="space-y-8 mb-12">
+          {ministryTeams.map((team) => (
+            <MinistryTeamSection key={team.teamName} team={team} />
           ))}
         </div>
 
@@ -255,4 +286,78 @@ export function MeetTheTeam() {
       </div>
     </section>
   );
+}
+
+function MinistryTeamSection({ team }: { team: (typeof ministryTeams)[0] }) {
+  const Icon = team.icon
+  const memberCount = team.members.length
+
+  return (
+    <div className="bg-background rounded-2xl border border-border p-6 md:p-8 shadow-sm">
+      {/* Team Header with Leader */}
+      <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
+        {/* Leader Card */}
+        <div className="flex items-center gap-4 md:min-w-[280px]">
+          <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-secondary/20 shadow-md flex-shrink-0">
+            <img
+              src={team.leader.image || "/placeholder.svg"}
+              alt={`Portrait of ${team.leader.name}`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <Badge className="mb-1 bg-secondary/10 text-secondary hover:bg-secondary/20 border-0">
+              <Icon className="w-3 h-3 mr-1" />
+              Leader
+            </Badge>
+            <h4 className="font-serif text-lg font-semibold text-foreground">{team.leader.name}</h4>
+            <p className="text-muted-foreground text-sm">{team.leader.role}</p>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="hidden md:block w-px h-16 bg-border" />
+        <div className="md:hidden h-px w-full bg-border" />
+
+        {/* Team Name */}
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-1">
+            <Icon className="w-5 h-5 text-secondary" />
+            <h3 className="font-serif text-xl md:text-2xl font-bold text-foreground">{team.teamName}</h3>
+          </div>
+          <p className="text-muted-foreground text-sm">{memberCount} dedicated team members</p>
+        </div>
+      </div>
+
+      {/* Team Members Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+        {team.members.map((memberName, index) => {
+          const isLastRow = Math.floor(index / 4) === Math.floor((memberCount - 1) / 4)
+          const itemsInLastRow = memberCount % 4 || 4
+          const shouldCenter = isLastRow && itemsInLastRow < 4
+
+          return (
+            <div
+              key={memberName}
+              className={`
+                flex items-center justify-center text-center p-4 rounded-xl bg-muted/50
+                hover:bg-muted transition-colors duration-200 border border-border/50
+                ${shouldCenter && itemsInLastRow === 1 ? "sm:col-span-2 lg:col-span-3 xl:col-span-4" : ""}
+                ${shouldCenter && itemsInLastRow === 2 ? "lg:col-span-2 xl:col-span-2" : ""}
+                ${shouldCenter && itemsInLastRow === 3 ? "xl:col-span-1" : ""}
+              `}
+            >
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-secondary/10 flex items-center justify-center mb-3 shadow-sm">
+                  <Icon className="w-6 h-6 md:w-8 md:h-8 text-secondary" />
+                </div>
+                <p className="font-medium text-foreground text-sm md:text-base leading-tight">{memberName}</p>
+                <p className="text-muted-foreground text-xs mt-1">Team Member</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
 }

@@ -13,7 +13,7 @@ const events = [
     title: "Sunday Fellowship and Refreshments",
     date: "Every Sunday",
     time: "After Service",
-    description: "A time for the community to share a meal and strengthen bonds of fellowship.",
+    description: "A time for the community to share refreshments and strengthen bonds of fellowship.",
   },
   {
     title: "Monthly Prayer and Fasting",

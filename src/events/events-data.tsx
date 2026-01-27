@@ -28,7 +28,7 @@ export const events: Event[] = [
     time: "After Service",
     location: "Fellowship Hall",
     description:
-      "A time for the community to share a meal and strengthen bonds of fellowship.",
+      "A time for the community to share refreshments and strengthen bonds of fellowship.",
     recurring: true,
   },
   {
@@ -89,12 +89,12 @@ export const events: Event[] = [
     year: 2026,
   },
   {
-    title: "World Sunday School Day",
+    title: "Vacation Bible School",
     date: "June",
     time: "TBA",
     location: "Burton Hill Baptist Church",
     description:
-      "Honor Sunday School teachers and celebrate the importance of biblical education with special programs and recognition.",
+      "A Vacation Bible school for children ministry and members to learn about the Bible and how to apply it to their daily lives. ",
     recurring: false,
     month: 6,
     day: null,
@@ -122,7 +122,7 @@ export const events: Event[] = [
     year: 2026,
   },
   {
-    title: "Mission Sunday",
+    title: "Missions Sunday",
     date: "December 6th",
     time: "TBA",
     location: "Burton Hill Baptist Church",
@@ -162,6 +162,16 @@ export const events: Event[] = [
     recurring: false,
     month: 7,
     day: 5,
+    year: 2026,
+  },
+  {
+    title: "Homeless Ministry",
+    date: "July 2nd Week",
+    location: "Burton Hill Baptist Church",
+    description:
+      "Homeless Ministry to provide food, clothing, and shelter to the homeless in our community.",
+    recurring: false,
+    month: 7,
     year: 2026,
   },
   {
@@ -253,13 +263,14 @@ export const events: Event[] = [
     year: 2026,
   },
   {
-    title: "Thanksgiving Month",
-    date: "November",
+    title: "Thanksgiving Sunday",
+    date: "November 22nd",
     location: "Burton Hill Baptist Church",
     description:
-      "A month dedicated to gratitude with special services, testimonies, and activities focusing on thankfulness to God.",
+      "A special Sunday dedicated to gratitude with special services, testimonies, and activities focusing on thankfulness to God.",
     recurring: false,
     month: 11,
+    day: 22,
     year: 2026,
   },
   {
@@ -282,23 +293,14 @@ export const events: Event[] = [
     recurring: true,
   },
   {
-    title: "Vacation Bible School",
-    date: "June",
-    location: "Burton Hill Baptist Church",
-    description:
-      "Year-end leadership meeting to review the year's activities, plan for the coming year, and set church goals.",
-    recurring: false,
-    month: 6,
-    year: 2026,
-  },
-  {
     title: "World Sunday School Celebration",
-    date: "November",
+    date: "November 1st",
     location: "Burton Hill Baptist Church",
     description:
       "Year-end leadership meeting to review the year's activities, plan for the coming year, and set church goals.",
     recurring: false,
     month: 11,
+    day: 1,
     year: 2026,
   },
   {
@@ -317,9 +319,10 @@ export const events: Event[] = [
     date: "November",
     location: "Lewisville",
     description:
-      "Year-end leadership meeting to review the year's activities, plan for the coming year, and set church goals.",
+      "Year-end fellowship with Chin Baptist Church to review the year's activities, plan for the coming year, and set church goals.",
     recurring: false,
     month: 11,
+    day: 8,
     year: 2026,
   },
 ];
