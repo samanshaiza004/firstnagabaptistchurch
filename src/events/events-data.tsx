@@ -78,14 +78,15 @@ export const events: Event[] = [
   },
   {
     title: "Fellowship with Baylor Students",
-    date: "February",
-    time: "TBA",
-    location: "TBA",
+    date: "February 22nd",
+    time: "3:00 PM",
+    location: "Burton Hill Baptist Church",
     description:
-      "A special gathering for fellowship with Baylor University students and faculty.",
+      "Join us for a special Sunday with Baylor Naga student-led worship service, followed by fellowship and a delicious potluck meal.",
     recurring: false,
     month: 2,
-    day: null,
+    day: 22,
+    year: 2026,
   },
   {
     title: "Vacation Bible School",
@@ -111,13 +112,14 @@ export const events: Event[] = [
   },
   {
     title: "Church-wide Seminar",
-    date: "October",
+    date: "October 11th",
     time: "TBA",
     location: "TBD",
-    description: "During the Fall Break.",
+    description: "Guest Speaker: Dr. Chris Shirley, Dean of Christian Education, Prof. at SWBTS",
     recurring: false,
     month: 10,
-    day: 5
+    day: 11,
+    year: 2026,
   },
   {
     title: "Missions Sunday",
@@ -174,13 +176,13 @@ export const events: Event[] = [
   },
   {
     title: "Church Picnic",
-    date: "May 9th",
+    date: "May 23rd",
     location: "TBA",
     description:
       "A fun outdoor gathering with games, food, and fellowship for the entire church family to relax and connect.",
     recurring: false,
     month: 5,
-    day: 9,
+    day: 23,
     year: 2026,
   },
   {
@@ -229,12 +231,13 @@ export const events: Event[] = [
   },
   {
     title: "Outreach missions at Houston",
-    date: "March",
+    date: "March 7th",
     location: "Houston",
     description:
-      "Church members travel to Houston to conduct outreach, evangelism, and community service projects.",
+      "Church members travel to Houston to conduct outreach, evangelism, and fellowship with Naga families.",
     recurring: false,
     month: 3,
+    day: 7,
     year: 2026,
   },
   {
@@ -302,13 +305,13 @@ export const events: Event[] = [
   },
   {
     title: "Mission Trip to Florida",
-    date: "October 3rd Week",
+    date: "October 4th",
     location: "Burton Hill Baptist Church",
     description:
-      "Mission trip to Florida to conduct outreach, evangelism, and community service projects.",
+      "Church members travel to Florida to conduct outreach, evangelism, and fellowship with Naga families.",
     recurring: false,
     month: 10,
-    day: 18,
+    day: 4,
     year: 2026,
   },
   {
