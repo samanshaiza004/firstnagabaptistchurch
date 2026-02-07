@@ -3,8 +3,8 @@ import { Heart, Users, BookOpen, Globe, Home, HandHeart } from "lucide-react"
 const impactAreas = [
   {
     icon: BookOpen,
-    title: "Spiritual Growth",
-    description: "Bible studies, discipleship programs, and Sunday school materials for all ages.",
+    title: "Ministry of the Word",
+    description: "Pastoral salaries, teaching ministries, and resources that ground our church in Scripture-the primary way God transforms lives and builds His people.",
   },
   {
     icon: Users,
@@ -18,13 +18,13 @@ const impactAreas = [
   },
   {
     icon: Globe,
-    title: "Missions & Outreach",
-    description: "Supporting missionaries and evangelism efforts locally and globally.",
+    title: "Worship & Media",
+    description: "Audio-visual, livestream, website, printed media, and creative resources that help our community encounter God and stay connected.",
   },
   {
     icon: Heart,
-    title: "Youth Programs",
-    description: "Investing in the next generation through youth ministry and activities.",
+    title: "Youth & Children",
+    description: "Age-appropriate teaching, events, safe environments, and mentorship helping youngpeople grow in faith and character.",
   },
   {
     icon: HandHeart,
