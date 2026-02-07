@@ -65,12 +65,12 @@ export const events: Event[] = [
     year: 2026,
   },
   {
-    title: "Christmas Celebration",
+    title: "Christmas",
     date: "December 25th",
     time: "TBA",
     location: "Burton Hill Baptist Church",
     description:
-      "Celebrate the birth of Jesus Christ with carols, special music, and a festive gathering of the church family.",
+      "A joyful celebration of Christ's birth through preaching, worship, fellowship, and feasting-welcomingk all to gather and worship the Light of the World.",
     recurring: false,
     month: 12,
     day: 25,
@@ -218,11 +218,11 @@ export const events: Event[] = [
     year: 2026,
   },
   {
-    title: "Carol and Advent",
+    title: "Carol & Advent",
     date: "December",
     location: "Burton Hill Baptist Church",
     description:
-      "A month-long celebration of Advent with special carol singing, Advent wreaths, and Christmas music programs.",
+      "An evening of carol, worship, and Scripture as we prepare our hearts for Christmas.",
     recurring: false,
     month: 12,
     year: 2026,
@@ -294,7 +294,7 @@ export const events: Event[] = [
     date: "November 1st",
     location: "Burton Hill Baptist Church",
     description:
-      "Year-end leadership meeting to review the year's activities, plan for the coming year, and set church goals.",
+      "A church-wide celebration of Sunday School'd transformative impact-uniting worship, fellowship, and renewed commitment to teaching God's Word across every generation.",
     recurring: false,
     month: 11,
     day: 1,
@@ -316,7 +316,7 @@ export const events: Event[] = [
     date: "November",
     location: "Lewisville",
     description:
-      "Year-end fellowship with Chin Baptist Church to review the year's activities, plan for the coming year, and set church goals.",
+      "An evening of shared worship, cultural exchange, and deepening partnership with ouir brothers and sisters from Chin Baptist Church as one family in Christ.",
     recurring: false,
     month: 11,
     day: 8,
