@@ -264,6 +264,7 @@ export function MeetTheTeam() {
                       src={trustee.image || "/placeholder.svg"}
                       alt={`Portrait of ${trustee.name}`}
                       className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-300"
+
                     />
                   </div>
                   <CardContent className="p-5 flex-1">
