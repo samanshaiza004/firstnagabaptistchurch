@@ -1,10 +1,11 @@
 import { Clock, MapPin, Calendar } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
+import { getServiceTimeWithDST } from "@/lib/utils"
 
 const services = [
   {
     title: "Sunday Worship",
-    time: "3:00 PM",
+    getTime: () => getServiceTimeWithDST().time,
     description: "Join us for our main worship service with praise, prayer, and teaching.",
     icon: Clock,
   },
@@ -42,11 +43,18 @@ export function ServiceTimes() {
                   <service.icon className="h-6 w-6" />
                 </div>
                 <h3 className="font-serif text-xl font-semibold mb-2">{service.title}</h3>
-                <p className="text-black font-semibold text-lg mb-2">{service.time}</p>
+                <p className="text-black font-semibold text-lg mb-2">{service.getTime ? service.getTime() : service.time}</p>
                 <p className="text-muted-foreground text-sm">{service.description}</p>
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* DST Notice */}
+        <div className="mt-8 text-center">
+          <p className="text-sm text-muted-foreground bg-muted/50 rounded-lg px-4 py-3 inline-block">
+            <span className="font-medium">Daylight Saving Time:</span> Service starts at 3:30 PM during DST (March-November) and 3:00 PM during standard time (November-March)
+          </p>
         </div>
       </div>
     </section>
