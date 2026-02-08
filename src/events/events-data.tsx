@@ -1,7 +1,10 @@
+import { getCurrentServiceTime } from "@/lib/utils";
+
 export type Event = {
   title: string;
   date: string;
   time?: string;
+  getTime?: () => string;
   location: string;
   description: string;
   recurring: boolean;
@@ -16,7 +19,7 @@ export const events: Event[] = [
   {
     title: "Sunday Worship Service",
     date: "Every Sunday",
-    time: "3:00 PM",
+    getTime: getCurrentServiceTime,
     location: "Burton Hill Baptist Church",
     description:
       "Join us for our weekly worship gathering with praise, prayer, Scripture reading, and teaching from God's Word.",
