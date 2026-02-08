@@ -147,7 +147,7 @@ export const events: Event[] = [
     date: "April 5th",
     location: "Burton Hill Baptist Church",
     description:
-      "Celebrate Christ's resurrection with sunrise service, special music, and participation in the Lord's Supper.",
+      "Celebrate Christ's victorious resurrection through Scripture, song, and the sacred fellowship of the Lord's Supper.",
     recurring: false,
     month: 4,
     day: 5,
