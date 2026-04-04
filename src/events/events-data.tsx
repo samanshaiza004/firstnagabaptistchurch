@@ -53,15 +53,15 @@ export const events: Event[] = [
     year: 2026,
   },
   {
-    title: "Fundraising Cultural Event",
-    date: "August 9th",
+    title: "Fundraising & Cultural Event",
+    date: "August 1st",
     time: "TBA",
     location: "Burton Hill Baptist Church",
     description:
       "A vibrant cultural celebration featuring traditional Naga music, dance, and cuisine to support church ministries.",
     recurring: false,
     month: 8,
-    day: 9,
+    day: 1,
     year: 2026,
   },
   {
@@ -101,14 +101,15 @@ export const events: Event[] = [
   },
   {
     title: "Half Yearly GBM",
-    date: "June",
+    date: "July 12th",
     time: "TBA",
     location: "Burton Hill Baptist Church",
     description:
       "Mid-year General Body Meeting to review church progress, discuss upcoming initiatives, and make important decisions.",
     recurring: false,
-    month: 6,
-    day: null,
+    month: 7,
+    day: 12,
+    year: 2026,
   },
   {
     title: "Church-wide Seminar",
@@ -166,20 +167,21 @@ export const events: Event[] = [
   },
   {
     title: "Homeless Ministry",
-    date: "July 2nd Week",
+    date: "July 11th",
     location: "Burton Hill Baptist Church",
     description:
       "Homeless Ministry to provide food, clothing, and shelter to the homeless in our community.",
     recurring: false,
     month: 7,
+    day: 11,
     year: 2026,
   },
   {
-    title: "Church Picnic",
+    title: "Church Picnic & Baptism",
     date: "May 23rd",
     location: "TBA",
     description:
-      "A fun outdoor gathering with games, food, and fellowship for the entire church family to relax and connect.",
+      "A fun outdoor gathering with games, food, fellowship, and baptisms for the entire church family to relax and connect.",
     recurring: false,
     month: 5,
     day: 23,
@@ -304,14 +306,14 @@ export const events: Event[] = [
     year: 2026,
   },
   {
-    title: "Mission Trip to Florida",
-    date: "October 4th",
+    title: "Florida Mission's Trip",
+    date: "Oct 2-4",
     location: "Burton Hill Baptist Church",
     description:
       "Church members travel to Florida to conduct outreach, evangelism, and fellowship with Naga families.",
     recurring: false,
     month: 10,
-    day: 4,
+    day: 2,
     year: 2026,
   },
   {
