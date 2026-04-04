@@ -61,8 +61,13 @@ const teamMembers = [
     bio: "Originally from Nagaland, now married to Atul Kumar from North India. They have made Texas their home with their two daughters, Rhea and Nilivi. Passionate about serving the church and hosting events.",
     image: "/kumar.JPG",
   },
-  
-  
+  {
+    name: "Saman Shaiza",
+    role: "Webmaster",
+    category: "Administration",
+    bio: "Saman Shaiza is the creator and maintainer of this website. As the webmaster, he ensures our online presence effectively communicates our church's mission and connects with our community.",
+    image: "/samans.png",
+  },
 ];
 
 const trustees = [
@@ -224,14 +229,9 @@ export function MeetTheTeam() {
         </div>
 
         {/* Team Members Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-4 mb-12">
-          {teamMembers.map((member, index) => (
-            <div
-              key={member.name}
-              className={index >= 8 ? "xl:col-span-2" : ""}
-            >
-              <TeamMemberCard member={member} />
-            </div>
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-4 mb-12">
+          {teamMembers.map((member) => (
+            <TeamMemberCard key={member.name} member={member} />
           ))}
         </div>
 
@@ -263,7 +263,8 @@ export function MeetTheTeam() {
                     <img
                       src={trustee.image || "/placeholder.svg"}
                       alt={`Portrait of ${trustee.name}`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-300"
+
                     />
                   </div>
                   <CardContent className="p-5 flex-1">

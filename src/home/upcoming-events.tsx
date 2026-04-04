@@ -1,12 +1,13 @@
 import { Calendar, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { getCurrentServiceTime } from "@/lib/utils"
 
 const events = [
   {
     title: "Sunday Worship Service",
     date: "Every Sunday",
-    time: "3:00 PM",
+    getTime: () => getCurrentServiceTime(),
     description: "Join us for our weekly worship gathering with praise, prayer, and the Word.",
   },
   {
@@ -54,7 +55,7 @@ export function UpcomingEvents() {
                 <div className="flex items-center gap-2 text-secondary mb-3">
                   <Calendar className="h-4 w-4" />
                   <span className="text-sm font-medium">
-                    {event.date} • {event.time}
+                    {event.date} • {event.getTime ? event.getTime() : event.time}
                   </span>
                 </div>
                 <h3 className="font-serif text-xl font-semibold mb-2">{event.title}</h3>
