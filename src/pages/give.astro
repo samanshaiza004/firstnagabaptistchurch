@@ -1,7 +1,7 @@
 ---
-import { Image } from "astro:assets";
 import { BookOpen, Globe, HandHeart, Heart, House, QrCode, Quote, Shield, Smartphone, Users } from "@lucide/astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
 import heroImage from "../assets/images/fundraider.jpg";
 import { siteConfig } from "../site-config";
 
@@ -20,7 +20,7 @@ const impactAreas = [
 ---
 
 <BaseLayout title="Give | First Naga Baptist Church" description="Support the ministries and community outreach of First Naga Baptist Church.">
-  <section class="relative isolate overflow-hidden bg-primary py-24 lg:py-32"><Image src={heroImage} alt="First Naga Baptist Church community fundraiser" widths={[640, 960, 1280, 1920]} sizes="100vw" class="absolute inset-0 -z-20 size-full object-cover" /><div class="hero-overlay -z-10"></div><div class="site-container text-center"><span class="mx-auto mb-6 flex size-16 items-center justify-center rounded-full bg-secondary"><Heart class="size-8 text-secondary-foreground" /></span><h1 class="text-balance mb-6 font-serif text-4xl font-bold text-primary-foreground md:text-5xl lg:text-6xl">Support Our Ministry</h1><p class="mx-auto max-w-2xl text-lg leading-relaxed text-primary-foreground/90 md:text-xl">Your generous giving helps us continue our mission of spreading the Gospel, supporting Naga families, and building bridges between communities in DFW and beyond.</p></div></section>
+  <PageHero eyebrow="Giving as Worship" title="Support Our Ministry" description="Your generous giving helps us spread the Gospel, support Naga families, and build bridges between communities in DFW and beyond." image={heroImage} imageAlt="First Naga Baptist Church community fundraiser" />
 
   <section class="section"><div class="site-container"><div class="mb-12 text-center"><p class="eyebrow">Ways to Give</p><h2 class="section-title mb-4">Choose Your Donation Method</h2><p class="section-copy mx-auto">Scan the QR code with your phone camera or payment app, then verify the church recipient before sending.</p></div><div class="mx-auto mb-12 grid max-w-4xl gap-8 md:grid-cols-2">{methods.map((method) => <article class="card overflow-hidden border-2"><header class:list={["p-6 text-white", method.color]}><div class="flex items-center gap-3"><QrCode class="size-6" /><div><h3 class="text-xl font-semibold">{method.name}</h3><p class="text-sm text-white/80">{method.description}</p></div></div></header><div class="p-6"><div class="mb-6 rounded-lg bg-accent/40 p-4 text-center"><p class="font-semibold">{method.name} Contact:</p><p class="break-all font-mono text-lg text-primary">{method.contact}</p></div><div class="mx-auto mb-6 w-fit rounded-xl bg-white p-4 shadow-inner"><img src={method.image} width="192" height="192" alt={`${method.name} donation QR code`} loading="lazy" decoding="async" class="size-48 object-contain" /></div><h4 class="mb-3 flex items-center gap-2 font-semibold"><Smartphone class="size-4 text-primary" />How to Donate</h4><ol class="space-y-2">{method.instructions.map((instruction, index) => <li class="flex gap-3 text-sm text-muted-foreground"><span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary">{index + 1}</span>{instruction}</li>)}</ol></div></article>)}</div><div class="flex items-center justify-center gap-3 text-sm text-muted-foreground"><Shield class="size-5 text-green-700" /><p>Always verify the church recipient before completing a donation.</p></div></div></section>
 

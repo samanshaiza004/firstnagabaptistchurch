@@ -16,6 +16,8 @@
     "@lucide/astro": "latest",
     "@netlify/functions": "^5.1.2",
     "@astrojs/sitemap": "latest",
+    "@fontsource-variable/alegreya": "latest",
+    "@fontsource-variable/public-sans": "latest",
     "astro": "^7.0.0",
     "nodemailer": "^7.0.12",
     "sharp": "latest"
