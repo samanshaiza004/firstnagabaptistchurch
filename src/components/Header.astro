@@ -6,35 +6,35 @@ const routePath = Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.h
 const currentPath = routePath === "/" ? "/" : routePath.replace(/\/$/, "");
 ---
 
-<header class="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
+<header class="site-header sticky top-0 z-50 border-b">
   <nav class="site-container" aria-label="Main navigation">
-    <div class="flex h-16 items-center justify-between">
+    <div class="header-inner flex items-center justify-between">
       <a href="/" class="flex items-center gap-3 no-underline" aria-label={`${siteConfig.name} home`}>
-        <span class="flex size-10 items-center justify-center rounded-full bg-primary font-serif text-lg font-bold text-primary-foreground" aria-hidden="true">F</span>
+        <span class="brand-mark" aria-hidden="true">F</span>
         <span class="hidden sm:block">
-          <span class="block font-serif text-lg font-semibold text-foreground">{siteConfig.name}</span>
-          <span class="block text-xs text-muted-foreground">{siteConfig.region}</span>
+          <span class="block font-serif text-lg font-semibold leading-tight">{siteConfig.name}</span>
+          <span class="wordmark-location block text-[.65rem] font-semibold uppercase tracking-[.18em]">{siteConfig.region}</span>
         </span>
       </a>
 
       <div class="hidden items-center gap-8 md:flex">
         {navigation.map((item) => (
-          <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined} class:list={["text-sm font-medium transition-colors hover:text-foreground", currentPath === item.href ? "text-foreground" : "text-muted-foreground"]}>
+          <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined} class="nav-link text-sm font-medium transition-colors">
             {item.name}
           </a>
         ))}
       </div>
 
-      <button id="menu-button" class="flex size-11 items-center justify-center rounded-md text-foreground hover:bg-muted md:hidden" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation menu">
+      <button id="menu-button" class="menu-control flex size-11 items-center justify-center rounded-sm md:hidden" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation menu">
         <Menu data-menu-open class="size-6" aria-hidden="true" />
         <X data-menu-close class="hidden size-6" aria-hidden="true" />
       </button>
     </div>
 
-    <div id="mobile-menu" class="hidden border-t border-border py-4 md:hidden">
+    <div id="mobile-menu" class="hidden border-t border-white/15 py-4 md:hidden">
       <div class="flex flex-col gap-1">
         {navigation.map((item) => (
-          <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined} class:list={["rounded-md px-3 py-3 font-medium hover:bg-muted", currentPath === item.href ? "bg-muted text-foreground" : "text-muted-foreground"]}>
+          <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined} class:list={["rounded-sm px-3 py-3 font-medium hover:bg-white/10", currentPath === item.href ? "bg-white/10 text-white" : "text-white/70"]}>
             {item.name}
           </a>
         ))}
