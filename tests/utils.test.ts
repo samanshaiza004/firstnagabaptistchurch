@@ -3,7 +3,7 @@ import {
   getCurrentServiceTime,
   getServiceTimeWithDST,
   isDST,
-} from "../src/lib/utils";
+} from "../src/lib/service-time";
 
 describe("Central Time service schedule", () => {
   test("uses standard time in January", () => {
@@ -23,5 +23,15 @@ describe("Central Time service schedule", () => {
       time: "3:30 PM",
       note: "Service time during Daylight Saving Time",
     });
+  });
+
+  test("changes at the exact 2026 spring DST boundary", () => {
+    expect(isDST(new Date("2026-03-08T07:59:59Z"))).toBe(false);
+    expect(isDST(new Date("2026-03-08T08:00:00Z"))).toBe(true);
+  });
+
+  test("changes at the exact 2026 fall DST boundary", () => {
+    expect(isDST(new Date("2026-11-01T06:59:59Z"))).toBe(true);
+    expect(isDST(new Date("2026-11-01T07:00:00Z"))).toBe(false);
   });
 });

@@ -1,0 +1,70 @@
+---
+import { getImage } from "astro:assets";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ogSource from "../assets/images/bgoption2.webp";
+import { siteConfig } from "../site-config";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const { title, description = siteConfig.description, noindex = false } = Astro.props;
+const routePath = Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+const canonicalPath = routePath === "/" ? "/" : routePath.replace(/\/$/, "");
+const canonical = new URL(canonicalPath, siteConfig.domain);
+const ogImage = await getImage({ src: ogSource, width: 1200, height: 630, fit: "cover", format: "webp" });
+const ogUrl = new URL(ogImage.src, siteConfig.domain);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Church",
+  name: siteConfig.name,
+  url: siteConfig.domain,
+  email: siteConfig.email,
+  telephone: siteConfig.phoneHref,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "308 Burton Hill Rd",
+    addressLocality: "Westworth Village",
+    addressRegion: "TX",
+    postalCode: "76114",
+    addressCountry: "US",
+  },
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
+    <title>{title}</title>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <a href="#main-content" class="fixed left-4 top-4 z-[100] -translate-y-24 rounded-md bg-background px-4 py-2 text-foreground shadow-lg transition-transform focus:translate-y-0">Skip to main content</a>
+    <Header />
+    <main id="main-content" tabindex="-1"><slot /></main>
+    <Footer />
+    <script>import "../scripts/service-time";</script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+  image: ImageMetadata;
+  imageAlt: string;
+}
+
+const { eyebrow, title, description, image, imageAlt } = Astro.props;
+---
+
+<section class="relative isolate overflow-hidden bg-primary py-24 lg:py-32">
+  <Image src={image} alt={imageAlt} widths={[640, 960, 1280, 1920]} sizes="100vw" class="absolute inset-0 -z-20 size-full object-cover" />
+  <div class="hero-overlay -z-10"></div>
+  <div class="site-container text-center">
+    <p class="eyebrow mb-4">{eyebrow}</p>
+    <h1 class="text-balance mb-6 font-serif text-4xl font-bold text-primary-foreground md:text-5xl lg:text-6xl">{title}</h1>
+    <p class="mx-auto max-w-3xl text-lg leading-relaxed text-primary-foreground/90 md:text-xl">{description}</p>
+  </div>
+</section>

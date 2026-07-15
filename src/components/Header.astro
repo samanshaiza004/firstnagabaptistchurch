@@ -1,0 +1,69 @@
+---
+import { Menu, X } from "@lucide/astro";
+import { navigation, siteConfig } from "../site-config";
+
+const routePath = Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+const currentPath = routePath === "/" ? "/" : routePath.replace(/\/$/, "");
+---
+
+<header class="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
+  <nav class="site-container" aria-label="Main navigation">
+    <div class="flex h-16 items-center justify-between">
+      <a href="/" class="flex items-center gap-3 no-underline" aria-label={`${siteConfig.name} home`}>
+        <span class="flex size-10 items-center justify-center rounded-full bg-primary font-serif text-lg font-bold text-primary-foreground" aria-hidden="true">F</span>
+        <span class="hidden sm:block">
+          <span class="block font-serif text-lg font-semibold text-foreground">{siteConfig.name}</span>
+          <span class="block text-xs text-muted-foreground">{siteConfig.region}</span>
+        </span>
+      </a>
+
+      <div class="hidden items-center gap-8 md:flex">
+        {navigation.map((item) => (
+          <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined} class:list={["text-sm font-medium transition-colors hover:text-foreground", currentPath === item.href ? "text-foreground" : "text-muted-foreground"]}>
+            {item.name}
+          </a>
+        ))}
+      </div>
+
+      <button id="menu-button" class="flex size-11 items-center justify-center rounded-md text-foreground hover:bg-muted md:hidden" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation menu">
+        <Menu data-menu-open class="size-6" aria-hidden="true" />
+        <X data-menu-close class="hidden size-6" aria-hidden="true" />
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden border-t border-border py-4 md:hidden">
+      <div class="flex flex-col gap-1">
+        {navigation.map((item) => (
+          <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined} class:list={["rounded-md px-3 py-3 font-medium hover:bg-muted", currentPath === item.href ? "bg-muted text-foreground" : "text-muted-foreground"]}>
+            {item.name}
+          </a>
+        ))}
+        <a href="/contact" class="button mt-3">Join Us</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>("#menu-button");
+  const menu = document.querySelector<HTMLElement>("#mobile-menu");
+  const openIcon = button?.querySelector<HTMLElement>("[data-menu-open]");
+  const closeIcon = button?.querySelector<HTMLElement>("[data-menu-close]");
+
+  const setMenu = (open: boolean) => {
+    if (!button || !menu) return;
+    button.setAttribute("aria-expanded", String(open));
+    button.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
+    menu.classList.toggle("hidden", !open);
+    openIcon?.classList.toggle("hidden", open);
+    closeIcon?.classList.toggle("hidden", !open);
+  };
+
+  button?.addEventListener("click", () => setMenu(button.getAttribute("aria-expanded") !== "true"));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && button?.getAttribute("aria-expanded") === "true") {
+      setMenu(false);
+      button.focus();
+    }
+  });
+</script>
