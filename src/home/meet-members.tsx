@@ -9,7 +9,7 @@ const teamMembers = [
     role: "Interim Pastor",
     category: "Pastoral Staff",
     bio: "Mathingmi Hongchui, married to Yami Asai Shimray for three years, is a SWBTS PhD student and father to Hesed (2) and Thanzat (6 months). He served as Secretary, then Deacon (3 years), and previously as Children’s Coordinator at Richland Hill Baptist Church (3 years). Driven by love for Christ, Mathing is passionate about disciple-making through Jesus’ model and pursuing conformity to His image.",
-    image: "/mathingmi2.JPEG",
+    image: "/mathingmi-optimized.jpg",
   },
   {
     name: "Ms. Livi Yepthomi",
@@ -59,14 +59,14 @@ const teamMembers = [
     role: "Treasurer",
     category: "Finance",
     bio: "Originally from Nagaland, now married to Atul Kumar from North India. They have made Texas their home with their two daughters, Rhea and Nilivi. Passionate about serving the church and hosting events.",
-    image: "/kumar.JPG",
+    image: "/kumar-optimized.jpg",
   },
   {
     name: "Saman Shaiza",
     role: "Webmaster",
     category: "Administration",
     bio: "Saman Shaiza is the creator and maintainer of this website. As the webmaster, he ensures our online presence effectively communicates our church's mission and connects with our community.",
-    image: "/samans.png",
+    image: "/saman-optimized.jpg",
   },
 ];
 
@@ -162,6 +162,8 @@ function TeamMemberCard({ member }: { member: (typeof teamMembers)[0] }) {
           <img
             src={member.image || "/placeholder.svg"}
             alt={`Portrait of ${member.name}`}
+            loading="lazy"
+            decoding="async"
             className={`w-full h-full object-cover transition-transform duration-300 ${
               !isMobile ? "group-hover:scale-105" : ""
             }`}
@@ -263,6 +265,8 @@ export function MeetTheTeam() {
                     <img
                       src={trustee.image || "/placeholder.svg"}
                       alt={`Portrait of ${trustee.name}`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-300"
 
                     />
@@ -303,6 +307,8 @@ function MinistryTeamSection({ team }: { team: (typeof ministryTeams)[0] }) {
             <img
               src={team.leader.image || "/placeholder.svg"}
               alt={`Portrait of ${team.leader.name}`}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover"
             />
           </div>

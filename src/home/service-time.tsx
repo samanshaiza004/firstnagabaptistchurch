@@ -53,7 +53,7 @@ export function ServiceTimes() {
         {/* DST Notice */}
         <div className="mt-8 text-center">
           <p className="text-sm text-muted-foreground bg-muted/50 rounded-lg px-4 py-3 inline-block">
-            <span className="font-medium">Daylight Saving Time:</span> Service starts at 3:30 PM during DST (March-November) and 3:00 PM during standard time (November-March)
+            <span className="font-medium">Seasonal schedule:</span> Service starts at 3:30 PM while Central Time observes daylight saving time and at 3:00 PM during standard time.
           </p>
         </div>
       </div>

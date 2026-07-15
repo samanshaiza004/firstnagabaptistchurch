@@ -1,320 +1,198 @@
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import type { FormEvent } from "react";
+import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { useContactForm } from "@/hooks/useContactForm";
+import type { ContactField } from "@/hooks/useContactForm";
 
-// Validation schema
-const validationSchema = Yup.object({
-  firstName: Yup.string()
-    .trim()
-    .min(2, "First name must be at least 2 characters")
-    .required("First name is required"),
-  lastName: Yup.string()
-    .trim()
-    .min(2, "Last name must be at least 2 characters")
-    .required("Last name is required"),
-  email: Yup.string()
-    .email("Please enter a valid email address")
-    .required("Email is required"),
-  phone: Yup.string()
-    .nullable()
-    .notRequired()
-    .matches(/^[+]?[1-9]\d{0,15}$/, {
-      message: "Please enter a valid phone number",
-      excludeEmptyString: true,
-    }),
+function FieldError({ id, message }: { id: string; message?: string }) {
+  if (!message) return null;
 
-  subject: Yup.string()
-    .trim()
-    .min(5, "Subject must be at least 5 characters")
-    .required("Subject is required"),
-  message: Yup.string()
-    .trim()
-    .min(10, "Message must be at least 10 characters")
-    .required("Message is required"),
-});
-
-// Initial form values
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-  subject: "",
-  message: "",
-};
+  return (
+    <p id={id} className="flex items-center gap-1 text-sm text-red-600">
+      <AlertCircle className="h-3 w-3" aria-hidden="true" />
+      {message}
+    </p>
+  );
+}
 
 export function ContactForm() {
-  const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    isSubmitted,
+    submitError,
+    updateField,
+    submitForm,
+    resetForm,
+  } = useContactForm();
+
+  const fieldProps = (field: ContactField) => ({
+    value: formData[field],
+    onChange: (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => updateField(field, event.target.value),
+    "aria-invalid": Boolean(errors[field]),
+    "aria-describedby": errors[field] ? `${field}-error` : undefined,
+  });
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await submitForm();
+  };
 
   if (isSubmitted) {
     return (
-      <div className="bg-muted rounded-lg p-8 text-center">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+      <div className="rounded-lg bg-muted p-8 text-center" role="status">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
           <CheckCircle2 className="h-8 w-8 text-green-600" />
         </div>
-        <h3 className="font-serif text-2xl font-semibold text-foreground mb-2">
-          Message Sent Successfully!
-        </h3>
-        <p className="text-muted-foreground mb-6">
-          Thank you for reaching out! We will get back to you as soon as
-          possible.
+        <h2 className="mb-2 font-serif text-2xl font-semibold text-foreground">
+          Message sent successfully
+        </h2>
+        <p className="mb-6 text-muted-foreground">
+          Thank you for reaching out. We will respond as soon as we can.
         </p>
-        <Button onClick={() => setIsSubmitted(false)} variant="outline">
-          Send Another Message
+        <Button onClick={resetForm} variant="outline">
+          Send another message
         </Button>
       </div>
     );
   }
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={async (values, { setSubmitting, setStatus, resetForm }) => {
-        try {
-          const response = await fetch("/.netlify/functions/contact-email", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(values),
-          });
+    <div>
+      <h2 className="mb-2 font-serif text-2xl font-bold text-foreground md:text-3xl">
+        Send Us a Message
+      </h2>
+      <p className="mb-8 text-muted-foreground">
+        Fill out the form below and we will respond as soon as we can.
+      </p>
 
-          const result = await response.json();
-
-          if (!response.ok || !result.success) {
-            throw new Error(
-              result.error || "Failed to send message. Please try again."
-            );
-          }
-
-          setIsSubmitted(true);
-          resetForm();
-        } catch (error) {
-          console.error("Form submission error:", error);
-          setStatus({
-            error:
-              error instanceof Error
-                ? error.message
-                : "An unexpected error occurred. Please try again.",
-          });
-        } finally {
-          setSubmitting(false);
-        }
-      }}
-    >
-      {({ isSubmitting, status, errors, touched }) => (
-        <div>
-          <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-2">
-            Send Us a Message
-          </h2>
-          <p className="text-muted-foreground mb-8">
-            Fill out the form below and we will respond as soon as we can.
-          </p>
-
-          {/* Error Alert */}
-          {status?.error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3 mb-6">
-              <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
-              <div>
-                <h4 className="font-medium text-red-800 mb-1">
-                  Error Sending Message
-                </h4>
-                <p className="text-sm text-red-700">{status.error}</p>
-              </div>
-            </div>
-          )}
-
-          <Form className="space-y-6">
-            {/* Name Fields */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">
-                  First Name <span className="text-red-500">*</span>
-                </Label>
-                <Field
-                  as={Input}
-                  id="firstName"
-                  name="firstName"
-                  placeholder="John"
-                  className={
-                    errors.firstName && touched.firstName
-                      ? "border-red-500 focus:border-red-500"
-                      : ""
-                  }
-                />
-                <ErrorMessage name="firstName">
-                  {(msg) => (
-                    <p className="text-sm text-red-600 flex items-center gap-1">
-                      <AlertCircle className="h-3 w-3" />
-                      {msg}
-                    </p>
-                  )}
-                </ErrorMessage>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">
-                  Last Name <span className="text-red-500">*</span>
-                </Label>
-                <Field
-                  as={Input}
-                  id="lastName"
-                  name="lastName"
-                  placeholder="Doe"
-                  className={
-                    errors.lastName && touched.lastName
-                      ? "border-red-500 focus:border-red-500"
-                      : ""
-                  }
-                />
-                <ErrorMessage name="lastName">
-                  {(msg) => (
-                    <p className="text-sm text-red-600 flex items-center gap-1">
-                      <AlertCircle className="h-3 w-3" />
-                      {msg}
-                    </p>
-                  )}
-                </ErrorMessage>
-              </div>
-            </div>
-
-            {/* Email Field */}
-            <div className="space-y-2">
-              <Label htmlFor="email">
-                Email Address <span className="text-red-500">*</span>
-              </Label>
-              <Field
-                as={Input}
-                id="email"
-                name="email"
-                type="email"
-                placeholder="john@example.com"
-                className={
-                  errors.email && touched.email
-                    ? "border-red-500 focus:border-red-500"
-                    : ""
-                }
-              />
-              <ErrorMessage name="email">
-                {(msg) => (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="h-3 w-3" />
-                    {msg}
-                  </p>
-                )}
-              </ErrorMessage>
-            </div>
-
-            {/* Phone Field */}
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
-              <Field
-                as={Input}
-                id="phone"
-                name="phone"
-                type="tel"
-                placeholder="(555) 123-4567"
-                className={
-                  errors.phone && touched.phone
-                    ? "border-red-500 focus:border-red-500"
-                    : ""
-                }
-              />
-              <ErrorMessage name="phone">
-                {(msg) => (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="h-3 w-3" />
-                    {msg}
-                  </p>
-                )}
-              </ErrorMessage>
-              <p className="text-xs text-muted-foreground">
-                Optional, but helpful for us to contact you
-              </p>
-            </div>
-
-            {/* Subject Field */}
-            <div className="space-y-2">
-              <Label htmlFor="subject">
-                Subject <span className="text-red-500">*</span>
-              </Label>
-              <Field
-                as={Input}
-                id="subject"
-                name="subject"
-                placeholder="How can we help?"
-                className={
-                  errors.subject && touched.subject
-                    ? "border-red-500 focus:border-red-500"
-                    : ""
-                }
-              />
-              <ErrorMessage name="subject">
-                {(msg) => (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="h-3 w-3" />
-                    {msg}
-                  </p>
-                )}
-              </ErrorMessage>
-            </div>
-
-            {/* Message Field */}
-            <div className="space-y-2">
-              <Label htmlFor="message">
-                Message <span className="text-red-500">*</span>
-              </Label>
-              <Field
-                as={Textarea}
-                id="message"
-                name="message"
-                placeholder="Tell us more about your inquiry, prayer request, or question..."
-                rows={5}
-                className={
-                  errors.message && touched.message
-                    ? "border-red-500 focus:border-red-500"
-                    : ""
-                }
-              />
-              <ErrorMessage name="message">
-                {(msg) => (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="h-3 w-3" />
-                    {msg}
-                  </p>
-                )}
-              </ErrorMessage>
-            </div>
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              className="w-full bg-primary hover:bg-primary/90"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Sending Message...
-                </>
-              ) : (
-                "Send Message"
-              )}
-            </Button>
-
-            {/* Privacy Notice */}
-            <p className="text-xs text-muted-foreground text-center">
-              Your information is secure and will only be used to respond to
-              your message.
-            </p>
-          </Form>
+      {submitError && (
+        <div
+          className="mb-6 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4"
+          role="alert"
+        >
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-600" />
+          <div>
+            <h3 className="mb-1 font-medium text-red-800">
+              Error sending message
+            </h3>
+            <p className="text-sm text-red-700">{submitError}</p>
+          </div>
         </div>
       )}
-    </Formik>
+
+      <form className="space-y-6" onSubmit={handleSubmit} noValidate>
+        <div className="absolute left-[-10000px]" aria-hidden="true">
+          <Label htmlFor="website">Website</Label>
+          <Input
+            id="website"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            {...fieldProps("website")}
+          />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="firstName">First Name *</Label>
+            <Input
+              id="firstName"
+              name="firstName"
+              autoComplete="given-name"
+              maxLength={80}
+              {...fieldProps("firstName")}
+            />
+            <FieldError id="firstName-error" message={errors.firstName} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="lastName">Last Name *</Label>
+            <Input
+              id="lastName"
+              name="lastName"
+              autoComplete="family-name"
+              maxLength={80}
+              {...fieldProps("lastName")}
+            />
+            <FieldError id="lastName-error" message={errors.lastName} />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="email">Email Address *</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            maxLength={254}
+            {...fieldProps("email")}
+          />
+          <FieldError id="email-error" message={errors.email} />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="phone">Phone Number</Label>
+          <Input
+            id="phone"
+            name="phone"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            maxLength={30}
+            {...fieldProps("phone")}
+          />
+          <FieldError id="phone-error" message={errors.phone} />
+          <p className="text-xs text-muted-foreground">
+            Optional, but helpful if you would like us to call you.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="subject">Subject *</Label>
+          <Input
+            id="subject"
+            name="subject"
+            maxLength={150}
+            {...fieldProps("subject")}
+          />
+          <FieldError id="subject-error" message={errors.subject} />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="message">Message *</Label>
+          <Textarea
+            id="message"
+            name="message"
+            rows={6}
+            maxLength={5000}
+            {...fieldProps("message")}
+          />
+          <FieldError id="message-error" message={errors.message} />
+        </div>
+
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Sending message…
+            </>
+          ) : (
+            "Send message"
+          )}
+        </Button>
+
+        <p className="text-center text-xs text-muted-foreground">
+          Your information will only be used to respond to your message.
+        </p>
+      </form>
+    </div>
   );
 }

@@ -14,7 +14,7 @@ const founders = [
     "Mr. Visedelie Seyie",
     "Mr. Theishing Konghar",
   ]
-  
+
   export function FoundersSection() {
     return (
       <section className="py-16 lg:py-24 bg-muted">
@@ -31,6 +31,8 @@ const founders = [
             <img
               src="/foundingmembers.jpg"
               alt="First Naga Baptist Church Founding Members"
+              loading="lazy"
+              decoding="async"
               className="w-full h-96 object-cover rounded-lg shadow-lg"
             />
             <p className="text-center text-sm text-muted-foreground mt-3 italic">

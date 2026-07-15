@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -39,13 +39,17 @@ export function Header() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:gap-8">
             {navigation.map((item) => (
-              <Link
+              <NavLink
                 key={item.name}
                 to={item.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className={({ isActive }) =>
+                  `text-sm font-medium transition-colors hover:text-foreground ${
+                    isActive ? "text-foreground" : "text-muted-foreground"
+                  }`
+                }
               >
                 {item.name}
-              </Link>
+              </NavLink>
             ))}
             {/*<Button asChild className="bg-primary hover:bg-primary/90">
               <Link to="/contact">Join Us</Link>
@@ -74,14 +78,18 @@ export function Header() {
           <div className="md:hidden border-t border-border py-4">
             <div className="flex flex-col gap-4">
               {navigation.map((item) => (
-                <Link
+                <NavLink
                   key={item.name}
                   to={item.href}
-                  className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  className={({ isActive }) =>
+                    `text-base font-medium transition-colors hover:text-foreground ${
+                      isActive ? "text-foreground" : "text-muted-foreground"
+                    }`
+                  }
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.name}
-                </Link>
+                </NavLink>
               ))}
               <Button
                 asChild

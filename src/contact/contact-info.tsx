@@ -1,5 +1,6 @@
 import { MapPin, Clock, Mail, Phone, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { getCurrentServiceTime } from "@/lib/utils";
 
 const contactDetails = [
   {
@@ -12,7 +13,7 @@ const contactDetails = [
   {
     icon: Clock,
     title: "Service Times",
-    primary: "Sunday Worship: 3:00 PM",
+    primary: `Sunday Worship: ${getCurrentServiceTime()}`,
     secondary: "Fellowship follows after service",
     note: "Join us every Sunday for worship, teaching, and community.",
   },
@@ -26,7 +27,7 @@ const contactDetails = [
     icon: Phone,
     title: "Phone",
     primary: "469 236-7545",
-    link: "tel:+4692367545",
+    link: "tel:+14692367545",
   },
 ];
 
@@ -89,7 +90,7 @@ export function ContactInfo() {
         <div className="space-y-3 text-sm">
           <div className="flex justify-between items-center border-b border-primary-foreground/20 pb-2">
             <span className="text-primary-foreground/80">Sunday Worship</span>
-            <span className="font-semibold">3:00 PM</span>
+            <span className="font-semibold">{getCurrentServiceTime()}</span>
           </div>
           <div className="flex justify-between items-center border-b border-primary-foreground/20 pb-2">
             <span className="text-primary-foreground/80">

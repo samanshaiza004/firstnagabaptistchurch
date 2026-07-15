@@ -5,13 +5,13 @@ import { Shield, Smartphone, QrCode } from "lucide-react"
 const donationMethods = [
   {
     name: "PayPal",
-    description: "Secure online payments with buyer protection",
+    description: "A familiar online payment option",
     contact: "firstnagabaptistchurch@yahoo.com",
     instructions: [
       "Visit paypal.com or use the PayPal app",
       "Send payment to: firstnagabaptistchurch@yahoo.com",
       "Include 'Donation' in the payment notes",
-      "All transactions are secure and encrypted",
+      "Keep your payment confirmation for your records",
     ],
     color: "bg-[#0070ba]",
   },
@@ -41,8 +41,7 @@ export function DonationOptions() {
             Choose Your Donation Method
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Scan the QR code with your phone camera or payment app to make a secure donation. All transactions are
-            encrypted and protected.
+            Scan the QR code with your phone camera or payment app, then verify the church recipient before sending.
           </p>
         </div>
 
@@ -71,6 +70,8 @@ export function DonationOptions() {
                   <img
                     src={method.name === "PayPal" ? "/paypal.jpg" : "/zelle.jpg"}
                     alt={`${method.name} donation information`}
+                    loading="lazy"
+                    decoding="async"
                     className="w-48 h-48 object-contain"
                   />
                 </div>
@@ -116,7 +117,7 @@ export function DonationOptions() {
         {/* Security Notice */}
         <div className="mt-12 flex items-center justify-center gap-3 text-sm text-muted-foreground">
           <Shield className="w-5 h-5 text-green-600" />
-          <p>All donations are secure, encrypted, and tax-deductible</p>
+          <p>Always verify the church recipient before completing a donation</p>
         </div>
       </div>
     </section>

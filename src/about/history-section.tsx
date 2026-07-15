@@ -35,7 +35,7 @@ export function HistorySection() {
               <div className="lg:col-span-2">
                 <div className="relative aspect-[3/4] rounded-lg overflow-hidden shadow-xl bg-muted">
                   <div className="absolute inset-0 flex items-center justify-center">
-                  <img src="/bgoption3.webp" alt="Church Worship" className="w-full h-full object-cover" />
+                  <img src="/bgoption3.webp" alt="Church worship gathering" loading="lazy" decoding="async" className="w-full h-full object-cover" />
 
                   </div>
                 </div>
@@ -61,7 +61,7 @@ export function HistorySection() {
                 stronger relationship between American churches and Naga churches back home.
               </p>
               <p>
-                In 2017, he met <strong>Mr. Visedelie Seyie</strong>, a student at South Western Baptist Theological
+                In 2017, he met <strong>Mr. Visedelie Seyie</strong>, a student at Southwestern Baptist Theological
                 Seminary and shared his vision of a Naga church. He became very committed to the idea and together they
                 fervently worked with other like-minded Nagas.
               </p>

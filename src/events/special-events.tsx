@@ -70,7 +70,7 @@ export function SpecialEvents() {
           <CalendarDays className="h-5 w-5 text-secondary" />
         </div>
         <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground">
-          Upcoming Events
+          Special Events
         </h2>
       </div>
 
@@ -79,7 +79,7 @@ export function SpecialEvents() {
         {sortedMonths.map((monthNum) => (
           <div key={monthNum} className="relative">
             {/* Month header */}
-            <div className="sticky top-16 z-4 bg-background py-2 mb-0">
+            <div className="sticky top-16 z-40 bg-background py-2 mb-0">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-lg bg-secondary text-secondary-foreground flex flex-col items-center justify-center">
                   <span className="text-xs font-medium uppercase leading-none">
@@ -100,7 +100,7 @@ export function SpecialEvents() {
             <div className="space-y-4 pl-0 md:pl-16">
               {grouped[monthNum].map((event) => (
                 <Card
-                  key={event.title}
+                  key={`${event.title}-${event.month}-${event.day ?? "tba"}`}
                   className="border-secondary/30 bg-secondary/5 hover:border-secondary/50 hover:shadow-md transition-all"
                 >
                   <CardContent className="p-6">
@@ -111,7 +111,7 @@ export function SpecialEvents() {
                           {monthNames[monthNum - 1].slice(0, 3)}
                         </span>
                         <span className="text-2xl font-bold leading-none mt-1">
-                          {event.day}
+                          {event.day ?? "TBA"}
                         </span>
                       </div>
 
@@ -120,18 +120,20 @@ export function SpecialEvents() {
                           {event.title}
                         </h4>
                         <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-3">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-4 w-4" />
+                            {event.date}
+                          </span>
                           {event.time && (
                             <span className="flex items-center gap-1">
                               <Clock className="h-4 w-4" />
                               {event.time}
                             </span>
                           )}
-                          {event.time && (
-                            <span className="flex items-center gap-1">
-                              <MapPin className="h-4 w-4" />
-                              {event.location}
-                            </span>
-                          )}
+                          <span className="flex items-center gap-1">
+                            <MapPin className="h-4 w-4" />
+                            {event.location}
+                          </span>
                         </div>
                         <p className="text-muted-foreground text-sm">
                           {event.description}

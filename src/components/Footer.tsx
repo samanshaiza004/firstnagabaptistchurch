@@ -1,4 +1,6 @@
 import { MapPin, Mail, Clock } from "lucide-react";
+import { Link } from "react-router";
+import { getCurrentServiceTime } from "@/lib/utils";
 
 const quickLinks = [
   { name: "Home", href: "/" },
@@ -43,12 +45,12 @@ export function Footer() {
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-sm text-primary-foreground/80 hover:text-secondary transition-colors"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -71,13 +73,13 @@ export function Footer() {
               <li className="flex items-center gap-3">
                 <Clock className="h-4 w-4 text-secondary shrink-0" />
                 <span className="text-sm text-primary-foreground/80">
-                  Sundays at 3:00 PM
+                  Sundays at {getCurrentServiceTime()}
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-4 w-4 text-secondary shrink-0" />
                 <a
-                  href="mailto:info@firstnagabaptist.org"
+                  href="mailto:firstnagabaptistchurch@yahoo.com"
                   className="text-sm text-primary-foreground/80 hover:text-secondary transition-colors"
                 >
                   firstnagabaptistchurch@yahoo.com

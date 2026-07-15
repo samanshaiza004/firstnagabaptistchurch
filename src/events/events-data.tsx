@@ -73,7 +73,7 @@ export const events: Event[] = [
     time: "TBA",
     location: "Burton Hill Baptist Church",
     description:
-      "A joyful celebration of Christ's birth through preaching, worship, fellowship, and feasting-welcomingk all to gather and worship the Light of the World.",
+      "A joyful celebration of Christ's birth through preaching, worship, fellowship, and feasting—welcoming all to gather and worship the Light of the World.",
     recurring: false,
     month: 12,
     day: 25,
@@ -147,7 +147,7 @@ export const events: Event[] = [
     year: 2026,
   },
   {
-    title: "Easter Sunday & Lord Supper",
+    title: "Easter Sunday & Lord's Supper",
     date: "April 5th",
     location: "Burton Hill Baptist Church",
     description:
@@ -158,7 +158,7 @@ export const events: Event[] = [
     year: 2026,
   },
   {
-    title: "Lord Supper",
+    title: "Lord's Supper",
     date: "July 5th",
     location: "Burton Hill Baptist Church",
     description:
@@ -257,7 +257,7 @@ export const events: Event[] = [
     year: 2026,
   },
   {
-    title: "Lord Supper",
+    title: "Lord's Supper",
     date: "October 4th",
     location: "Burton Hill Baptist Church",
     description:
@@ -290,7 +290,7 @@ export const events: Event[] = [
     year: 2026,
   },
   {
-    title: "Missions/Deacon Team Meet",
+    title: "Missions/Deacon Team Meeting",
     date: "Bi Monthly",
     location: "Burton Hill Baptist Church",
     description:
@@ -302,14 +302,14 @@ export const events: Event[] = [
     date: "November 1st",
     location: "Burton Hill Baptist Church",
     description:
-      "A church-wide celebration of Sunday School'd transformative impact-uniting worship, fellowship, and renewed commitment to teaching God's Word across every generation.",
+      "A church-wide celebration of Sunday School's transformative impact—uniting worship, fellowship, and renewed commitment to teaching God's Word across every generation.",
     recurring: false,
     month: 11,
     day: 1,
     year: 2026,
   },
   {
-    title: "Florida Mission's Trip",
+    title: "Florida Mission Trip",
     date: "Oct 2-4",
     location: "Burton Hill Baptist Church",
     description:
@@ -324,7 +324,7 @@ export const events: Event[] = [
     date: "November",
     location: "Lewisville",
     description:
-      "An evening of shared worship, cultural exchange, and deepening partnership with ouir brothers and sisters from Chin Baptist Church as one family in Christ.",
+      "An evening of shared worship, cultural exchange, and deepening partnership with our brothers and sisters from Chin Baptist Church as one family in Christ.",
     recurring: false,
     month: 11,
     day: 8,
