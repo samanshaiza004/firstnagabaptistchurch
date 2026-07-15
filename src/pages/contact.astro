@@ -1,0 +1,100 @@
+---
+import { Clock, ExternalLink, Mail, MapPin, Phone } from "@lucide/astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import heroImage from "../assets/images/praying hands.jpg";
+import { siteConfig } from "../site-config";
+
+const fields = [
+  { id: "firstName", label: "First Name", required: true, autocomplete: "given-name", maxlength: 80 },
+  { id: "lastName", label: "Last Name", required: true, autocomplete: "family-name", maxlength: 80 },
+];
+---
+
+<BaseLayout title="Contact | First Naga Baptist Church" description="Contact First Naga Baptist Church, send a prayer request, or find our Sunday worship location in Fort Worth.">
+  <PageHero eyebrow="Get In Touch" title="Contact Us" description="We would love to hear from you. Reach out with any questions, prayer requests, or to learn more about our community." image={heroImage} imageAlt="Hands joined in prayer" />
+
+  <section class="section"><div class="site-container grid gap-12 lg:grid-cols-2 lg:gap-16">
+    <div id="form-region">
+      <div id="form-panel"><h2 class="mb-2 font-serif text-2xl font-bold md:text-3xl">Send Us a Message</h2><p class="mb-8 text-muted-foreground">Fill out the form below and we will respond as soon as we can.</p>
+        <div id="submit-error" class="mb-6 hidden rounded-lg border border-red-200 bg-red-50 p-4 text-red-800" role="alert"><h3 class="font-medium">Error sending message</h3><p class="mt-1 text-sm" data-error-message></p></div>
+        <form id="contact-form" class="space-y-6" novalidate>
+          <div class="absolute left-[-10000px]" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off" /></div>
+          <div class="grid gap-4 sm:grid-cols-2">{fields.map((field) => <div><label class="mb-2 block font-medium" for={field.id}>{field.label} *</label><input class="field" id={field.id} name={field.id} autocomplete={field.autocomplete} maxlength={field.maxlength} aria-describedby={`${field.id}-error`} required /><p id={`${field.id}-error`} class="field-error hidden"></p></div>)}</div>
+          <div><label class="mb-2 block font-medium" for="email">Email Address *</label><input class="field" id="email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="254" aria-describedby="email-error" required /><p id="email-error" class="field-error hidden"></p></div>
+          <div><label class="mb-2 block font-medium" for="phone">Phone Number</label><input class="field" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" aria-describedby="phone-error phone-help" /><p id="phone-error" class="field-error hidden"></p><p id="phone-help" class="mt-1 text-xs text-muted-foreground">Optional, but helpful if you would like us to call you.</p></div>
+          <div><label class="mb-2 block font-medium" for="subject">Subject *</label><input class="field" id="subject" name="subject" maxlength="150" aria-describedby="subject-error" required /><p id="subject-error" class="field-error hidden"></p></div>
+          <div><label class="mb-2 block font-medium" for="message">Message *</label><textarea class="field" id="message" name="message" rows="6" maxlength="5000" aria-describedby="message-error" required></textarea><p id="message-error" class="field-error hidden"></p></div>
+          <button id="submit-button" class="button w-full" type="submit"><span data-idle>Send message</span><span data-pending class="hidden">Sending message…</span></button><p class="text-center text-xs text-muted-foreground">Your information will only be used to respond to your message.</p>
+        </form>
+      </div>
+      <div id="success-panel" class="hidden rounded-lg bg-muted p-8 text-center" role="status" tabindex="-1"><span class="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-green-100 text-3xl text-green-700" aria-hidden="true">✓</span><h2 class="mb-2 font-serif text-2xl font-semibold">Message sent successfully</h2><p class="mb-6 text-muted-foreground">Thank you for reaching out. We will respond as soon as we can.</p><button id="reset-form" class="button button-outline text-foreground" type="button">Send another message</button></div>
+    </div>
+
+    <div><h2 class="mb-2 font-serif text-2xl font-bold md:text-3xl">Contact Information</h2><p class="mb-8 text-muted-foreground">Find us at our worship location or reach out through any of the channels below.</p><div class="space-y-4">
+      <article class="card flex gap-4 p-4"><span class="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10"><MapPin class="size-5 text-primary" /></span><div><p class="mb-1 text-sm text-muted-foreground">Location</p><p class="font-semibold">{siteConfig.venue}</p><p class="text-sm text-muted-foreground">{siteConfig.address}</p><p class="mt-2 text-sm text-muted-foreground">We worship at Burton Hill Baptist Church, who graciously hosts our services.</p></div></article>
+      <article class="card flex gap-4 p-4"><span class="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10"><Clock class="size-5 text-primary" /></span><div><p class="mb-1 text-sm text-muted-foreground">Service Times</p><p class="font-semibold">Sunday Worship: <span data-service-time>3:00 PM standard / 3:30 PM daylight time</span></p><p class="text-sm text-muted-foreground">Fellowship follows after service.</p></div></article>
+      <article class="card flex gap-4 p-4"><span class="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10"><Mail class="size-5 text-primary" /></span><div><p class="mb-1 text-sm text-muted-foreground">Email</p><a href={`mailto:${siteConfig.email}`} class="flex items-center gap-1 break-all font-semibold hover:text-primary">{siteConfig.email}<ExternalLink class="size-3" /></a></div></article>
+      <article class="card flex gap-4 p-4"><span class="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10"><Phone class="size-5 text-primary" /></span><div><p class="mb-1 text-sm text-muted-foreground">Phone</p><a href={`tel:${siteConfig.phoneHref}`} class="flex items-center gap-1 font-semibold hover:text-primary">{siteConfig.phoneDisplay}<ExternalLink class="size-3" /></a></div></article>
+    </div><div class="mt-8 rounded-lg bg-primary p-6 text-primary-foreground"><h3 class="mb-4 font-serif text-lg font-semibold">Join Us This Sunday</h3><div class="flex justify-between gap-4 border-b border-primary-foreground/20 pb-2 text-sm"><span class="text-primary-foreground/80">Sunday Worship</span><strong data-service-time>Seasonal service time</strong></div><div class="flex justify-between gap-4 pt-3 text-sm"><span class="text-primary-foreground/80">Fellowship and Refreshments</span><strong>After Service</strong></div></div></div>
+  </div></section>
+
+  <section class="bg-muted"><div class="site-container py-12 text-center"><h2 class="mb-2 font-serif text-2xl font-bold md:text-3xl">Find Us</h2><p class="flex items-center justify-center gap-2 text-muted-foreground"><MapPin class="size-4" />{siteConfig.venue}, Fort Worth, TX</p></div><div class="h-[400px] w-full bg-muted-foreground/10"><iframe src="https://maps.google.com/maps?width=660&height=575&hl=en&q=Burton%20Hill%20Baptist%20Church%2C%20Fort%20Worth%2C%20TX&t=&z=15&ie=UTF8&iwloc=B&output=embed" width="100%" height="100%" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map showing Burton Hill Baptist Church"></iframe></div></section>
+</BaseLayout>
+
+<script>
+  import { contactFields, firstContactError, normalizeContactPayload, validateContact, type ContactField } from "../lib/contact";
+
+  const form = document.querySelector<HTMLFormElement>("#contact-form");
+  const formPanel = document.querySelector<HTMLElement>("#form-panel");
+  const successPanel = document.querySelector<HTMLElement>("#success-panel");
+  const submitButton = document.querySelector<HTMLButtonElement>("#submit-button");
+  const submitError = document.querySelector<HTMLElement>("#submit-error");
+  const pending = submitButton?.querySelector<HTMLElement>("[data-pending]");
+  const idle = submitButton?.querySelector<HTMLElement>("[data-idle]");
+
+  const clearFieldError = (field: ContactField) => {
+    const input = form?.elements.namedItem(field) as HTMLElement | null;
+    const error = document.querySelector<HTMLElement>(`#${field}-error`);
+    input?.removeAttribute("aria-invalid");
+    if (error) { error.textContent = ""; error.classList.add("hidden"); }
+  };
+
+  contactFields.forEach((field) => (form?.elements.namedItem(field) as HTMLElement | null)?.addEventListener("input", () => clearFieldError(field)));
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    contactFields.forEach(clearFieldError);
+    submitError?.classList.add("hidden");
+    const payload = normalizeContactPayload(Object.fromEntries(new FormData(form).entries()));
+    if (!payload) return;
+    const errors = validateContact(payload);
+    for (const [field, message] of Object.entries(errors)) {
+      const input = form.elements.namedItem(field) as HTMLElement | null;
+      const error = document.querySelector<HTMLElement>(`#${field}-error`);
+      input?.setAttribute("aria-invalid", "true");
+      if (error && message) { error.textContent = message; error.classList.remove("hidden"); }
+    }
+    const firstError = firstContactError(errors);
+    if (firstError) { (form.elements.namedItem(firstError) as HTMLElement | null)?.focus(); return; }
+
+    if (submitButton) submitButton.disabled = true;
+    pending?.classList.remove("hidden"); idle?.classList.add("hidden");
+    try {
+      const response = await fetch("/.netlify/functions/contact-email", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const result = await response.json().catch(() => null) as { success?: boolean; error?: string } | null;
+      if (!response.ok || !result?.success) throw new Error(result?.error || "Failed to send your message. Please try again.");
+      form.reset(); formPanel?.classList.add("hidden"); successPanel?.classList.remove("hidden"); successPanel?.focus();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "An unexpected error occurred. Please try again.";
+      const output = submitError?.querySelector<HTMLElement>("[data-error-message]");
+      if (output) output.textContent = message;
+      submitError?.classList.remove("hidden"); submitError?.focus();
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+      pending?.classList.add("hidden"); idle?.classList.remove("hidden");
+    }
+  });
+
+  document.querySelector("#reset-form")?.addEventListener("click", () => { successPanel?.classList.add("hidden"); formPanel?.classList.remove("hidden"); document.querySelector<HTMLElement>("#firstName")?.focus(); });
+</script>

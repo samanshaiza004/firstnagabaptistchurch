@@ -1,23 +1,17 @@
 # Contact form operations
 
-The contact page uses a small project-owned React hook instead of a third-party
-form framework. This keeps the contact route smaller and ensures the browser and
-server use matching validation rules.
+The contact page uses semantic HTML and a small browser TypeScript module. Client and server import the same payload normalization and validation rules from `src/lib/contact.ts`.
 
 ## Request flow
 
-1. `src/contact/contact-form.tsx` renders accessible, controlled fields.
-2. `src/hooks/useContactForm.ts` validates and posts JSON to
-   `/.netlify/functions/contact-email`.
-3. `netlify/functions/contact-email.ts` parses and validates the request again.
-4. A hidden honeypot field silently discards basic bot submissions.
-5. User-provided content is HTML-escaped before the email template is created.
-6. Nodemailer sends through Yahoo SMTP and sets the visitor's address as
-   `replyTo`.
-7. The browser displays either a confirmed success state or the function's
-   delivery error.
+1. `src/pages/contact.astro` validates the visitor's fields and posts JSON to `/.netlify/functions/contact-email`.
+2. The Netlify function limits the request size, parses it, and validates it again.
+3. A hidden `website` honeypot silently accepts basic bot submissions without sending email.
+4. User content is escaped before the HTML email is built.
+5. Nodemailer sends through Yahoo SMTP and uses the visitor's email as `replyTo`.
+6. The browser shows a confirmed delivery state or the function's actual error.
 
-## Required environment variables
+## Environment
 
 ```text
 EMAIL_USER=firstnagabaptistchurch@yahoo.com
@@ -25,20 +19,6 @@ EMAIL_APP_PASSWORD=your-yahoo-app-password
 CONTACT_EMAIL_TO=recipient@example.com
 ```
 
-- `EMAIL_APP_PASSWORD` is required and must be a Yahoo app password.
-- `EMAIL_USER` defaults to the church Yahoo address.
-- `CONTACT_EMAIL_TO` defaults to the recipient currently configured in the
-  function, but setting it explicitly in Netlify is recommended.
+`EMAIL_APP_PASSWORD` must be a Yahoo app password. Never commit `.env`. Without the password the function returns `503`; it does not claim the message was sent.
 
-Never commit `.env`; it is ignored by Git.
-
-## Testing
-
-Run `bun dev`, submit invalid data to verify field errors, and test one real
-message only in an environment with the intended recipient and SMTP credentials.
-Netlify function logs should be checked after a production test.
-
-The function enforces request size and field length limits and returns `503`
-when email credentials are absent. Production-grade abuse protection such as
-Netlify rate limiting or Cloudflare Turnstile can be added later if spam becomes
-a problem.
+Run `bun run dev:netlify` to exercise local validation and failure states. Send one controlled real message only after deployment with the intended recipient and SMTP credentials, then confirm the corresponding Netlify function log.

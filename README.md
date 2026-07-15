@@ -1,46 +1,59 @@
 # First Naga Baptist Church website
 
-The public website for First Naga Baptist Church in the Dallas–Fort Worth area.
-It contains the church story, leadership, service schedule, events, giving
-instructions, contact information, and a Netlify-powered contact form.
+The public website for First Naga Baptist Church in the Dallas–Fort Worth area. It is a statically generated Astro site containing the church story, leadership, service schedule, events, giving instructions, contact information, and a Netlify-powered contact form.
 
 ## Stack
 
-- React 19 and TypeScript
-- React Router 7 with route-level code splitting
-- Vite 8
-- Tailwind CSS 3
-- Netlify Vite plugin and Netlify Functions
-- Nodemailer with Yahoo SMTP for contact-form delivery
+- Astro 7 with strict TypeScript
+- Tailwind CSS 4
+- Astro content collections backed by JSON
+- Astro's responsive image pipeline
+- Netlify static hosting and Netlify Functions
+- Nodemailer with Yahoo SMTP for contact delivery
 
-The site is intentionally content-first and has no database, authentication, or
-CMS. Most content is maintained directly in typed React files.
+The public site ships no React runtime and requires no database, authentication, CMS, or SSR server.
 
 ## Local development
 
-Vite 8 requires Node.js 20.19+ or 22.12+. This repository uses Bun for package
-management and scripts.
+Use Node.js 22.21.1 (see `.nvmrc`) and Bun:
 
 ```bash
 bun install
-bun dev
+bun run dev
 ```
 
-The Netlify Vite plugin emulates redirects, headers, and functions during local
-development.
+For the static site and Netlify contact function together:
+
+```bash
+bun run dev:netlify
+```
 
 ## Quality checks
 
 ```bash
 bun run test
 bun run lint
+bun run check
 bun run build
 bun run preview
 ```
 
-## Contact email configuration
+## Content updates
 
-Configure these environment variables locally in `.env` and in Netlify:
+- Events: `src/data/events.json`
+- Leadership and trustees: `src/data/people.json`
+- Ministry teams: `src/data/ministries.json`
+- Shared church details: `src/site-config.ts`
+- Service-time policy: `src/lib/service-time.ts`
+- Active photographs: `src/assets/images/`
+- QR codes and public metadata: `public/`
+- Original/unused photographs: `source-assets/originals/`
+
+Content data is validated during type checking and builds. Each entry needs a stable, unique `id`. Service time is updated in the browser for the `America/Chicago` time zone: 3:30 PM during daylight saving time and 3:00 PM during standard time.
+
+## Deployment
+
+`netlify.toml` configures the production build and publish directory. Keep these environment variables in Netlify:
 
 ```text
 EMAIL_USER=firstnagabaptistchurch@yahoo.com
@@ -48,34 +61,4 @@ EMAIL_APP_PASSWORD=your-yahoo-app-password
 CONTACT_EMAIL_TO=recipient@example.com
 ```
 
-`EMAIL_APP_PASSWORD` is required. The function returns an honest service error
-when delivery is not configured; it never reports a successful delivery after
-only logging the message. See [CONTACT_FORM_README.md](./CONTACT_FORM_README.md)
-for the full flow.
-
-## Common content updates
-
-- Events: `src/events/events-data.tsx`
-- Leadership and ministry teams: `src/home/meet-members.tsx`
-- Service-time policy: `src/lib/utils.ts`
-- Giving methods: `src/give/donation-options.tsx`
-- Shared contact information: `src/contact/contact-info.tsx` and
-  `src/components/Footer.tsx`
-- Public photographs and QR codes: `public/`
-- Original and currently unused photographs: `source-assets/originals/` (kept
-  outside `public/` so they are not included in production deployments)
-
-Service time is calculated in the `America/Chicago` time zone: 3:30 PM during
-daylight saving time and 3:00 PM during standard time.
-
-## Deployment
-
-Netlify should use:
-
-```text
-Build command: bun run build
-Publish directory: dist
-```
-
-`public/_redirects` provides the SPA fallback, and `public/_headers` provides
-baseline security headers and long-lived caching for hashed build assets.
+The production domain is `https://firstnagabaptistchurch.org`.

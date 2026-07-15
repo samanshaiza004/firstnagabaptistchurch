@@ -1,0 +1,36 @@
+---
+import { Clock, Mail, MapPin } from "@lucide/astro";
+import { navigation, siteConfig } from "../site-config";
+---
+
+<footer class="bg-primary text-primary-foreground">
+  <div class="site-container py-12 lg:py-16">
+    <div class="grid gap-10 pt-6 md:grid-cols-2 lg:grid-cols-4">
+      <div class="lg:col-span-2">
+        <div class="mb-4 flex items-center gap-3">
+          <span class="flex size-10 items-center justify-center rounded-full bg-secondary font-serif text-lg font-bold text-secondary-foreground" aria-hidden="true">F</span>
+          <div>
+            <p class="font-serif text-lg font-semibold">{siteConfig.name}</p>
+            <p class="text-sm text-primary-foreground/70">{siteConfig.region}</p>
+          </div>
+        </div>
+        <p class="max-w-md text-sm leading-relaxed text-primary-foreground/80">The first Naga church established in America, dedicated to sharing the Word, supporting Naga families, and building bridges between communities.</p>
+      </div>
+      <div>
+        <h2 class="mb-4 font-serif text-lg font-semibold">Quick Links</h2>
+        <ul class="space-y-2">
+          {navigation.map((link) => <li><a href={link.href} class="text-sm text-primary-foreground/80 transition-colors hover:text-secondary">{link.name}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <h2 class="mb-4 font-serif text-lg font-semibold">Contact Us</h2>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3"><MapPin class="mt-1 size-4 shrink-0 text-secondary" aria-hidden="true" /><span class="text-sm text-primary-foreground/80">{siteConfig.venue}<br />Fort Worth, TX</span></li>
+          <li class="flex items-center gap-3"><Clock class="size-4 shrink-0 text-secondary" aria-hidden="true" /><span class="text-sm text-primary-foreground/80">Sundays at <span data-service-time>{siteConfig.serviceTime.standard} standard / {siteConfig.serviceTime.daylight} daylight time</span></span></li>
+          <li class="flex items-start gap-3"><Mail class="mt-1 size-4 shrink-0 text-secondary" aria-hidden="true" /><a href={`mailto:${siteConfig.email}`} class="break-all text-sm text-primary-foreground/80 hover:text-secondary">{siteConfig.email}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 border-t border-primary-foreground/20 pt-8"><p class="text-center text-sm text-primary-foreground/60">&copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.</p></div>
+  </div>
+</footer>

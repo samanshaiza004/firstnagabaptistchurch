@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import EventsList from "../components/EventsList.astro";
+import heroImage from "../assets/images/bgoption5.jpg";
+---
+
+<BaseLayout title="Events | First Naga Baptist Church" description="See worship services, prayer gatherings, ministry events, and special events at First Naga Baptist Church.">
+  <PageHero eyebrow="Gather With Us" title="Services & Events" description="Worship, fellowship, prayer, and special gatherings help us grow together as one family in Christ." image={heroImage} imageAlt="First Naga Baptist Church gathering" />
+  <EventsList />
+</BaseLayout>

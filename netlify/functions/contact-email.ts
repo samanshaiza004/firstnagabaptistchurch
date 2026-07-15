@@ -1,15 +1,10 @@
 import type { Handler } from "@netlify/functions";
 import nodemailer from "nodemailer";
-
-interface ContactPayload {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  subject: string;
-  message: string;
-  website?: string;
-}
+import {
+  normalizeContactPayload,
+  validateContact,
+  type ContactPayload,
+} from "../../src/lib/contact";
 
 const jsonHeaders = {
   "Content-Type": "application/json; charset=utf-8",
@@ -41,60 +36,10 @@ function parsePayload(body: string | null): ContactPayload | null {
   if (!body || body.length > 20_000) return null;
 
   try {
-    const value = JSON.parse(body) as Partial<ContactPayload>;
-    const fields = [
-      "firstName",
-      "lastName",
-      "email",
-      "phone",
-      "subject",
-      "message",
-    ] as const;
-
-    if (fields.some((field) => typeof value[field] !== "string")) {
-      return null;
-    }
-
-    return {
-      firstName: value.firstName!.trim(),
-      lastName: value.lastName!.trim(),
-      email: value.email!.trim(),
-      phone: value.phone!.trim(),
-      subject: value.subject!.trim(),
-      message: value.message!.trim(),
-      website: typeof value.website === "string" ? value.website.trim() : "",
-    };
+    return normalizeContactPayload(JSON.parse(body));
   } catch {
     return null;
   }
-}
-
-function validationError(payload: ContactPayload): string | null {
-  if (payload.firstName.length < 2 || payload.firstName.length > 80) {
-    return "Please enter a valid first name.";
-  }
-  if (payload.lastName.length < 2 || payload.lastName.length > 80) {
-    return "Please enter a valid last name.";
-  }
-  if (
-    payload.email.length > 254 ||
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)
-  ) {
-    return "Please enter a valid email address.";
-  }
-
-  const normalizedPhone = payload.phone.replace(/[\s\-().]/g, "");
-  if (normalizedPhone && !/^\+?[1-9]\d{6,14}$/.test(normalizedPhone)) {
-    return "Please enter a valid phone number.";
-  }
-  if (payload.subject.length < 5 || payload.subject.length > 150) {
-    return "The subject must be between 5 and 150 characters.";
-  }
-  if (payload.message.length < 10 || payload.message.length > 5000) {
-    return "The message must be between 10 and 5,000 characters.";
-  }
-
-  return null;
 }
 
 function createEmailContent(payload: ContactPayload) {
@@ -156,7 +101,8 @@ export const handler: Handler = async (event) => {
     return response(200, { success: true });
   }
 
-  const error = validationError(payload);
+  const errors = validateContact(payload);
+  const error = Object.values(errors)[0];
   if (error) {
     return response(400, { error });
   }
