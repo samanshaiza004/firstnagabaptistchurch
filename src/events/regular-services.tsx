@@ -32,7 +32,7 @@ export function RegularServices() {
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="h-4 w-4" />
-                        {event.time}
+                        {event.getTime ? event.getTime() : event.time || "TBA"}
                       </span>
                       <span className="flex items-center gap-1">
                         <MapPin className="h-4 w-4" />

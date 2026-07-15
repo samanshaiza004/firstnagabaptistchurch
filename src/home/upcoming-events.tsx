@@ -2,6 +2,7 @@ import { Calendar, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { getCurrentServiceTime } from "@/lib/utils"
+import { Link } from "react-router"
 
 const events = [
   {
@@ -38,10 +39,10 @@ export function UpcomingEvents() {
             variant="outline"
             className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 w-fit bg-transparent"
           >
-            <a href="/events">
+            <Link to="/events">
               View All Events
               <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
+            </Link>
           </Button>
         </div>
 

@@ -1,73 +1,81 @@
-# React + TypeScript + Vite
+# First Naga Baptist Church website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The public website for First Naga Baptist Church in the Dallas–Fort Worth area.
+It contains the church story, leadership, service schedule, events, giving
+instructions, contact information, and a Netlify-powered contact form.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19 and TypeScript
+- React Router 7 with route-level code splitting
+- Vite 8
+- Tailwind CSS 3
+- Netlify Vite plugin and Netlify Functions
+- Nodemailer with Yahoo SMTP for contact-form delivery
 
-## React Compiler
+The site is intentionally content-first and has no database, authentication, or
+CMS. Most content is maintained directly in typed React files.
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## Local development
 
-## Expanding the ESLint configuration
+Vite 8 requires Node.js 20.19+ or 22.12+. This repository uses Bun for package
+management and scripts.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+bun install
+bun dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The Netlify Vite plugin emulates redirects, headers, and functions during local
+development.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Quality checks
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+bun run test
+bun run lint
+bun run build
+bun run preview
 ```
+
+## Contact email configuration
+
+Configure these environment variables locally in `.env` and in Netlify:
+
+```text
+EMAIL_USER=firstnagabaptistchurch@yahoo.com
+EMAIL_APP_PASSWORD=your-yahoo-app-password
+CONTACT_EMAIL_TO=recipient@example.com
+```
+
+`EMAIL_APP_PASSWORD` is required. The function returns an honest service error
+when delivery is not configured; it never reports a successful delivery after
+only logging the message. See [CONTACT_FORM_README.md](./CONTACT_FORM_README.md)
+for the full flow.
+
+## Common content updates
+
+- Events: `src/events/events-data.tsx`
+- Leadership and ministry teams: `src/home/meet-members.tsx`
+- Service-time policy: `src/lib/utils.ts`
+- Giving methods: `src/give/donation-options.tsx`
+- Shared contact information: `src/contact/contact-info.tsx` and
+  `src/components/Footer.tsx`
+- Public photographs and QR codes: `public/`
+- Original and currently unused photographs: `source-assets/originals/` (kept
+  outside `public/` so they are not included in production deployments)
+
+Service time is calculated in the `America/Chicago` time zone: 3:30 PM during
+daylight saving time and 3:00 PM during standard time.
+
+## Deployment
+
+Netlify should use:
+
+```text
+Build command: bun run build
+Publish directory: dist
+```
+
+`public/_redirects` provides the SPA fallback, and `public/_headers` provides
+baseline security headers and long-lived caching for hashed build assets.

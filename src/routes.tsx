@@ -1,35 +1,48 @@
 import { createBrowserRouter } from "react-router";
 import Layout from './components/Layout';
-import Home from './home/Home';
-import About from './about/About';
-import Contact from './contact/Contact';
-import EventsPage from './events/events';
-import GivePage from './give/Give';
+import { PageLoading } from "./components/PageLoading";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    hydrateFallbackElement: <PageLoading />,
     children: [
       {
         index: true,
-        element: <Home />,
+        lazy: async () => ({
+          Component: (await import("./home/Home")).default,
+        }),
       },
       {
         path: "about",
-        element: <About />,
+        lazy: async () => ({
+          Component: (await import("./about/About")).default,
+        }),
       },
       {
         path: "events",
-        element: <EventsPage />,
+        lazy: async () => ({
+          Component: (await import("./events/events")).default,
+        }),
       },
       {
         path: "give",
-        element: <GivePage />,
+        lazy: async () => ({
+          Component: (await import("./give/Give")).default,
+        }),
       },
       {
         path: "contact",
-        element: <Contact />,
+        lazy: async () => ({
+          Component: (await import("./contact/Contact")).default,
+        }),
+      },
+      {
+        path: "*",
+        lazy: async () => ({
+          Component: (await import("./components/NotFound")).default,
+        }),
       },
     ],
   },

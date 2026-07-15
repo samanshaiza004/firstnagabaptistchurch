@@ -24,7 +24,7 @@ const impactAreas = [
   {
     icon: Heart,
     title: "Youth & Children",
-    description: "Age-appropriate teaching, events, safe environments, and mentorship helping youngpeople grow in faith and character.",
+    description: "Age-appropriate teaching, events, safe environments, and mentorship helping young people grow in faith and character.",
   },
   {
     icon: HandHeart,
