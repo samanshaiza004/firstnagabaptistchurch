@@ -104,14 +104,14 @@ export const events: Event[] = [
   },
   {
     title: "Half Yearly GBM",
-    date: "July 12th",
+    date: "July 19th",
     time: "TBA",
     location: "Burton Hill Baptist Church",
     description:
       "Mid-year General Body Meeting to review church progress, discuss upcoming initiatives, and make important decisions.",
     recurring: false,
     month: 7,
-    day: 12,
+    day: 19,
     year: 2026,
   },
   {
