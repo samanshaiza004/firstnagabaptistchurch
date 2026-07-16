@@ -43,4 +43,17 @@ const ministries = defineCollection({
   }),
 });
 
-export const collections = { events, people, ministries };
+const gallery = defineCollection({
+  loader: file("src/data/gallery.json"),
+  schema: z.object({
+    title: z.string().min(1),
+    caption: z.string().min(1),
+    alt: z.string().min(1),
+    imageKey: z.string().min(1),
+    category: z.enum(["Baptism", "Church Family", "Church History", "Culture", "Worship"]),
+    dateLabel: z.string().min(1).optional(),
+    order: z.number().int().nonnegative(),
+  }),
+});
+
+export const collections = { events, people, ministries, gallery };

@@ -1,0 +1,66 @@
+[
+  {
+    "id": "cultural-day-2023",
+    "title": "Cultural Day",
+    "caption": "Church members gather in traditional attire to celebrate Naga culture, fellowship, and shared heritage.",
+    "alt": "First Naga Baptist Church members gathered in traditional attire for Cultural Day",
+    "imageKey": "culturalDay",
+    "category": "Culture",
+    "dateLabel": "October 7, 2023",
+    "order": 1
+  },
+  {
+    "id": "church-family-gathering",
+    "title": "Together as One Church Family",
+    "caption": "Members and friends gather after a day of worship and fellowship together.",
+    "alt": "A large multigenerational group of church members and friends gathered indoors",
+    "imageKey": "churchFamily",
+    "category": "Church Family",
+    "order": 2
+  },
+  {
+    "id": "lakeside-baptism",
+    "title": "A New Life in Christ",
+    "caption": "A lakeside baptism marks a public profession of faith and a joyful milestone for the church family.",
+    "alt": "A minister and baptism candidate standing together in a lake",
+    "imageKey": "lakesideBaptism",
+    "category": "Baptism",
+    "order": 3
+  },
+  {
+    "id": "church-family-shirts",
+    "title": "First Naga Church Family",
+    "caption": "Generations of the congregation gather in First Naga Baptist Church shirts for a family photograph.",
+    "alt": "A large group of First Naga Baptist Church members wearing matching navy shirts",
+    "imageKey": "churchFamilyShirts",
+    "category": "Church Family",
+    "order": 4
+  },
+  {
+    "id": "choir-worship",
+    "title": "Special Music in Worship",
+    "caption": "The choir leads the congregation in song during a special worship gathering.",
+    "alt": "Church choir singing before the congregation beneath a draped cross",
+    "imageKey": "worshipChoir",
+    "category": "Worship",
+    "order": 5
+  },
+  {
+    "id": "early-church-family",
+    "title": "The Early Church Family",
+    "caption": "An early gathering of the members whose prayer, service, and fellowship helped establish the church.",
+    "alt": "Early First Naga Baptist Church members gathered for a group portrait in a home",
+    "imageKey": "foundingMembers",
+    "category": "Church History",
+    "order": 6
+  },
+  {
+    "id": "church-community-leaders",
+    "title": "Friends in Fellowship",
+    "caption": "Church and community friends gather after worship, reflecting the partnerships that support the congregation.",
+    "alt": "Church and community friends gathered for a group portrait inside the sanctuary",
+    "imageKey": "churchLeaders",
+    "category": "Church Family",
+    "order": 7
+  }
+]
