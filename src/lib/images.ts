@@ -13,8 +13,25 @@ import peraly from "../assets/images/peraly.jpg";
 import rhite from "../assets/images/rhite.png";
 import saman from "../assets/images/saman-optimized.jpg";
 import theishing from "../assets/images/theishing.jpg";
+import churchFamily from "../assets/images/bgoption.webp";
+import churchFamilyShirts from "../assets/images/bgoption2.webp";
+import lakesideBaptism from "../assets/images/bgoption3.webp";
+import worshipChoir from "../assets/images/bgoption5.jpg";
+import churchLeaders from "../assets/images/bgoption6.jpg";
+import foundingMembers from "../assets/images/foundingmembers.jpg";
+import culturalDay from "../assets/images/fundraider.jpg";
 
 export const personImages: Record<string, ImageMetadata> = {
   achan, chishi, hosea, joseph, katensangla, kinoto, kumar, lanu, livi,
   mathingmi, peraly, rhite, saman, theishing,
+};
+
+export const galleryImages: Record<string, ImageMetadata> = {
+  churchFamily,
+  churchFamilyShirts,
+  lakesideBaptism,
+  worshipChoir,
+  churchLeaders,
+  foundingMembers,
+  culturalDay,
 };
