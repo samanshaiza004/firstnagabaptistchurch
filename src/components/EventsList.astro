@@ -18,7 +18,7 @@ const timeMarkup = (event: typeof events[number]) => event.timeKind === "seasona
       <div class="mb-6 flex items-center gap-3"><span class="flex size-10 items-center justify-center rounded-full bg-primary/10"><Calendar class="size-5 text-primary" aria-hidden="true" /></span><h2 class="font-serif text-2xl font-bold md:text-3xl">Regular Services</h2></div>
       <div class="space-y-4">
         {recurring.map((event) => (
-          <article class="card p-6 transition-colors hover:border-secondary/50">
+          <article class="card p-6">
             <div class="flex flex-col gap-4 md:flex-row md:items-start">
               <span class="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10"><Calendar class="size-6 text-primary" aria-hidden="true" /></span>
               <div><h3 class="mb-2 font-serif text-xl font-semibold">{event.title}</h3><div class="mb-3 flex flex-wrap gap-4 text-sm text-muted-foreground"><span class="flex items-center gap-1"><Calendar class="size-4" />{event.dateLabel}</span>{timeMarkup(event) && <span class="flex items-center gap-1"><Clock class="size-4" />{timeMarkup(event) === "seasonal" ? <span data-service-time>3:00 PM standard / 3:30 PM daylight time</span> : timeMarkup(event)}</span>}<span class="flex items-center gap-1"><MapPin class="size-4" />{event.location}</span></div><p class="text-muted-foreground">{event.description}</p></div>
@@ -28,20 +28,43 @@ const timeMarkup = (event: typeof events[number]) => event.timeKind === "seasona
       </div>
     </div>
 
-    <div class="mb-8 flex items-center gap-3"><span class="flex size-10 items-center justify-center rounded-full bg-secondary/20"><CalendarDays class="size-5 text-secondary-foreground" aria-hidden="true" /></span><h2 class="font-serif text-2xl font-bold md:text-3xl">Special Events</h2></div>
-    <div class="space-y-8">
+    <div class="mb-6 flex items-center gap-3"><span class="flex size-10 items-center justify-center rounded-full bg-secondary/20"><CalendarDays class="size-5 text-secondary-foreground" aria-hidden="true" /></span><h2 class="font-serif text-2xl font-bold md:text-3xl">Special Events</h2></div>
+
+    <nav class="event-month-nav mb-12" aria-label="Jump to a month">
+      <p class="event-month-nav-label">2026 calendar</p>
+      <div class="event-month-links">
+        {months.map((month) => <a href={`#month-${month}`}>{monthNames[month - 1].slice(0, 3)}</a>)}
+      </div>
+    </nav>
+
+    <div class="event-agenda">
       {months.map((month) => {
         const monthEvents = grouped.get(month) ?? [];
         return (
-          <section aria-labelledby={`month-${month}`}>
-            <div class="sticky top-16 z-30 mb-3 flex items-center gap-3 bg-background py-2"><span class="flex size-12 flex-col items-center justify-center rounded-lg bg-secondary text-secondary-foreground"><span class="text-xs font-medium uppercase leading-none">{monthNames[month - 1].slice(0, 3)}</span><span class="text-lg font-bold leading-none">{monthEvents[0]?.year ?? new Date().getFullYear()}</span></span><h3 id={`month-${month}`} class="font-serif text-xl font-semibold md:text-2xl">{monthNames[month - 1]}</h3><span class="h-px flex-1 bg-border"></span></div>
-            <div class="space-y-4 md:pl-16">
+          <section id={`month-${month}`} class="event-month" aria-labelledby={`month-${month}-title`}>
+            <header class="event-month-heading">
+              <div><p>{monthNames[month - 1].slice(0, 3)}</p><h3 id={`month-${month}-title`}>{monthNames[month - 1]}</h3></div>
+              <p>{monthEvents[0]?.year ?? new Date().getFullYear()} <span aria-hidden="true">·</span> {monthEvents.length} {monthEvents.length === 1 ? "event" : "events"}</p>
+            </header>
+            <ol class="event-list">
               {monthEvents.map((event) => (
-                <article class="card border-secondary/30 bg-secondary/5 p-6">
-                  <div class="flex flex-col gap-4 sm:flex-row"><span class="flex size-16 shrink-0 flex-col items-center justify-center rounded-lg bg-primary text-primary-foreground"><span class="text-xs font-medium uppercase">{monthNames[month - 1].slice(0, 3)}</span><span class="text-2xl font-bold leading-none">{event.day ?? "TBA"}</span></span><div><h4 class="mb-2 font-serif text-lg font-semibold">{event.title}</h4><div class="mb-3 flex flex-wrap gap-3 text-sm text-muted-foreground"><span class="flex items-center gap-1"><Calendar class="size-4" />{event.dateLabel}</span>{timeMarkup(event) && <span class="flex items-center gap-1"><Clock class="size-4" />{timeMarkup(event)}</span>}<span class="flex items-center gap-1"><MapPin class="size-4" />{event.location}</span></div><p class="text-sm text-muted-foreground">{event.description}</p></div></div>
-                </article>
+                <li class="event-row">
+                  <time class="event-date" datetime={event.day ? `${event.year}-${String(month).padStart(2, "0")}-${String(event.day).padStart(2, "0")}` : undefined}>
+                    <span>{event.day ?? "TBA"}</span>
+                    <small>{event.day ? monthNames[month - 1].slice(0, 3) : "Date"}</small>
+                  </time>
+                  <div class="event-details">
+                    <h4>{event.title}</h4>
+                    <div class="event-meta">
+                      <span><Calendar class="size-4" aria-hidden="true" />{event.dateLabel}</span>
+                      {timeMarkup(event) && <span><Clock class="size-4" aria-hidden="true" />{timeMarkup(event)}</span>}
+                      <span><MapPin class="size-4" aria-hidden="true" />{event.location}</span>
+                    </div>
+                    <p>{event.description}</p>
+                  </div>
+                </li>
               ))}
-            </div>
+            </ol>
           </section>
         );
       })}

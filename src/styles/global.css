@@ -98,9 +98,9 @@ a, button, input, textarea { outline-offset: 4px; }
   background: hsl(var(--card));
   color: hsl(var(--card-foreground));
   box-shadow: 7px 7px 0 hsl(var(--primary) / .07);
-  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
-.card:hover { border-color: hsl(var(--primary) / .45); box-shadow: 4px 4px 0 hsl(var(--primary) / .12); transform: translate(2px, 2px); }
+.leadership-card summary { transition: background-color .2s ease; }
+.leadership-card summary:hover { background: hsl(var(--muted) / .55); }
 .button {
   display: inline-flex;
   min-height: 3rem;
@@ -192,6 +192,44 @@ a, button, input, textarea { outline-offset: 4px; }
 .section-heading-grid { display: grid; align-items: end; gap: 1rem 3rem; border-bottom: 1px solid hsl(var(--border)); padding-bottom: 1.6rem; text-align: left; }
 .section-heading-grid .section-copy { margin: 0; }
 
+/* Annual agenda: a compact index and calm timeline, without faux-interactive cards. */
+.event-month-nav { display: grid; gap: .7rem 1.5rem; border-block: 1px solid hsl(var(--border)); padding-block: .9rem; }
+.event-month-nav-label { color: hsl(var(--muted-foreground)); font-size: .7rem; font-weight: 760; letter-spacing: .13em; text-transform: uppercase; }
+.event-month-links { display: flex; flex-wrap: wrap; gap: .25rem .45rem; }
+.event-month-links a { min-width: 2.35rem; border-bottom: 2px solid transparent; padding: .2rem .25rem; color: hsl(var(--muted-foreground)); font-size: .78rem; font-weight: 720; text-align: center; text-decoration: none; text-transform: uppercase; }
+.event-month-links a:hover { border-bottom-color: #b64035; color: hsl(var(--foreground)); }
+.event-agenda { display: grid; gap: 4rem; }
+.event-month { scroll-margin-top: 6.5rem; }
+.event-month-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; border-bottom: 3px solid hsl(var(--primary)); padding-bottom: .8rem; }
+.event-month-heading > div { display: flex; align-items: baseline; gap: .8rem; }
+.event-month-heading > div > p { color: #9f3028; font-size: .7rem; font-weight: 780; letter-spacing: .14em; text-transform: uppercase; }
+.event-month-heading h3 { font-family: var(--font-serif); font-size: clamp(1.8rem, 4vw, 2.35rem); font-weight: 620; line-height: 1; }
+.event-month-heading > p { color: hsl(var(--muted-foreground)); font-size: .75rem; font-weight: 650; white-space: nowrap; }
+.event-list { margin: 0; padding: 0; list-style: none; }
+.event-row { display: grid; grid-template-columns: 4.25rem minmax(0, 1fr); gap: 1.25rem; border-bottom: 1px solid hsl(var(--border)); padding-block: 1.65rem; }
+.event-date { display: flex; height: 4.25rem; flex-direction: column; align-items: center; justify-content: center; border-left: 4px solid #b64035; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); font-variant-numeric: tabular-nums; }
+.event-date > span { font-family: var(--font-serif); font-size: 1.75rem; font-weight: 650; line-height: .9; }
+.event-date > small { margin-top: .3rem; font-size: .62rem; font-weight: 760; letter-spacing: .12em; text-transform: uppercase; }
+.event-details h4 { margin-bottom: .35rem; font-family: var(--font-serif); font-size: 1.3rem; font-weight: 650; line-height: 1.15; }
+.event-details > p { margin-top: .65rem; color: hsl(var(--muted-foreground)); font-size: .9rem; line-height: 1.6; }
+.event-meta { display: flex; flex-wrap: wrap; gap: .3rem 1rem; color: hsl(var(--muted-foreground)); font-size: .78rem; }
+.event-meta span { display: inline-flex; align-items: center; gap: .3rem; }
+
+/* Ministry rosters prioritize names and leaders without turning each person into a card. */
+.ministry-panel { border: 1px solid hsl(var(--border)); border-top: 4px solid hsl(var(--primary)); background: hsl(var(--card)); }
+.ministry-heading { display: flex; align-items: center; gap: .8rem; border-bottom: 1px solid hsl(var(--border)); padding: 1.1rem 1.25rem; }
+.ministry-icon { display: grid; width: 2.4rem; height: 2.4rem; flex: 0 0 auto; place-items: center; background: hsl(var(--secondary) / .24); color: hsl(var(--secondary-foreground)); }
+.ministry-heading h3 { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 650; line-height: 1.1; }
+.ministry-heading p { color: hsl(var(--muted-foreground)); font-size: .75rem; }
+.ministry-leader { display: flex; align-items: center; gap: .9rem; padding: 1.25rem; }
+.ministry-leader img { outline: 3px solid hsl(var(--secondary) / .25); outline-offset: 2px; }
+.ministry-leader span { color: #9f3028; font-size: .65rem; font-weight: 760; letter-spacing: .1em; text-transform: uppercase; }
+.ministry-leader h4 { font-family: var(--font-serif); font-size: 1.08rem; font-weight: 650; line-height: 1.2; }
+.ministry-leader p { color: hsl(var(--muted-foreground)); font-size: .78rem; }
+.ministry-roster { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; border-top: 1px solid hsl(var(--border)); padding: .4rem 1.25rem 1rem; list-style: none; }
+.ministry-roster li { position: relative; border-bottom: 1px solid hsl(var(--border) / .7); padding: .65rem .5rem .65rem 1rem; font-size: .82rem; font-weight: 580; }
+.ministry-roster li::before { position: absolute; top: 1.05rem; left: 0; width: .38rem; height: .38rem; background: #c5a45e; content: ""; transform: rotate(45deg); }
+
 @keyframes hero-arrive {
   from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: translateY(0); }
@@ -203,6 +241,8 @@ a, button, input, textarea { outline-offset: 4px; }
 
 @media (min-width: 768px) {
   .section-heading-grid { grid-template-columns: minmax(0, 1fr) minmax(20rem, .72fr); }
+  .event-month-nav { grid-template-columns: 8rem minmax(0, 1fr); align-items: center; }
+  .event-month-links { justify-content: space-between; }
   .home-hero-grid { grid-template-columns: minmax(25rem, 5fr) minmax(0, 7fr); }
   .home-hero-copy { padding: 5rem max(2rem, calc((100vw - 82rem) / 2)); padding-right: 3.5rem; }
   .home-hero-media { min-height: 40rem; }
