@@ -68,7 +68,7 @@ const iconMap = { music: Music, heart: Heart };
         {trustees.map((trustee) => (
           <article class="card flex overflow-hidden">
             <Image src={personImages[trustee.data.imageKey]} alt={`Portrait of ${trustee.data.name}`} width={192} height={192} loading="lazy" class="w-28 shrink-0 object-cover sm:w-36" />
-            <div class="p-5"><span class="mb-2 inline-flex rounded-full bg-secondary/20 px-2.5 py-1 text-xs">Trustee</span><h4 class="mb-1 font-serif text-lg font-semibold">{trustee.data.name}</h4><p class="text-sm leading-relaxed text-muted-foreground sm:text-base">{trustee.data.bio}</p></div>
+            <div class="p-5"><span class="mb-2 inline-flex rounded-full bg-secondary/20 px-2.5 py-1 text-xs">{trustee.data.role}</span><h4 class="mb-1 font-serif text-lg font-semibold">{trustee.data.name}</h4><p class="text-sm leading-relaxed text-muted-foreground sm:text-base">{trustee.data.bio}</p></div>
           </article>
         ))}
       </div>
