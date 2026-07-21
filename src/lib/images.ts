@@ -8,6 +8,8 @@ import kinoto from "../assets/images/kinoto2.jpg";
 import kumar from "../assets/images/kumar-optimized.jpg";
 import lanu from "../assets/images/lanu.jpg";
 import livi from "../assets/images/Livi.jpg";
+import keyilungdauleHieme from "../assets/images/keyilungdaule-hieme.jpeg";
+import sentiAier from "../assets/images/senti-aier.jpeg";
 import mathingmi from "../assets/images/mathingmi-optimized.jpg";
 import peraly from "../assets/images/peraly.jpg";
 import rhite from "../assets/images/rhite.png";
@@ -24,6 +26,8 @@ import culturalDay from "../assets/images/fundraider.jpg";
 export const personImages: Record<string, ImageMetadata> = {
   achan, chishi, hosea, joseph, katensangla, kinoto, kumar, lanu, livi,
   mathingmi, peraly, rhite, saman, theishing,
+  "keyilungdaule-hieme": keyilungdauleHieme,
+  "senti-aier": sentiAier,
 };
 
 export const galleryImages: Record<string, ImageMetadata> = {
