@@ -1,32 +1,47 @@
 # First Naga Baptist Church website
 
-The public website for First Naga Baptist Church in the Dallas–Fort Worth area. It is a statically generated Astro site containing the church story, leadership, service schedule, events, giving instructions, contact information, and a Netlify-powered contact form.
+The public website for First Naga Baptist Church in the Dallas–Fort Worth area. It is a statically generated Astro site with a separately hosted Sanity Studio for church media staff.
 
-## Stack
+## Architecture
 
-- Astro 7 with strict TypeScript
-- Tailwind CSS 4
-- Astro content collections backed by JSON
-- Astro's responsive image pipeline
-- Netlify static hosting and Netlify Functions
-- Nodemailer with Yahoo SMTP for contact delivery
+- Astro 7, strict TypeScript, and Tailwind CSS 4
+- Sanity Content Lake for published website content and media
+- Separately deployed Sanity Studio; React is not shipped by the public site
+- Netlify static hosting and a Netlify Function for contact email
+- Browser-side `America/Chicago` service-time selection so static builds do not freeze DST
 
-The public site ships no React runtime and requires no database, authentication, CMS, or SSR server.
+Publishing content in Sanity calls a Netlify build hook. Astro fetches published content during the build and Netlify replaces the live deployment only after that build succeeds.
 
 ## Local development
 
-Use Node.js 22.21.1 (see `.nvmrc`) and Bun:
+Use Node.js 22.21.1 and Bun. Copy `.env.example` to `.env`, then keep `CMS_SOURCE=local` until the production dataset has been migrated and verified.
 
 ```bash
 bun install
 bun run dev
 ```
 
-For the static site and Netlify contact function together:
+Run the site and Netlify contact function together with `bun run dev:netlify`.
+
+The local source is an explicit migration fixture made from `src/data/`, `src/lib/cms/local-content.ts`, and the active local images. It is not a production fallback. Production must set `CMS_SOURCE=sanity` after the initial migration.
+
+## Sanity Studio
+
+The Studio is a standalone sibling project at `../studio-first-naga-baptist-church-website`, connected to Sanity project `6h6upd33` and the `production` dataset. From this app folder, run:
 
 ```bash
-bun run dev:netlify
+bun run studio:dev
+bun run studio:build
+bun run studio:deploy
 ```
+
+The public `/admin` page links authorized staff to the hosted Studio and is excluded from the sitemap and search indexing.
+
+## Migration and backups
+
+Set `PUBLIC_SANITY_PROJECT_ID` and a temporary `SANITY_WRITE_TOKEN`, then run `bun run cms:migrate`. The importer is idempotent: stable document IDs are replaced in place and previously uploaded migration assets are reused by filename.
+
+Create a complete dataset and asset export with `bun run cms:export`. The monthly GitHub Actions workflow retains rolling export artifacts for 90 days and requires `PUBLIC_SANITY_PROJECT_ID` and `SANITY_BACKUP_TOKEN` repository secrets.
 
 ## Quality checks
 
@@ -35,30 +50,22 @@ bun run test
 bun run lint
 bun run check
 bun run build
-bun run preview
+bun run studio:build
 ```
 
-## Content updates
+## Deployment configuration
 
-- Events: `src/data/events.json`
-- Leadership and trustees: `src/data/people.json`
-- Ministry teams: `src/data/ministries.json`
-- Shared church details: `src/site-config.ts`
-- Service-time policy: `src/lib/service-time.ts`
-- Active photographs: `src/assets/images/`
-- QR codes and public metadata: `public/`
-- Original/unused photographs: `source-assets/originals/`
-
-Content data is validated during type checking and builds. Each entry needs a stable, unique `id`. Service time is updated in the browser for the `America/Chicago` time zone: 3:30 PM during daylight saving time and 3:00 PM during standard time.
-
-## Deployment
-
-`netlify.toml` configures the production build and publish directory. Keep these environment variables in Netlify:
+Netlify needs:
 
 ```text
+CMS_SOURCE=sanity
+PUBLIC_SANITY_PROJECT_ID=6h6upd33
+PUBLIC_SANITY_DATASET=production
+PUBLIC_SANITY_API_VERSION=2026-07-01
+PUBLIC_SANITY_STUDIO_URL=https://your-studio.sanity.studio
 EMAIL_USER=firstnagabaptistchurch@yahoo.com
 EMAIL_APP_PASSWORD=your-yahoo-app-password
 CONTACT_EMAIL_TO=recipient@example.com
 ```
 
-The production domain is `https://firstnagabaptistchurch.org`.
+Never expose `SANITY_WRITE_TOKEN`, `SANITY_BACKUP_TOKEN`, or SMTP credentials with a `PUBLIC_` prefix. See [CMS_OPERATIONS.md](./CMS_OPERATIONS.md) for project creation, webhook, access, recovery, and handoff instructions.

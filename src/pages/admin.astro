@@ -1,0 +1,39 @@
+---
+import { ExternalLink, LockKeyhole, ShieldCheck } from "@lucide/astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCmsContent } from "../lib/cms/content";
+
+const { settings } = await getCmsContent();
+const studioUrl = process.env.PUBLIC_SANITY_STUDIO_URL ?? "https://first-naga-baptist-church.sanity.studio";
+---
+
+<BaseLayout title={`Website Admin | ${settings.name}`} description="Secure website content access for authorized First Naga Baptist Church media staff." noindex>
+  <section class="admin-portal">
+    <div class="site-container admin-grid">
+      <div class="admin-copy">
+        <span class="admin-icon" aria-hidden="true"><LockKeyhole class="size-7" /></span>
+        <p class="eyebrow">Authorized staff</p>
+        <h1>Church Website Admin</h1>
+        <p>Update events, photographs, ministry teams, church information, page text, and giving details through the church’s secure content studio.</p>
+        <a class="button" href={studioUrl} rel="nofollow">Open content studio <ExternalLink class="size-4" aria-hidden="true" /></a>
+      </div>
+      <aside class="admin-note">
+        <ShieldCheck class="size-6 text-secondary-foreground" aria-hidden="true" />
+        <div><h2>Before you publish</h2><p>Use your individual staff account. Verify dates, names, photo permissions, payment contacts, and QR codes. Published changes normally reach the website after a short Netlify build.</p></div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .admin-portal { min-height: 68vh; display: grid; align-items: center; padding-block: clamp(4rem, 10vw, 8rem); background: linear-gradient(135deg, hsl(var(--muted)) 0 45%, hsl(var(--background)) 45%); }
+  .admin-grid { display: grid; gap: 2rem; align-items: end; }
+  .admin-copy { max-width: 46rem; }
+  .admin-icon { display: grid; width: 3.5rem; height: 3.5rem; margin-bottom: 1.5rem; place-items: center; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
+  .admin-copy h1 { max-width: 12ch; font-family: var(--font-serif); font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 650; line-height: .88; letter-spacing: -.045em; }
+  .admin-copy > p:not(.eyebrow) { max-width: 42rem; margin-block: 1.75rem; color: hsl(var(--muted-foreground)); font-size: 1.05rem; line-height: 1.7; }
+  .admin-note { display: flex; gap: 1rem; border-top: 5px solid hsl(var(--secondary)); padding: 1.5rem; background: hsl(var(--card)); box-shadow: .5rem .5rem 0 hsl(var(--border)); }
+  .admin-note h2 { margin-bottom: .4rem; font-family: var(--font-serif); font-size: 1.3rem; font-weight: 650; }
+  .admin-note p { color: hsl(var(--muted-foreground)); font-size: .9rem; line-height: 1.6; }
+  @media (min-width: 900px) { .admin-grid { grid-template-columns: minmax(0, 1.25fr) minmax(18rem, .65fr); gap: 5rem; } }
+</style>

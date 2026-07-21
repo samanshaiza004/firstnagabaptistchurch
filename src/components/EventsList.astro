@@ -1,21 +1,22 @@
 ---
-import { getCollection } from "astro:content";
 import { Calendar, CalendarDays, Clock, MapPin } from "@lucide/astro";
 import { groupEventsByMonth } from "../lib/events";
+import type { EventContent, EventsPageContent } from "../lib/cms/types";
 
-const entries = await getCollection("events");
-const events = entries.map((entry) => entry.data).sort((a, b) => a.order - b.order);
+interface Props { events: EventContent[]; page: EventsPageContent }
+const { events: eventData, page } = Astro.props;
+const events = eventData.sort((a, b) => a.order - b.order);
 const recurring = events.filter((event) => event.recurring);
 const { months, grouped, undated } = groupEventsByMonth(events);
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-const timeMarkup = (event: typeof events[number]) => event.timeKind === "seasonal" ? "seasonal" : event.timeKind === "label" ? event.timeLabel : undefined;
+const timeMarkup = (event: Pick<EventContent, "timeKind" | "timeLabel">) => event.timeKind === "seasonal" ? "seasonal" : event.timeKind === "label" ? event.timeLabel : undefined;
 ---
 
 <section class="section bg-background">
   <div class="site-container"><div class="mx-auto max-w-4xl">
     <div class="mb-16">
-      <div class="mb-6 flex items-center gap-3"><span class="flex size-10 items-center justify-center rounded-full bg-primary/10"><Calendar class="size-5 text-primary" aria-hidden="true" /></span><h2 class="font-serif text-2xl font-bold md:text-3xl">Regular Services</h2></div>
+      <div class="mb-6 flex items-center gap-3"><span class="flex size-10 items-center justify-center rounded-full bg-primary/10"><Calendar class="size-5 text-primary" aria-hidden="true" /></span><h2 class="font-serif text-2xl font-bold md:text-3xl">{page.regularTitle}</h2></div>
       <div class="space-y-4">
         {recurring.map((event) => (
           <article class="card p-6">
@@ -28,10 +29,10 @@ const timeMarkup = (event: typeof events[number]) => event.timeKind === "seasona
       </div>
     </div>
 
-    <div class="mb-6 flex items-center gap-3"><span class="flex size-10 items-center justify-center rounded-full bg-secondary/20"><CalendarDays class="size-5 text-secondary-foreground" aria-hidden="true" /></span><h2 class="font-serif text-2xl font-bold md:text-3xl">Special Events</h2></div>
+    <div class="mb-6 flex items-center gap-3"><span class="flex size-10 items-center justify-center rounded-full bg-secondary/20"><CalendarDays class="size-5 text-secondary-foreground" aria-hidden="true" /></span><h2 class="font-serif text-2xl font-bold md:text-3xl">{page.specialTitle}</h2></div>
 
     <nav class="event-month-nav mb-12" aria-label="Jump to a month">
-      <p class="event-month-nav-label">2026 calendar</p>
+      <p class="event-month-nav-label">{page.calendarLabel}</p>
       <div class="event-month-links">
         {months.map((month) => <a href={`#month-${month}`}>{monthNames[month - 1].slice(0, 3)}</a>)}
       </div>
@@ -57,7 +58,7 @@ const timeMarkup = (event: typeof events[number]) => event.timeKind === "seasona
                     <h4>{event.title}</h4>
                     <div class="event-meta">
                       <span><Calendar class="size-4" aria-hidden="true" />{event.dateLabel}</span>
-                      {timeMarkup(event) && <span><Clock class="size-4" aria-hidden="true" />{timeMarkup(event)}</span>}
+                      {timeMarkup(event) && <span><Clock class="size-4" aria-hidden="true" />{timeMarkup(event) === "seasonal" ? <span data-service-time>3:00 PM standard / 3:30 PM daylight time</span> : timeMarkup(event)}</span>}
                       <span><MapPin class="size-4" aria-hidden="true" />{event.location}</span>
                     </div>
                     <p>{event.description}</p>
@@ -70,6 +71,6 @@ const timeMarkup = (event: typeof events[number]) => event.timeKind === "seasona
       })}
     </div>
 
-    {undated.length > 0 && <section class="mt-16"><h2 class="mb-3 font-serif text-2xl font-bold md:text-3xl">Dates To Be Announced</h2><p class="mb-6 text-muted-foreground">These events are being planned. Check back soon for specific dates and times.</p>{undated.map((event) => <article class="card mb-4 border-2 border-dashed p-6"><h3 class="font-serif text-lg font-semibold">{event.title}</h3><p class="mt-2 text-sm text-muted-foreground">{event.description}</p></article>)}</section>}
+    {undated.length > 0 && <section class="mt-16"><h2 class="mb-3 font-serif text-2xl font-bold md:text-3xl">{page.undatedTitle}</h2><p class="mb-6 text-muted-foreground">{page.undatedDescription}</p>{undated.map((event) => <article class="card mb-4 border-2 border-dashed p-6"><h3 class="font-serif text-lg font-semibold">{event.title}</h3><p class="mt-2 text-sm text-muted-foreground">{event.description}</p></article>)}</section>}
   </div></div>
 </section>

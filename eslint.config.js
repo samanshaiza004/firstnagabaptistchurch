@@ -5,7 +5,7 @@ import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores(["dist/**", ".astro/**", ".netlify/**", "source-assets/**", "node_modules/**"]),
+  globalIgnores(["dist/**", ".astro/**", ".netlify/**", "source-assets/**", "studio/**", "node_modules/**"]),
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...astro.configs.recommended,

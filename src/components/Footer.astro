@@ -1,6 +1,10 @@
 ---
 import { Clock, Mail, MapPin } from "@lucide/astro";
-import { navigation, siteConfig } from "../site-config";
+import { navigation } from "../site-config";
+import type { SiteSettings } from "../lib/cms/types";
+
+interface Props { settings: SiteSettings }
+const { settings } = Astro.props;
 ---
 
 <footer class="site-footer relative bg-ink text-primary-foreground">
@@ -11,11 +15,11 @@ import { navigation, siteConfig } from "../site-config";
         <div class="mb-4 flex items-center gap-3">
           <span class="flex size-10 items-center justify-center rounded-full bg-secondary font-serif text-lg font-bold text-secondary-foreground" aria-hidden="true">F</span>
           <div>
-            <p class="font-serif text-lg font-semibold">{siteConfig.name}</p>
-            <p class="text-sm text-primary-foreground/70">{siteConfig.region}</p>
+            <p class="font-serif text-lg font-semibold">{settings.name}</p>
+            <p class="text-sm text-primary-foreground/70">{settings.region}</p>
           </div>
         </div>
-        <p class="max-w-md text-sm leading-relaxed text-primary-foreground/80">The first Naga church established in America, dedicated to sharing the Word, supporting Naga families, and building bridges between communities.</p>
+        <p class="max-w-md text-sm leading-relaxed text-primary-foreground/80">{settings.footerDescription}</p>
       </div>
       <div>
         <h2 class="mb-4 font-serif text-lg font-semibold">Quick Links</h2>
@@ -26,12 +30,12 @@ import { navigation, siteConfig } from "../site-config";
       <div>
         <h2 class="mb-4 font-serif text-lg font-semibold">Contact Us</h2>
         <ul class="space-y-3">
-          <li class="flex items-start gap-3"><MapPin class="mt-1 size-4 shrink-0 text-secondary" aria-hidden="true" /><span class="text-sm text-primary-foreground/80">{siteConfig.venue}<br />Fort Worth, TX</span></li>
-          <li class="flex items-center gap-3"><Clock class="size-4 shrink-0 text-secondary" aria-hidden="true" /><span class="text-sm text-primary-foreground/80">Sundays at <span data-service-time>{siteConfig.serviceTime.standard} standard / {siteConfig.serviceTime.daylight} daylight time</span></span></li>
-          <li class="flex items-start gap-3"><Mail class="mt-1 size-4 shrink-0 text-secondary" aria-hidden="true" /><a href={`mailto:${siteConfig.email}`} class="break-all text-sm text-primary-foreground/80 hover:text-secondary">{siteConfig.email}</a></li>
+          <li class="flex items-start gap-3"><MapPin class="mt-1 size-4 shrink-0 text-secondary" aria-hidden="true" /><span class="text-sm text-primary-foreground/80">{settings.venue}<br />{settings.region}</span></li>
+          <li class="flex items-center gap-3"><Clock class="size-4 shrink-0 text-secondary" aria-hidden="true" /><span class="text-sm text-primary-foreground/80">Sundays at <span data-service-time>{settings.serviceTime.standard} standard / {settings.serviceTime.daylight} daylight time</span></span></li>
+          <li class="flex items-start gap-3"><Mail class="mt-1 size-4 shrink-0 text-secondary" aria-hidden="true" /><a href={`mailto:${settings.email}`} class="break-all text-sm text-primary-foreground/80 hover:text-secondary">{settings.email}</a></li>
         </ul>
       </div>
     </div>
-    <div class="mt-12 border-t border-primary-foreground/20 pt-8"><p class="text-center text-sm text-primary-foreground/60">&copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.</p></div>
+    <div class="mt-12 border-t border-primary-foreground/20 pt-8"><p class="text-center text-sm text-primary-foreground/60">&copy; {new Date().getFullYear()} {settings.name}. All rights reserved.</p></div>
   </div>
 </footer>
