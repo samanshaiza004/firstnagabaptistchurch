@@ -1,4 +1,5 @@
 import { createClient } from "@sanity/client";
+import { createReadStream } from "node:fs";
 import { basename, extname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { localContent } from "../../src/lib/cms/local-content";
@@ -8,8 +9,8 @@ const environment = process.env;
 const projectId = environment.PUBLIC_SANITY_PROJECT_ID;
 const dataset = environment.PUBLIC_SANITY_DATASET ?? "production";
 const apiVersion = environment.PUBLIC_SANITY_API_VERSION ?? "2026-07-01";
-const token = environment.SANITY_WRITE_TOKEN;
-if (!projectId || !token) throw new Error("Set PUBLIC_SANITY_PROJECT_ID and SANITY_WRITE_TOKEN before running cms:migrate.");
+const token = environment.SANITY_WRITE_TOKEN ?? environment.SANITY_AUTH_TOKEN;
+if (!projectId || !token) throw new Error("Set PUBLIC_SANITY_PROJECT_ID and SANITY_WRITE_TOKEN, or run this script through sanity exec --with-user-token.");
 
 const client = createClient({ projectId, dataset, apiVersion, token, useCdn: false });
 const assetFiles: Record<string, string> = {
@@ -38,7 +39,7 @@ async function imageReference(image: CmsImage) {
   const filename = `fnbc-${image.key}${extname(path).toLowerCase()}`;
   let assetId = assetCache.get(filename) ?? await client.fetch<string | null>(`*[_type == "sanity.imageAsset" && originalFilename == $filename][0]._id`, { filename });
   if (!assetId) {
-    const asset = await client.assets.upload("image", Bun.file(path), { filename, title: basename(filename) });
+    const asset = await client.assets.upload("image", createReadStream(path), { filename, title: basename(filename) });
     assetId = asset._id;
   }
   assetCache.set(filename, assetId);

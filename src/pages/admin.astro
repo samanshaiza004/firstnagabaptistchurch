@@ -4,7 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCmsContent } from "../lib/cms/content";
 
 const { settings } = await getCmsContent();
-const studioUrl = process.env.PUBLIC_SANITY_STUDIO_URL ?? "https://first-naga-baptist-church.sanity.studio";
+const studioUrl = import.meta.env.PUBLIC_SANITY_STUDIO_URL ?? "https://first-naga-baptist-church.sanity.studio";
 ---
 
 <BaseLayout title={`Website Admin | ${settings.name}`} description="Secure website content access for authorized First Naga Baptist Church media staff." noindex>
