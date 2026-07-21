@@ -39,7 +39,7 @@ The public `/admin` page links authorized staff to the hosted Studio and is excl
 
 ## Migration and backups
 
-Set `PUBLIC_SANITY_PROJECT_ID` and a temporary `SANITY_WRITE_TOKEN`, then run `bun run cms:migrate`. The importer is idempotent: stable document IDs are replaced in place and previously uploaded migration assets are reused by filename.
+Set `PUBLIC_SANITY_PROJECT_ID` and a temporary `SANITY_WRITE_TOKEN`, then run `bun run cms:migrate`. If you are already logged in with the Sanity CLI, run the migration from the sibling Studio with `npx sanity exec ../firstnagabaptistchurch/scripts/cms/migrate.ts --with-user-token`. The importer is idempotent: stable document IDs are replaced in place and previously uploaded migration assets are reused by filename.
 
 Create a complete dataset and asset export with `bun run cms:export`. The monthly GitHub Actions workflow retains rolling export artifacts for 90 days and requires `PUBLIC_SANITY_PROJECT_ID` and `SANITY_BACKUP_TOKEN` repository secrets.
 
@@ -62,7 +62,7 @@ CMS_SOURCE=sanity
 PUBLIC_SANITY_PROJECT_ID=6h6upd33
 PUBLIC_SANITY_DATASET=production
 PUBLIC_SANITY_API_VERSION=2026-07-01
-PUBLIC_SANITY_STUDIO_URL=https://your-studio.sanity.studio
+PUBLIC_SANITY_STUDIO_URL=https://first-naga-baptist-church.sanity.studio
 EMAIL_USER=firstnagabaptistchurch@yahoo.com
 EMAIL_APP_PASSWORD=your-yahoo-app-password
 CONTACT_EMAIL_TO=recipient@example.com
