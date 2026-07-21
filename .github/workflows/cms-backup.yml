@@ -1,0 +1,30 @@
+name: CMS backup
+
+on:
+  schedule:
+    - cron: "20 5 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Export published content and assets
+        run: bun run cms:export
+        env:
+          PUBLIC_SANITY_PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID }}
+          PUBLIC_SANITY_DATASET: production
+          SANITY_WRITE_TOKEN: ${{ secrets.SANITY_BACKUP_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fnbc-sanity-backup-${{ github.run_id }}
+          path: backups/*.tar.gz
+          retention-days: 90
+          if-no-files-found: error

@@ -1,16 +1,15 @@
 ---
-import { Image } from "astro:assets";
-import type { ImageMetadata } from "astro";
+import CmsImage from "./CmsImage.astro";
+import type { CmsImage as CmsImageValue } from "../lib/cms/types";
 
 interface Props {
   eyebrow: string;
   title: string;
   description: string;
-  image: ImageMetadata;
-  imageAlt: string;
+  image: CmsImageValue;
 }
 
-const { eyebrow, title, description, image, imageAlt } = Astro.props;
+const { eyebrow, title, description, image } = Astro.props;
 ---
 
 <section class="page-hero">
@@ -21,7 +20,7 @@ const { eyebrow, title, description, image, imageAlt } = Astro.props;
       <p class="mt-6 text-lg leading-relaxed md:text-xl">{description}</p>
     </div>
     <div class="page-hero-media">
-      <Image src={image} alt={imageAlt} widths={[640, 960, 1280, 1600]} sizes="(min-width: 768px) 58vw, 100vw" loading="eager" fetchpriority="high" class="size-full object-cover" />
+      <CmsImage image={image} widths={[640, 960, 1280, 1600]} sizes="(min-width: 768px) 58vw, 100vw" loading="eager" fetchpriority="high" class="size-full object-cover" />
     </div>
     <div class="page-hero-seam woven-band" aria-hidden="true"></div>
   </div>

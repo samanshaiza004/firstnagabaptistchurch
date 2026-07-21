@@ -1,0 +1,51 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { localImages } from "../lib/cms/local-images";
+import type { CmsImage } from "../lib/cms/types";
+
+interface Props {
+  image: CmsImage;
+  widths?: number[];
+  sizes?: string;
+  loading?: "eager" | "lazy";
+  fetchpriority?: "high" | "low" | "auto";
+  class?: string;
+  quality?: number;
+}
+
+const { image, widths = [480, 720, 960, 1280], sizes = "100vw", loading = "lazy", fetchpriority, class: className, quality = 82 } = Astro.props;
+const local = image.source === "local" ? localImages[image.key] : undefined;
+if (image.source === "local" && !local) throw new Error(`Missing local CMS migration image: ${image.key}`);
+
+const sanityUrl = (width: number) => {
+  if (image.source !== "sanity") return "";
+  const url = new URL(image.url);
+  url.searchParams.set("w", String(Math.min(width, image.width)));
+  url.searchParams.set("q", String(quality));
+  url.searchParams.set("fit", "max");
+  url.searchParams.set("auto", "format");
+  return url.href;
+};
+const remoteWidths = image.source === "sanity" ? [...new Set(widths.map((width) => Math.min(width, image.width)))].sort((a, b) => a - b) : [];
+---
+
+{image.source === "local" && typeof local !== "string" ? (
+  <Image src={local as ImageMetadata} alt={image.alt} widths={widths} sizes={sizes} loading={loading} fetchpriority={fetchpriority} class={className} />
+) : image.source === "local" && typeof local === "string" ? (
+  <img src={local} width="192" height="192" alt={image.alt} loading={loading} decoding="async" fetchpriority={fetchpriority} class={className} />
+) : image.source === "sanity" ? (
+  <img
+    src={sanityUrl(remoteWidths.at(-1) ?? image.width)}
+    srcset={remoteWidths.map((width) => `${sanityUrl(width)} ${width}w`).join(", ")}
+    sizes={sizes}
+    width={image.width}
+    height={image.height}
+    alt={image.alt}
+    loading={loading}
+    decoding="async"
+    fetchpriority={fetchpriority}
+    class={className}
+    style={image.lqip ? `background-image:url(${image.lqip});background-size:cover` : undefined}
+  />
+) : null}

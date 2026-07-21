@@ -1,54 +1,49 @@
 ---
-import { Image } from "astro:assets";
-import { getCollection } from "astro:content";
 import { ArrowRight, BookOpen, Calendar, Clock, Globe, HandHeart, Link2, MapPin, Users } from "@lucide/astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import CmsImage from "../components/CmsImage.astro";
 import Leadership from "../components/Leadership.astro";
-import heroImage from "../assets/images/bgoption2.webp";
-import storyImage from "../assets/images/bgoption.webp";
-import { siteConfig } from "../site-config";
+import RichText from "../components/RichText.astro";
+import { getCmsContent } from "../lib/cms/content";
 
-const objectives = [
-  { icon: BookOpen, title: "Share the Word", description: "To share the Word and engage with the unreached." },
-  { icon: Users, title: "Support Naga Families", description: "To support Naga students and families in the DFW area." },
-  { icon: Globe, title: "Connect Community", description: "To connect with the Naga community throughout the United States." },
-  { icon: HandHeart, title: "Reach Out", description: "To reach out to the Indian subcontinent community in DFW." },
-  { icon: Link2, title: "Strengthen Connections", description: "To strengthen connections among Naga churches and American communities." },
-];
-const events = (await getCollection("events")).filter((event) => event.data.recurring).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
+const { settings, pages, events: allEvents, people, ministries, objectives } = await getCmsContent();
+const page = pages.home;
+const events = allEvents.filter((event) => event.recurring).sort((a, b) => a.order - b.order).slice(0, 3);
+const serviceIcons = { worship: Clock, location: MapPin, fellowship: Calendar };
+const objectiveIcons = { book: BookOpen, users: Users, globe: Globe, service: HandHeart, connection: Link2, house: HandHeart, heart: HandHeart };
+const serviceValue = (value: string) => value.replace("{address}", settings.address);
+const titleParts = page.hero.title.split(/(?=Baptist Church)/);
 ---
 
-<BaseLayout title="First Naga Baptist Church | DFW, Texas">
+<BaseLayout title={page.seo.title} description={page.seo.description} socialImage={page.seo.socialImage}>
   <section class="home-hero">
     <div class="home-hero-grid">
       <div class="home-hero-copy">
-        <p class="eyebrow">A Naga church in DFW</p>
-        <h1 class="home-hero-title">First Naga <em>Baptist Church</em></h1>
-        <p class="home-hero-copy-text">The first Naga church established in America—a place to worship together, grow in faith, and keep community close across generations.</p>
-        <div class="mt-8 flex flex-col gap-4 sm:flex-row"><a class="button button-secondary" href="/contact">Plan Your Sunday</a><a class="button button-outline text-primary-foreground" href="/about">Read Our Story</a></div>
+        <p class="eyebrow">{page.hero.eyebrow}</p>
+        <h1 class="home-hero-title">{titleParts[0]}{titleParts[1] && <em>{titleParts[1]}</em>}</h1>
+        <p class="home-hero-copy-text">{page.hero.description}</p>
+        <div class="mt-8 flex flex-col gap-4 sm:flex-row"><a class="button button-secondary" href={page.primaryCta.href}>{page.primaryCta.label}</a><a class="button button-outline text-primary-foreground" href={page.secondaryCta.href}>{page.secondaryCta.label}</a></div>
       </div>
       <div class="home-hero-media">
-        <Image src={heroImage} alt="First Naga Baptist Church worship gathering" widths={[640, 960, 1280, 1920]} sizes="(min-width: 768px) 58vw, 100vw" loading="eager" fetchpriority="high" class="size-full object-cover" />
-        <p class="home-hero-note">Established in America · November 4, 2018</p>
+        <CmsImage image={page.hero.image} widths={[640, 960, 1280, 1920]} sizes="(min-width: 768px) 58vw, 100vw" loading="eager" fetchpriority="high" class="size-full object-cover" />
+        <p class="home-hero-note">{page.heroNote}</p>
       </div>
       <div class="home-hero-seam woven-band" aria-hidden="true"></div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="service-title"><div class="site-container"><div class="section-heading-grid mb-12"><div><p class="eyebrow">Join Us</p><h2 id="service-title" class="section-title">Service Times &amp; Location</h2></div><p class="section-copy">We gather every Sunday to worship, learn, and grow together as a family in Christ.</p></div>
+  <section class="section" aria-labelledby="service-title"><div class="site-container"><div class="section-heading-grid mb-12"><div><p class="eyebrow">{page.serviceEyebrow}</p><h2 id="service-title" class="section-title">{page.serviceTitle}</h2></div><p class="section-copy">{page.serviceDescription}</p></div>
     <div class="service-grid grid gap-6 md:grid-cols-3">
-      <article class="card p-6 text-center"><span class="mb-4 flex size-14 items-center justify-center rounded-sm bg-primary/10"><Clock class="size-6 text-primary" /></span><h3 class="mb-2 font-serif text-xl font-semibold">Sunday Worship</h3><p class="mb-2 text-lg font-semibold"><span data-service-time>{siteConfig.serviceTime.standard} standard / {siteConfig.serviceTime.daylight} daylight time</span></p><p class="text-sm text-muted-foreground">Join us for our main worship service with praise, prayer, and teaching.</p></article>
-      <article class="card p-6 text-center"><span class="mb-4 flex size-14 items-center justify-center rounded-sm bg-primary/10"><MapPin class="size-6 text-primary" /></span><h3 class="mb-2 font-serif text-xl font-semibold">Location</h3><p class="mb-2 font-semibold">{siteConfig.address}</p><p class="text-sm text-muted-foreground">We are grateful to Burton Hill Baptist Church for hosting us.</p></article>
-      <article class="card p-6 text-center"><span class="mb-4 flex size-14 items-center justify-center rounded-sm bg-primary/10"><Calendar class="size-6 text-primary" /></span><h3 class="mb-2 font-serif text-xl font-semibold">Fellowship</h3><p class="mb-2 text-lg font-semibold">After Service</p><p class="text-sm text-muted-foreground">Stay for refreshments and fellowship with the community after worship.</p></article>
+      {page.serviceCards.map((card) => { const Icon = serviceIcons[card.kind]; return <article class="card p-6 text-center"><span class="mb-4 flex size-14 items-center justify-center rounded-sm bg-primary/10"><Icon class="size-6 text-primary" /></span><h3 class="mb-2 font-serif text-xl font-semibold">{card.title}</h3><p class="mb-2 text-lg font-semibold">{card.value === "{serviceTime}" ? <span data-service-time>{settings.serviceTime.standard} standard / {settings.serviceTime.daylight} daylight time</span> : serviceValue(card.value)}</p><p class="text-sm text-muted-foreground">{card.description}</p></article>; })}
     </div>
-    <p class="mx-auto mt-8 max-w-3xl rounded-lg bg-muted/50 px-4 py-3 text-center text-sm text-muted-foreground"><strong>Seasonal schedule:</strong> Service starts at 3:30 PM while Central Time observes daylight saving time and at 3:00 PM during standard time.</p>
+    <p class="mx-auto mt-8 max-w-3xl rounded-lg bg-muted/50 px-4 py-3 text-center text-sm text-muted-foreground"><strong>Seasonal schedule:</strong> {page.seasonalNote}</p>
   </div></section>
 
-  <Leadership />
+  <Leadership people={people} ministries={ministries} eyebrow={page.leadershipEyebrow} title={page.leadershipTitle} description={page.leadershipDescription} trusteesTitle={page.trusteesTitle} trusteesDescription={page.trusteesDescription} />
 
-  <section class="section" aria-labelledby="objectives-title"><div class="site-container"><div class="section-heading-grid mb-12"><div><p class="eyebrow">Our Mission</p><h2 id="objectives-title" class="section-title">Main Objectives</h2></div><p class="section-copy">We are committed to these core objectives that guide our ministry and outreach.</p></div><div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{objectives.map((objective) => { const Icon = objective.icon; return <article class="flex gap-4 border-l-4 border-l-loom bg-muted/50 p-6"><span class="flex size-12 shrink-0 items-center justify-center rounded-sm bg-primary/10"><Icon class="size-5 text-primary" /></span><div><h3 class="mb-1 font-serif text-lg font-semibold">{objective.title}</h3><p class="text-sm leading-relaxed text-muted-foreground">{objective.description}</p></div></article>; })}</div></div></section>
+  <section class="section" aria-labelledby="objectives-title"><div class="site-container"><div class="section-heading-grid mb-12"><div><p class="eyebrow">{page.objectivesEyebrow}</p><h2 id="objectives-title" class="section-title">{page.objectivesTitle}</h2></div><p class="section-copy">{page.objectivesDescription}</p></div><div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{objectives.map((objective) => { const Icon = objectiveIcons[objective.icon]; return <article class="flex gap-4 border-l-4 border-l-loom bg-muted/50 p-6"><span class="flex size-12 shrink-0 items-center justify-center rounded-sm bg-primary/10"><Icon class="size-5 text-primary" /></span><div><h3 class="mb-1 font-serif text-lg font-semibold">{objective.shortTitle}</h3><p class="text-sm leading-relaxed text-muted-foreground">{objective.shortDescription}</p></div></article>; })}</div></div></section>
 
-  <section class="section bg-background"><div class="site-container grid items-center gap-12 lg:grid-cols-2"><div><p class="eyebrow">Our Story</p><h2 class="section-title mb-6 lg:text-5xl">A Historic Journey of Faith</h2><div class="space-y-4 leading-relaxed text-muted-foreground"><p>The first Naga church was established in America on November 4th, 2018 in DFW, Texas—113 years after the first Naga, Mr. Sanjamo Jungi, landed in this country in 1905.</p><p>The inspiration came through Mr. Chuingachan Shokwungnao, who believed a church of their own would foster fellowship among scattered Nagas and open the door for evangelism.</p><p>He emphasized that Nagas must never forget the Americans, for it was them who introduced the Nagas to the living God.</p></div><a class="button mt-8" href="/about">Read Full History</a></div><div class="relative"><Image src={storyImage} alt="Church worship gathering" widths={[480, 720, 960]} sizes="(min-width: 1024px) 50vw, 100vw" loading="lazy" class="story-image aspect-[4/3] w-full object-cover" /></div></div></section>
+  <section class="section bg-background"><div class="site-container grid items-center gap-12 lg:grid-cols-2"><div><p class="eyebrow">{page.storyEyebrow}</p><h2 class="section-title mb-6 lg:text-5xl">{page.storyTitle}</h2><RichText value={page.storyBody} class="space-y-4 leading-relaxed text-muted-foreground" /><a class="button mt-8" href={page.storyCta.href}>{page.storyCta.label}</a></div><div class="relative"><CmsImage image={page.storyImage} widths={[480, 720, 960]} sizes="(min-width: 1024px) 50vw, 100vw" loading="lazy" class="story-image aspect-[4/3] w-full object-cover" /></div></div></section>
 
-  <section class="section bg-primary text-primary-foreground"><div class="site-container"><div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"><div><p class="eyebrow">Stay Connected</p><h2 class="font-serif text-3xl font-bold md:text-4xl">Upcoming Events</h2></div><a class="button button-outline w-fit text-primary-foreground" href="/events">View All Events <ArrowRight class="size-4" /></a></div><div class="grid gap-6 md:grid-cols-3">{events.map((entry) => <article class="rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 p-6"><div class="mb-3 flex items-center gap-2 text-secondary"><Calendar class="size-4" /><span class="text-sm font-medium">{entry.data.dateLabel} · {entry.data.timeKind === "seasonal" ? <span data-service-time>Seasonal service time</span> : entry.data.timeLabel ?? "Time TBA"}</span></div><h3 class="mb-2 font-serif text-xl font-semibold">{entry.data.title}</h3><p class="text-sm leading-relaxed text-primary-foreground/80">{entry.data.description}</p></article>)}</div></div></section>
+  <section class="section bg-primary text-primary-foreground"><div class="site-container"><div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"><div><p class="eyebrow">{page.eventsEyebrow}</p><h2 class="font-serif text-3xl font-bold md:text-4xl">{page.eventsTitle}</h2></div><a class="button button-outline w-fit text-primary-foreground" href={page.eventsCta.href}>{page.eventsCta.label} <ArrowRight class="size-4" /></a></div><div class="grid gap-6 md:grid-cols-3">{events.map((event) => <article class="rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 p-6"><div class="mb-3 flex items-center gap-2 text-secondary"><Calendar class="size-4" /><span class="text-sm font-medium">{event.dateLabel} · {event.timeKind === "seasonal" ? <span data-service-time>Seasonal service time</span> : event.timeLabel ?? "Time TBA"}</span></div><h3 class="mb-2 font-serif text-xl font-semibold">{event.title}</h3><p class="text-sm leading-relaxed text-primary-foreground/80">{event.description}</p></article>)}</div></div></section>
 </BaseLayout>

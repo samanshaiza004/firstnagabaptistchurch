@@ -3,41 +3,51 @@ import { getImage } from "astro:assets";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import ogSource from "../assets/images/bgoption2.webp";
-import { siteConfig } from "../site-config";
+import { getCmsContent } from "../lib/cms/content";
+import { localImages } from "../lib/cms/local-images";
+import type { CmsImage } from "../lib/cms/types";
 import "../styles/global.css";
 
 interface Props {
   title: string;
   description?: string;
   noindex?: boolean;
+  socialImage?: CmsImage;
 }
 
-const { title, description = siteConfig.description, noindex = false } = Astro.props;
+const { settings } = await getCmsContent();
+const { title, description = settings.description, noindex = false, socialImage } = Astro.props;
 const routePath = Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
 const canonicalPath = routePath === "/" ? "/" : routePath.replace(/\/$/, "");
-const canonical = new URL(canonicalPath, siteConfig.domain);
-const ogImage = await getImage({ src: ogSource, width: 1200, height: 630, fit: "cover", format: "webp" });
-const ogUrl = new URL(ogImage.src, siteConfig.domain);
+const canonical = new URL(canonicalPath, settings.domain);
+let ogUrl: URL;
+if (socialImage?.source === "sanity") {
+  const url = new URL(socialImage.url);
+  url.searchParams.set("w", "1200"); url.searchParams.set("h", "630"); url.searchParams.set("fit", "crop"); url.searchParams.set("auto", "format");
+  ogUrl = url;
+} else {
+  const localSource = socialImage?.source === "local" ? localImages[socialImage.key] : ogSource;
+  const ogImage = typeof localSource === "string" ? undefined : await getImage({ src: localSource, width: 1200, height: 630, fit: "cover", format: "webp" });
+  ogUrl = new URL(typeof localSource === "string" ? localSource : ogImage!.src, settings.domain);
+}
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Church",
-  name: siteConfig.name,
-  url: siteConfig.domain,
-  email: siteConfig.email,
-  telephone: siteConfig.phoneHref,
+  name: settings.name,
+  url: settings.domain,
+  email: settings.email,
+  telephone: settings.phoneHref,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "308 Burton Hill Rd",
-    addressLocality: "Westworth Village",
+    streetAddress: settings.address,
     addressRegion: "TX",
-    postalCode: "76114",
     addressCountry: "US",
   },
 };
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-service-standard={settings.serviceTime.standard} data-service-daylight={settings.serviceTime.daylight} data-service-time-zone={settings.serviceTime.timeZone}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -49,7 +59,7 @@ const structuredData = {
     <link rel="sitemap" href="/sitemap-index.xml" />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:site_name" content={settings.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -63,9 +73,9 @@ const structuredData = {
   </head>
   <body>
     <a href="#main-content" class="fixed left-4 top-4 z-[100] -translate-y-24 rounded-md bg-background px-4 py-2 text-foreground shadow-lg transition-transform focus:translate-y-0">Skip to main content</a>
-    <Header />
+    <Header settings={settings} />
     <main id="main-content" tabindex="-1"><slot /></main>
-    <Footer />
+    <Footer settings={settings} />
     <script>import "../scripts/service-time";</script>
   </body>
 </html>

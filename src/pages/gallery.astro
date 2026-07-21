@@ -1,34 +1,37 @@
 ---
-import { getCollection } from "astro:content";
-import { getImage, Image } from "astro:assets";
+import { getImage } from "astro:assets";
 import { ChevronLeft, ChevronRight, Expand, Images, X } from "@lucide/astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import CmsImage from "../components/CmsImage.astro";
 import PageHero from "../components/PageHero.astro";
-import { galleryImages } from "../lib/images";
-import heroImage from "../assets/images/bgoption.webp";
-import { siteConfig } from "../site-config";
+import { getCmsContent } from "../lib/cms/content";
+import { sanityImageUrl } from "../lib/cms/image-url";
+import { localImages } from "../lib/cms/local-images";
 
-const entries = (await getCollection("gallery")).sort((a, b) => a.data.order - b.data.order);
-const photos = await Promise.all(entries.map(async (entry, index) => {
-  const image = galleryImages[entry.data.imageKey];
-  if (!image) throw new Error(`Missing gallery image: ${entry.data.imageKey}`);
-  const expanded = await getImage({ src: image, width: Math.min(image.width, 1800), format: "webp", quality: 88 });
-  return { ...entry.data, id: entry.id, image, expandedSrc: expanded.src, position: index + 1 };
+const { settings, pages, gallery } = await getCmsContent();
+const page = pages.gallery;
+const photos = await Promise.all(gallery.sort((a, b) => a.order - b.order).map(async (photo, index) => {
+  if (photo.image.source === "sanity") return { ...photo, expandedSrc: sanityImageUrl(photo.image, 1800, 88), position: index + 1 };
+  const local = localImages[photo.image.key];
+  if (!local) throw new Error(`Missing gallery image: ${photo.image.key}`);
+  if (typeof local === "string") return { ...photo, expandedSrc: local, position: index + 1 };
+  const expanded = await getImage({ src: local, width: Math.min(local.width, 1800), format: "webp", quality: 88 });
+  return { ...photo, expandedSrc: expanded.src, position: index + 1 };
 }));
 ---
 
-<BaseLayout title={`Gallery | ${siteConfig.name}`} description="Photographs of worship, fellowship, baptisms, cultural celebrations, and church life at First Naga Baptist Church.">
-  <PageHero eyebrow="Photo Gallery" title="Church Life, Remembered" description="A growing collection of worship, fellowship, milestones, and shared moments from our church family." image={heroImage} imageAlt="First Naga Baptist Church family gathered together" />
+<BaseLayout title={page.seo.title} description={page.seo.description} socialImage={page.seo.socialImage}>
+  <PageHero {...page.hero} />
 
   <main class="gallery-section section" aria-labelledby="gallery-title">
     <div class="site-container">
       <header class="gallery-intro">
         <div>
-          <p class="eyebrow">Our Shared Story</p>
-          <h2 id="gallery-title" class="section-title">Moments from Our Church Family</h2>
+          <p class="eyebrow">{page.introEyebrow}</p>
+          <h2 id="gallery-title" class="section-title">{page.introTitle}</h2>
         </div>
         <div class="gallery-intro-copy">
-          <p>These photographs preserve the people and moments that shape our life together. Select any image to view it in full.</p>
+          <p>{page.introDescription}</p>
           <p class="gallery-count"><Images class="size-4" aria-hidden="true" />{photos.length} photographs in this collection</p>
         </div>
       </header>
@@ -41,14 +44,14 @@ const photos = await Promise.all(entries.map(async (entry, index) => {
               class="gallery-trigger"
               data-gallery-index={index}
               data-full-src={photo.expandedSrc}
-              data-alt={photo.alt}
+              data-alt={photo.image.alt}
               data-title={photo.title}
               data-caption={photo.caption}
               data-category={photo.category}
               data-date={photo.dateLabel ?? ""}
               aria-label={`View ${photo.title} in full`}
             >
-              <Image src={photo.image} alt={photo.alt} widths={[360, 540, 720]} sizes="(min-width: 1100px) 28vw, (min-width: 640px) 44vw, 100vw" loading={index < 2 ? "eager" : "lazy"} class="gallery-photo" />
+              <CmsImage image={photo.image} widths={[360, 540, 720]} sizes="(min-width: 1100px) 28vw, (min-width: 640px) 44vw, 100vw" loading={index < 2 ? "eager" : "lazy"} class="gallery-photo" />
               <span class="gallery-view"><Expand class="size-4" aria-hidden="true" />View photo</span>
             </button>
             <figcaption>
@@ -60,9 +63,9 @@ const photos = await Promise.all(entries.map(async (entry, index) => {
       </div>
 
       <aside class="gallery-contribute" aria-labelledby="share-photos-title">
-        <div><p class="eyebrow">Help Preserve Our Story</p><h2 id="share-photos-title">Have church photos to share?</h2></div>
-        <p>Send original photographs with the event name and approximate date so they can be considered for the gallery.</p>
-        <a class="button" href={`mailto:${siteConfig.email}?subject=Church%20gallery%20photos`}>Share Photos</a>
+        <div><p class="eyebrow">{page.shareEyebrow}</p><h2 id="share-photos-title">{page.shareTitle}</h2></div>
+        <p>{page.shareDescription}</p>
+        <a class="button" href={`mailto:${settings.email}?subject=Church%20gallery%20photos`}>{page.shareButtonLabel}</a>
       </aside>
     </div>
   </main>
@@ -72,7 +75,7 @@ const photos = await Promise.all(entries.map(async (entry, index) => {
       <button type="button" class="lightbox-close" data-lightbox-close aria-label="Close expanded photo"><X class="size-6" aria-hidden="true" /></button>
       <button type="button" class="lightbox-nav lightbox-prev" data-lightbox-prev aria-label="View previous photo"><ChevronLeft class="size-7" aria-hidden="true" /></button>
       <figure class="lightbox-figure">
-        <div class="lightbox-image-wrap"><img data-lightbox-image src="" alt="" /></div>
+        <div class="lightbox-image-wrap"><img data-lightbox-image alt="" /></div>
         <figcaption>
           <div class="lightbox-kicker"><span data-lightbox-category></span><span data-lightbox-date></span><span data-lightbox-position></span></div>
           <h2 id="lightbox-title" data-lightbox-title></h2>

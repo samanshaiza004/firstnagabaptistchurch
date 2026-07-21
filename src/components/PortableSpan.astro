@@ -1,0 +1,17 @@
+---
+import type { PortableBlock, PortableSpan } from "../lib/cms/types";
+interface Props { span: PortableSpan; markDefs?: PortableBlock["markDefs"] }
+const { span, markDefs = [] } = Astro.props;
+const marks = new Set(span.marks ?? []);
+const link = markDefs.find((definition) => marks.has(definition._key));
+const strong = marks.has("strong");
+const emphasis = marks.has("em");
+---
+{link && strong && emphasis ? <a href={link.href}><strong><em>{span.text}</em></strong></a>
+  : link && strong ? <a href={link.href}><strong>{span.text}</strong></a>
+  : link && emphasis ? <a href={link.href}><em>{span.text}</em></a>
+  : link ? <a href={link.href}>{span.text}</a>
+  : strong && emphasis ? <strong><em>{span.text}</em></strong>
+  : strong ? <strong>{span.text}</strong>
+  : emphasis ? <em>{span.text}</em>
+  : span.text}
