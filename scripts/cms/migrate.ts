@@ -19,11 +19,13 @@ const assetFiles: Record<string, string> = {
   churchLeaders: "../../src/assets/images/bgoption6.jpg", foundingMembers: "../../src/assets/images/foundingmembers.jpg",
   culturalDay: "../../src/assets/images/fundraider.jpg", hosea: "../../src/assets/images/hosea.jpg",
   joseph: "../../src/assets/images/joseph.jpg", katensangla: "../../src/assets/images/katensangla2.jpg",
-  kinoto: "../../src/assets/images/kinoto2.jpg", kumar: "../../src/assets/images/kumar-optimized.jpg",
+  kinoto: "../../src/assets/images/kinoto2.jpg", "keyilungdaule-hieme": "../../src/assets/images/keyilungdaule-hieme.jpeg",
+  kumar: "../../src/assets/images/kumar-optimized.jpg",
   lanu: "../../src/assets/images/lanu.jpg", livi: "../../src/assets/images/Livi.jpg",
   mathingmi: "../../src/assets/images/mathingmi-optimized.jpg", peraly: "../../src/assets/images/peraly.jpg",
   prayingHands: "../../src/assets/images/praying hands.jpg", rhite: "../../src/assets/images/rhite.png",
-  saman: "../../src/assets/images/saman-optimized.jpg", theishing: "../../src/assets/images/theishing.jpg",
+  saman: "../../src/assets/images/saman-optimized.jpg", "senti-aier": "../../src/assets/images/senti-aier.jpeg",
+  theishing: "../../src/assets/images/theishing.jpg",
   paypalQr: "../../public/paypal.jpg", zelleQr: "../../public/zelle.jpg",
 };
 const assetCache = new Map<string, string>();
