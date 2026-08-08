@@ -6,6 +6,7 @@
     "alt": "First Naga Baptist Church members gathered in traditional attire for Cultural Day",
     "imageKey": "culturalDay",
     "category": "Culture",
+    "tags": ["Cultural Heritage", "Celebration", "Community"],
     "dateLabel": "October 7, 2023",
     "order": 1
   },
@@ -16,6 +17,7 @@
     "alt": "A large multigenerational group of church members and friends gathered indoors",
     "imageKey": "churchFamily",
     "category": "Church Family",
+    "tags": ["Fellowship", "Worship"],
     "order": 2
   },
   {
@@ -25,6 +27,7 @@
     "alt": "A minister and baptism candidate standing together in a lake",
     "imageKey": "lakesideBaptism",
     "category": "Baptism",
+    "tags": ["Baptism", "Milestone", "Outdoor"],
     "order": 3
   },
   {
@@ -34,6 +37,7 @@
     "alt": "A large group of First Naga Baptist Church members wearing matching navy shirts",
     "imageKey": "churchFamilyShirts",
     "category": "Church Family",
+    "tags": ["Church Family", "Fellowship"],
     "order": 4
   },
   {
@@ -43,6 +47,7 @@
     "alt": "Church choir singing before the congregation beneath a draped cross",
     "imageKey": "worshipChoir",
     "category": "Worship",
+    "tags": ["Worship", "Music"],
     "order": 5
   },
   {
@@ -52,6 +57,7 @@
     "alt": "Early First Naga Baptist Church members gathered for a group portrait in a home",
     "imageKey": "foundingMembers",
     "category": "Church History",
+    "tags": ["History", "Founding"],
     "order": 6
   },
   {
@@ -61,6 +67,7 @@
     "alt": "Church and community friends gathered for a group portrait inside the sanctuary",
     "imageKey": "churchLeaders",
     "category": "Church Family",
+    "tags": ["Fellowship", "Community"],
     "order": 7
   }
 ]
