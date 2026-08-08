@@ -83,7 +83,7 @@ export const localContent: CmsContent = {
   events: eventsData as EventContent[],
   people: peopleData.map((person) => ({ ...person, image: image(person.imageKey, `Portrait of ${person.name}`) })) as PersonContent[],
   ministries: ministriesData as MinistryContent[], objectives,
-  gallery: galleryData.map((photo) => ({ id: photo.id, title: photo.title, caption: photo.caption, image: image(photo.imageKey, photo.alt), category: photo.category, dateLabel: photo.dateLabel, order: photo.order })) as GalleryPhotoContent[],
+  gallery: galleryData.map((photo) => ({ id: photo.id, title: photo.title, caption: photo.caption, image: image(photo.imageKey, photo.alt), category: photo.category, tags: photo.tags, dateLabel: photo.dateLabel, order: photo.order })) as GalleryPhotoContent[],
   givingMethods: [
     { id: "paypal", name: "PayPal", description: "A familiar online payment option", contact: "firstnagabaptistchurch@yahoo.com", qrCode: image("paypalQr", "PayPal donation QR code"), brandColor: "#0070ba", instructions: ["Visit paypal.com or use the PayPal app", "Send payment to: firstnagabaptistchurch@yahoo.com", "Include ‘Donation’ in the payment notes", "Keep your payment confirmation for your records"], order: 1 },
     { id: "zelle", name: "Zelle", description: "Fast, free bank-to-bank transfers", contact: "(817) 724-6922", qrCode: image("zelleQr", "Zelle donation QR code"), brandColor: "#6d1ed4", instructions: ["Open your banking app with Zelle", "Send to phone: (817) 724-6922", "Enter your donation amount", "Complete the secure transfer"], order: 2 },
