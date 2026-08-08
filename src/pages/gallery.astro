@@ -18,6 +18,8 @@ const photos = await Promise.all(gallery.sort((a, b) => a.order - b.order).map(a
   const expanded = await getImage({ src: local, width: Math.min(local.width, 1800), format: "webp", quality: 88 });
   return { ...photo, expandedSrc: expanded.src, position: index + 1 };
 }));
+const galleryTags = [...new Set(photos.flatMap((photo) => photo.tags))].sort((a, b) => a.localeCompare(b));
+const photoCountByTag = new Map(galleryTags.map((tag) => [tag, photos.filter((photo) => photo.tags.includes(tag)).length]));
 ---
 
 <BaseLayout title={page.seo.title} description={page.seo.description} socialImage={page.seo.socialImage}>
@@ -36,9 +38,21 @@ const photos = await Promise.all(gallery.sort((a, b) => a.order - b.order).map(a
         </div>
       </header>
 
-      <div class="gallery-masonry" aria-label="Church photo gallery">
+      <div class="gallery-filters" role="group" aria-labelledby="gallery-filters-title">
+        <h3 id="gallery-filters-title" class="gallery-filters-title">Browse by tag</h3>
+        <div class="gallery-filter-buttons">
+          <button type="button" class="gallery-filter-button is-active" data-gallery-filter="all" aria-pressed="true" aria-controls="gallery-grid">All photos<span class="gallery-filter-count">{photos.length}</span></button>
+          {galleryTags.map((tag) => (
+            <button type="button" class="gallery-filter-button" data-gallery-filter={tag} aria-pressed="false" aria-controls="gallery-grid">{tag}<span class="gallery-filter-count">{photoCountByTag.get(tag) ?? 0}</span></button>
+          ))}
+        </div>
+        <p class="gallery-result-count" data-gallery-result-count>Showing all {photos.length} photographs</p>
+        <p class="gallery-empty" data-gallery-empty hidden>No photographs match this tag.</p>
+      </div>
+
+      <div class="gallery-masonry" id="gallery-grid" aria-label="Church photo gallery">
         {photos.map((photo, index) => (
-          <figure class="gallery-item">
+          <figure class="gallery-item" data-gallery-photo data-gallery-tags={photo.tags.join(",")}>
             <button
               type="button"
               class="gallery-trigger"
@@ -89,34 +103,72 @@ const photos = await Promise.all(gallery.sort((a, b) => a.order - b.order).map(a
 
 <script>
   const dialog = document.querySelector<HTMLDialogElement>("#gallery-lightbox");
-  const triggers = [...document.querySelectorAll<HTMLButtonElement>("[data-gallery-index]")];
+  const grid = document.querySelector<HTMLElement>("#gallery-grid");
+  const items = [...document.querySelectorAll<HTMLElement>("[data-gallery-photo]")];
+  const filterButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-gallery-filter]")];
+  const resultCount = document.querySelector<HTMLElement>("[data-gallery-result-count]");
+  const emptyMessage = document.querySelector<HTMLElement>("[data-gallery-empty]");
   const image = dialog?.querySelector<HTMLImageElement>("[data-lightbox-image]");
   const title = dialog?.querySelector<HTMLElement>("[data-lightbox-title]");
   const caption = dialog?.querySelector<HTMLElement>("[data-lightbox-caption]");
   const category = dialog?.querySelector<HTMLElement>("[data-lightbox-category]");
   const date = dialog?.querySelector<HTMLElement>("[data-lightbox-date]");
   const position = dialog?.querySelector<HTMLElement>("[data-lightbox-position]");
+  let activeTag: string | null = null;
+  let currentTriggers: HTMLButtonElement[] = [];
   let currentIndex = 0;
   let opener: HTMLButtonElement | undefined;
 
+  const tagsForItem = (item: HTMLElement) => (item.dataset.galleryTags ?? "").split(",").filter(Boolean);
+
+  const refreshFilter = () => {
+    currentTriggers = items
+      .filter((item) => activeTag === null || tagsForItem(item).includes(activeTag))
+      .flatMap((item) => [...item.querySelectorAll<HTMLButtonElement>("[data-gallery-index]")]);
+    items.forEach((item) => {
+      item.hidden = activeTag !== null && !tagsForItem(item).includes(activeTag);
+    });
+    filterButtons.forEach((button) => {
+      const isPressed = activeTag === null ? button.dataset.galleryFilter === "all" : button.dataset.galleryFilter === activeTag;
+      button.classList.toggle("is-active", isPressed);
+      button.setAttribute("aria-pressed", String(isPressed));
+    });
+    if (resultCount) {
+      resultCount.textContent = activeTag === null
+        ? `Showing all ${currentTriggers.length} photographs`
+        : `Showing ${currentTriggers.length} of ${items.length} photographs`;
+    }
+    if (emptyMessage) emptyMessage.hidden = currentTriggers.length !== 0;
+  };
+
   const showPhoto = (index: number) => {
-    if (!dialog || !image || !title || !caption || !category || !date || !position || triggers.length === 0) return;
-    currentIndex = (index + triggers.length) % triggers.length;
-    const trigger = triggers[currentIndex];
+    if (!dialog || !image || !title || !caption || !category || !date || !position || currentTriggers.length === 0) return;
+    currentIndex = (index + currentTriggers.length) % currentTriggers.length;
+    const trigger = currentTriggers[currentIndex];
     image.src = trigger.dataset.fullSrc ?? "";
     image.alt = trigger.dataset.alt ?? "";
     title.textContent = trigger.dataset.title ?? "";
     caption.textContent = trigger.dataset.caption ?? "";
     category.textContent = trigger.dataset.category ?? "";
     date.textContent = trigger.dataset.date ? ` · ${trigger.dataset.date}` : "";
-    position.textContent = `${currentIndex + 1} / ${triggers.length}`;
+    position.textContent = `${currentIndex + 1} / ${currentTriggers.length}`;
   };
 
-  triggers.forEach((trigger, index) => trigger.addEventListener("click", () => {
+  grid?.addEventListener("click", (event) => {
     if (!dialog) return;
+    const trigger = event.target instanceof Element ? event.target.closest<HTMLButtonElement>("[data-gallery-index]") : null;
+    if (!trigger) return;
+    const index = currentTriggers.indexOf(trigger);
+    if (index === -1) return;
     opener = trigger;
     showPhoto(index);
     dialog.showModal();
+  });
+
+  filterButtons.forEach((button) => button.addEventListener("click", () => {
+    activeTag = button.dataset.galleryFilter === "all" ? null : button.dataset.galleryFilter ?? null;
+    refreshFilter();
+    if (dialog?.open) dialog.close();
   }));
 
   dialog?.querySelector("[data-lightbox-close]")?.addEventListener("click", () => dialog.close());
@@ -129,6 +181,8 @@ const photos = await Promise.all(gallery.sort((a, b) => a.order - b.order).map(a
     if (event.key === "ArrowLeft") { event.preventDefault(); showPhoto(currentIndex - 1); }
     if (event.key === "ArrowRight") { event.preventDefault(); showPhoto(currentIndex + 1); }
   });
+
+  refreshFilter();
 </script>
 
 <style>
@@ -136,7 +190,17 @@ const photos = await Promise.all(gallery.sort((a, b) => a.order - b.order).map(a
   .gallery-intro { display: grid; gap: 1.5rem 4rem; border-bottom: 1px solid hsl(var(--border)); padding-bottom: 2rem; }
   .gallery-intro-copy { max-width: 38rem; color: hsl(var(--muted-foreground)); }
   .gallery-count { display: flex; align-items: center; gap: .45rem; margin-top: 1rem; color: hsl(var(--foreground)); font-size: .78rem; font-weight: 720; letter-spacing: .02em; }
-  .gallery-masonry { margin-top: 2.5rem; column-count: 1; column-gap: 1.25rem; }
+  .gallery-filters { display: grid; gap: .85rem 1.5rem; align-items: end; margin-top: 2.5rem; border-block: 1px solid hsl(var(--border)); padding-block: 1.25rem; }
+  .gallery-filters-title { margin: 0; color: #9f3028; font-size: .7rem; font-weight: 780; letter-spacing: .14em; text-transform: uppercase; }
+  .gallery-filter-buttons { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .gallery-filter-button { display: inline-flex; min-height: 2.5rem; align-items: center; gap: .5rem; border: 1px solid hsl(var(--border)); border-radius: 2px; padding: .45rem .8rem; background: hsl(var(--card)); color: hsl(var(--foreground)); font-size: .8rem; font-weight: 680; cursor: pointer; }
+  .gallery-filter-button:hover, .gallery-filter-button:focus-visible { border-color: hsl(var(--ring)); }
+  .gallery-filter-button.is-active { border-color: hsl(var(--primary)); background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
+  .gallery-filter-count { display: inline-grid; min-width: 1.55rem; height: 1.55rem; place-items: center; border-radius: 999px; background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); font-size: .68rem; font-weight: 760; }
+  .gallery-filter-button.is-active .gallery-filter-count { background: rgb(247 248 243 / .18); color: inherit; }
+  .gallery-result-count { margin: 0; color: hsl(var(--muted-foreground)); font-size: .78rem; font-weight: 650; }
+  .gallery-empty { margin: .35rem 0 0; color: #9f3028; font-size: .85rem; font-weight: 680; }
+  .gallery-masonry { margin-top: 2rem; column-count: 1; column-gap: 1.25rem; }
   .gallery-item { display: inline-block; width: 100%; margin: 0 0 1.25rem; break-inside: avoid; border: 1px solid hsl(var(--border)); background: hsl(var(--card)); }
   .gallery-trigger { position: relative; display: block; width: 100%; overflow: hidden; border: 0; padding: 0; background: hsl(var(--muted)); color: inherit; cursor: zoom-in; text-align: left; }
   .gallery-trigger::after { position: absolute; inset: 0; border: 0 solid #b64035; content: ""; transition: border-width .18s ease; pointer-events: none; }
@@ -174,6 +238,9 @@ const photos = await Promise.all(gallery.sort((a, b) => a.order - b.order).map(a
   }
   @media (min-width: 768px) {
     .gallery-intro { grid-template-columns: minmax(0, 1fr) minmax(20rem, .72fr); align-items: end; }
+    .gallery-filters { grid-template-columns: auto minmax(0, 1fr); }
+    .gallery-filters-title { margin-top: .4rem; }
+    .gallery-result-count, .gallery-empty { grid-column: 2; }
     .gallery-contribute { grid-template-columns: minmax(18rem, .85fr) minmax(20rem, 1fr) auto; }
     .lightbox-figure figcaption { padding-inline: 4.5rem; }
   }
