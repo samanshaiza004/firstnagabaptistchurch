@@ -70,7 +70,7 @@ export interface EventContent { id: string; title: string; dateLabel: string; ti
 export interface PersonContent { id: string; name: string; role: string; category: string; bio: string; image: CmsImage; group: "leadership" | "trustee" | "ministry"; order: number }
 export interface MinistryContent { id: string; name: string; icon: "music" | "heart"; leaderId: string; members: string[]; order: number }
 export interface ObjectiveContent { id: string; icon: IconKey; shortTitle: string; shortDescription: string; title: string; description: string; order: number }
-export interface GalleryPhotoContent { id: string; title: string; caption: string; image: CmsImage; category: "Baptism" | "Church Family" | "Church History" | "Culture" | "Worship"; dateLabel?: string; order: number }
+export interface GalleryPhotoContent { id: string; title: string; caption: string; image: CmsImage; category: "Baptism" | "Church Family" | "Church History" | "Culture" | "Worship"; tags: string[]; dateLabel?: string; order: number }
 export interface GivingMethodContent { id: string; name: string; description: string; contact: string; qrCode: CmsImage; brandColor: string; instructions: string[]; order: number }
 export interface ImpactAreaContent { id: string; icon: IconKey; title: string; description: string; order: number }
 
