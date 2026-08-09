@@ -7,6 +7,7 @@ import { homePage } from "./singletons/homePage";
 import { siteSettings } from "./singletons/siteSettings";
 import { event } from "./documents/event";
 import { galleryPhoto } from "./documents/galleryPhoto";
+import { galleryEvent } from "./documents/galleryEvent";
 import { givingMethod } from "./documents/givingMethod";
 import { impactArea } from "./documents/impactArea";
 import { ministry } from "./documents/ministry";
@@ -17,5 +18,5 @@ import { callToAction, hero, richText, seo } from "./objects";
 export const schemaTypes = [
   seo, callToAction, hero, richText,
   siteSettings, homePage, aboutPage, eventsPage, galleryPage, givingPage, contactPage,
-  event, person, ministry, objective, galleryPhoto, givingMethod, impactArea,
+  event, person, ministry, objective, galleryEvent, galleryPhoto, givingMethod, impactArea,
 ];

@@ -12,7 +12,7 @@ export const contentQuery = String.raw`{
   "people": *[_type == "person"] | order(group asc, order asc){"id":stableId.current,name,role,category,bio,"image":image{"source":"sanity","url":asset->url,"width":asset->metadata.dimensions.width,"height":asset->metadata.dimensions.height,"lqip":asset->metadata.lqip,"alt":alt},group,order},
   "ministries": *[_type == "ministry"] | order(order asc){"id":stableId.current,name,icon,"leaderId":leader->stableId.current,members,order},
   "objectives": *[_type == "objective"] | order(order asc){"id":stableId.current,icon,shortTitle,shortDescription,title,description,order},
-  "gallery": *[_type == "galleryPhoto"] | order(order asc){"id":stableId.current,title,caption,"image":image{"source":"sanity","url":asset->url,"width":asset->metadata.dimensions.width,"height":asset->metadata.dimensions.height,"lqip":asset->metadata.lqip,"alt":alt},category,tags,dateLabel,order},
+  "gallery": *[_type == "galleryPhoto"] | order(order asc){"id":stableId.current,title,caption,"image":image{"source":"sanity","url":asset->url,"width":asset->metadata.dimensions.width,"height":asset->metadata.dimensions.height,"lqip":asset->metadata.lqip,"alt":alt},category,"event":event->{"id":stableId.current,title,dateLabel,location},order},
   "givingMethods": *[_type == "givingMethod"] | order(order asc){"id":stableId.current,name,description,contact,"qrCode":qrCode{"source":"sanity","url":asset->url,"width":asset->metadata.dimensions.width,"height":asset->metadata.dimensions.height,"lqip":asset->metadata.lqip,"alt":alt},brandColor,instructions,order},
   "impactAreas": *[_type == "impactArea"] | order(order asc){"id":stableId.current,icon,title,description,order}
 }`;

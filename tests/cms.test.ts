@@ -29,10 +29,7 @@ describe("CMS content contract", () => {
 
   test("requires accessible gallery and payment images", () => {
     for (const photo of localContent.gallery) expect(photo.image.alt.length).toBeGreaterThan(11);
-    for (const photo of localContent.gallery) {
-      expect(photo.tags.length).toBeGreaterThan(0);
-      expect(new Set(photo.tags).size).toBe(photo.tags.length);
-    }
+    for (const photo of localContent.gallery) expect(photo.event.title.length).toBeGreaterThan(2);
     for (const method of localContent.givingMethods) {
       expect(method.qrCode.alt).toContain(method.name);
       expect(method.contact.length).toBeGreaterThan(4);

@@ -32,7 +32,7 @@ This runbook covers the external account work that cannot be completed from the 
 !(_id in path("drafts.**")) && _type in [
   "siteSettings", "homePage", "aboutPage", "eventsPage", "galleryPage",
   "givingPage", "contactPage", "event", "person", "ministry", "objective",
-  "galleryPhoto", "givingMethod", "impactArea"
+  "galleryPhoto", "galleryEvent", "givingMethod", "impactArea"
 ]
 ```
 

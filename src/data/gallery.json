@@ -6,8 +6,7 @@
     "alt": "First Naga Baptist Church members gathered in traditional attire for Cultural Day",
     "imageKey": "culturalDay",
     "category": "Culture",
-    "tags": ["Culture", "Naga Heritage", "Fellowship", "Celebration"],
-    "dateLabel": "October 7, 2023",
+    "event": { "id": "cultural-day-2023", "title": "Cultural Day", "dateLabel": "October 7, 2023", "location": "First Naga Baptist Church" },
     "order": 1
   },
   {
@@ -17,7 +16,7 @@
     "alt": "A large multigenerational group of church members and friends gathered indoors",
     "imageKey": "churchFamily",
     "category": "Church Family",
-    "tags": ["Church Family", "Fellowship", "Community"],
+    "event": { "id": "church-family-gathering", "title": "Church Family Gathering", "dateLabel": "Date not recorded", "location": "First Naga Baptist Church" },
     "order": 2
   },
   {
@@ -27,7 +26,7 @@
     "alt": "A minister and baptism candidate standing together in a lake",
     "imageKey": "lakesideBaptism",
     "category": "Baptism",
-    "tags": ["Baptism", "Worship", "Faith Milestone"],
+    "event": { "id": "lakeside-baptism", "title": "Lakeside Baptism", "dateLabel": "Date not recorded", "location": "Lakeside" },
     "order": 3
   },
   {
@@ -37,7 +36,7 @@
     "alt": "A large group of First Naga Baptist Church members wearing matching navy shirts",
     "imageKey": "churchFamilyShirts",
     "category": "Church Family",
-    "tags": ["Church Family", "Fellowship", "Community"],
+    "event": { "id": "church-family-gathering", "title": "Church Family Gathering", "dateLabel": "Date not recorded", "location": "First Naga Baptist Church" },
     "order": 4
   },
   {
@@ -47,7 +46,7 @@
     "alt": "Church choir singing before the congregation beneath a draped cross",
     "imageKey": "worshipChoir",
     "category": "Worship",
-    "tags": ["Worship", "Music", "Fellowship"],
+    "event": { "id": "special-worship-gathering", "title": "Special Worship Gathering", "dateLabel": "Date not recorded", "location": "First Naga Baptist Church" },
     "order": 5
   },
   {
@@ -57,7 +56,7 @@
     "alt": "Early First Naga Baptist Church members gathered for a group portrait in a home",
     "imageKey": "foundingMembers",
     "category": "Church History",
-    "tags": ["Church History", "Church Family", "Founding Story"],
+    "event": { "id": "early-church-family", "title": "Early Church Family", "dateLabel": "Date not recorded", "location": "First Naga Baptist Church" },
     "order": 6
   },
   {
@@ -67,7 +66,7 @@
     "alt": "Church and community friends gathered for a group portrait inside the sanctuary",
     "imageKey": "churchLeaders",
     "category": "Church Family",
-    "tags": ["Church Family", "Fellowship", "Community"],
+    "event": { "id": "church-community-gathering", "title": "Church Community Gathering", "dateLabel": "Date not recorded", "location": "First Naga Baptist Church" },
     "order": 7
   }
 ]
