@@ -51,8 +51,7 @@ const gallery = defineCollection({
     alt: z.string().min(1),
     imageKey: z.string().min(1),
     category: z.enum(["Baptism", "Church Family", "Church History", "Culture", "Worship"]),
-    tags: z.array(z.string().min(1)).min(1),
-    dateLabel: z.string().min(1).optional(),
+    event: z.object({ id: z.string().min(1), title: z.string().min(1), dateLabel: z.string().min(1), location: z.string().min(1) }),
     order: z.number().int().nonnegative(),
   }),
 });

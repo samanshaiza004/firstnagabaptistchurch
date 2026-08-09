@@ -26,6 +26,7 @@ export const studioStructure: StructureResolver = (S) => S.list()
     S.documentTypeListItem("ministry").title("Ministries"),
     S.documentTypeListItem("objective").title("Mission Objectives"),
     S.documentTypeListItem("galleryPhoto").title("Gallery Photos"),
+    S.documentTypeListItem("galleryEvent").title("Gallery Events"),
     S.documentTypeListItem("givingMethod").title("Giving Methods"),
     S.documentTypeListItem("impactArea").title("Giving Impact Areas"),
   ]);

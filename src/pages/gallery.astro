@@ -18,8 +18,8 @@ const photos = await Promise.all(gallery.sort((a, b) => a.order - b.order).map(a
   const expanded = await getImage({ src: local, width: Math.min(local.width, 1800), format: "webp", quality: 88 });
   return { ...photo, expandedSrc: expanded.src, position: index + 1 };
 }));
-const galleryTags = [...new Set(photos.flatMap((photo) => photo.tags))].sort((a, b) => a.localeCompare(b));
-const photoCountByTag = new Map(galleryTags.map((tag) => [tag, photos.filter((photo) => photo.tags.includes(tag)).length]));
+const galleryEvents = [...new Map(photos.map((photo) => [photo.event.id, photo.event])).values()].sort((a, b) => a.title.localeCompare(b.title));
+const photoCountByEvent = new Map(galleryEvents.map((event) => [event.id, photos.filter((photo) => photo.event.id === event.id).length]));
 ---
 
 <BaseLayout title={page.seo.title} description={page.seo.description} socialImage={page.seo.socialImage}>
@@ -39,20 +39,20 @@ const photoCountByTag = new Map(galleryTags.map((tag) => [tag, photos.filter((ph
       </header>
 
       <div class="gallery-filters" role="group" aria-labelledby="gallery-filters-title">
-        <h3 id="gallery-filters-title" class="gallery-filters-title">Browse by tag</h3>
+        <h3 id="gallery-filters-title" class="gallery-filters-title">Browse by event</h3>
         <div class="gallery-filter-buttons">
           <button type="button" class="gallery-filter-button is-active" data-gallery-filter="all" aria-pressed="true" aria-controls="gallery-grid">All photos<span class="gallery-filter-count">{photos.length}</span></button>
-          {galleryTags.map((tag) => (
-            <button type="button" class="gallery-filter-button" data-gallery-filter={tag} aria-pressed="false" aria-controls="gallery-grid">{tag}<span class="gallery-filter-count">{photoCountByTag.get(tag) ?? 0}</span></button>
+          {galleryEvents.map((event) => (
+            <button type="button" class="gallery-filter-button" data-gallery-filter={event.id} aria-pressed="false" aria-controls="gallery-grid">{event.title}<span class="gallery-filter-count">{photoCountByEvent.get(event.id) ?? 0}</span></button>
           ))}
         </div>
         <p class="gallery-result-count" data-gallery-result-count>Showing all {photos.length} photographs</p>
-        <p class="gallery-empty" data-gallery-empty hidden>No photographs match this tag.</p>
+        <p class="gallery-empty" data-gallery-empty hidden>No photographs match this event.</p>
       </div>
 
       <div class="gallery-masonry" id="gallery-grid" aria-label="Church photo gallery">
         {photos.map((photo, index) => (
-          <figure class="gallery-item" data-gallery-photo data-gallery-tags={photo.tags.join(",")}>
+          <figure class="gallery-item" data-gallery-photo data-gallery-event={photo.event.id}>
             <button
               type="button"
               class="gallery-trigger"
@@ -61,15 +61,15 @@ const photoCountByTag = new Map(galleryTags.map((tag) => [tag, photos.filter((ph
               data-alt={photo.image.alt}
               data-title={photo.title}
               data-caption={photo.caption}
-              data-category={photo.category}
-              data-date={photo.dateLabel ?? ""}
+              data-event={photo.event.title}
+              data-date={photo.event.dateLabel}
               aria-label={`View ${photo.title} in full`}
             >
               <CmsImage image={photo.image} widths={[360, 540, 720]} sizes="(min-width: 1100px) 28vw, (min-width: 640px) 44vw, 100vw" loading={index < 2 ? "eager" : "lazy"} class="gallery-photo" />
               <span class="gallery-view"><Expand class="size-4" aria-hidden="true" />View photo</span>
             </button>
             <figcaption>
-              <p>{photo.category}{photo.dateLabel && <><span aria-hidden="true"> · </span>{photo.dateLabel}</>}</p>
+              <p>{photo.event.title}<span aria-hidden="true"> · </span>{photo.event.dateLabel}</p>
               <h3>{photo.title}</h3>
             </figcaption>
           </figure>
@@ -91,7 +91,7 @@ const photoCountByTag = new Map(galleryTags.map((tag) => [tag, photos.filter((ph
       <figure class="lightbox-figure">
         <div class="lightbox-image-wrap"><img data-lightbox-image alt="" /></div>
         <figcaption>
-          <div class="lightbox-kicker"><span data-lightbox-category></span><span data-lightbox-date></span><span data-lightbox-position></span></div>
+          <div class="lightbox-kicker"><span data-lightbox-event></span><span data-lightbox-date></span><span data-lightbox-position></span></div>
           <h2 id="lightbox-title" data-lightbox-title></h2>
           <p data-lightbox-caption></p>
         </figcaption>
@@ -111,30 +111,30 @@ const photoCountByTag = new Map(galleryTags.map((tag) => [tag, photos.filter((ph
   const image = dialog?.querySelector<HTMLImageElement>("[data-lightbox-image]");
   const title = dialog?.querySelector<HTMLElement>("[data-lightbox-title]");
   const caption = dialog?.querySelector<HTMLElement>("[data-lightbox-caption]");
-  const category = dialog?.querySelector<HTMLElement>("[data-lightbox-category]");
+  const eventName = dialog?.querySelector<HTMLElement>("[data-lightbox-event]");
   const date = dialog?.querySelector<HTMLElement>("[data-lightbox-date]");
   const position = dialog?.querySelector<HTMLElement>("[data-lightbox-position]");
-  let activeTag: string | null = null;
+  let activeEvent: string | null = null;
   let currentTriggers: HTMLButtonElement[] = [];
   let currentIndex = 0;
   let opener: HTMLButtonElement | undefined;
 
-  const tagsForItem = (item: HTMLElement) => (item.dataset.galleryTags ?? "").split(",").filter(Boolean);
+  const eventForItem = (item: HTMLElement) => item.dataset.galleryEvent ?? "";
 
   const refreshFilter = () => {
     currentTriggers = items
-      .filter((item) => activeTag === null || tagsForItem(item).includes(activeTag))
+      .filter((item) => activeEvent === null || eventForItem(item) === activeEvent)
       .flatMap((item) => [...item.querySelectorAll<HTMLButtonElement>("[data-gallery-index]")]);
     items.forEach((item) => {
-      item.hidden = activeTag !== null && !tagsForItem(item).includes(activeTag);
+      item.hidden = activeEvent !== null && eventForItem(item) !== activeEvent;
     });
     filterButtons.forEach((button) => {
-      const isPressed = activeTag === null ? button.dataset.galleryFilter === "all" : button.dataset.galleryFilter === activeTag;
+      const isPressed = activeEvent === null ? button.dataset.galleryFilter === "all" : button.dataset.galleryFilter === activeEvent;
       button.classList.toggle("is-active", isPressed);
       button.setAttribute("aria-pressed", String(isPressed));
     });
     if (resultCount) {
-      resultCount.textContent = activeTag === null
+      resultCount.textContent = activeEvent === null
         ? `Showing all ${currentTriggers.length} photographs`
         : `Showing ${currentTriggers.length} of ${items.length} photographs`;
     }
@@ -142,14 +142,14 @@ const photoCountByTag = new Map(galleryTags.map((tag) => [tag, photos.filter((ph
   };
 
   const showPhoto = (index: number) => {
-    if (!dialog || !image || !title || !caption || !category || !date || !position || currentTriggers.length === 0) return;
+    if (!dialog || !image || !title || !caption || !eventName || !date || !position || currentTriggers.length === 0) return;
     currentIndex = (index + currentTriggers.length) % currentTriggers.length;
     const trigger = currentTriggers[currentIndex];
     image.src = trigger.dataset.fullSrc ?? "";
     image.alt = trigger.dataset.alt ?? "";
     title.textContent = trigger.dataset.title ?? "";
     caption.textContent = trigger.dataset.caption ?? "";
-    category.textContent = trigger.dataset.category ?? "";
+    eventName.textContent = trigger.dataset.event ?? "";
     date.textContent = trigger.dataset.date ? ` · ${trigger.dataset.date}` : "";
     position.textContent = `${currentIndex + 1} / ${currentTriggers.length}`;
   };
@@ -166,7 +166,7 @@ const photoCountByTag = new Map(galleryTags.map((tag) => [tag, photos.filter((ph
   });
 
   filterButtons.forEach((button) => button.addEventListener("click", () => {
-    activeTag = button.dataset.galleryFilter === "all" ? null : button.dataset.galleryFilter ?? null;
+    activeEvent = button.dataset.galleryFilter === "all" ? null : button.dataset.galleryFilter ?? null;
     refreshFilter();
     if (dialog?.open) dialog.close();
   }));
