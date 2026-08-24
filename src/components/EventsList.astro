@@ -1,76 +1,161 @@
 ---
-import { Calendar, CalendarDays, Clock, MapPin } from "@lucide/astro";
-import { groupEventsByMonth } from "../lib/events";
+import { Calendar, Clock, MapPin } from "@lucide/astro";
+import { groupEventsByMonth, isPublicFacingEvent, splitEventsByDate } from "../lib/events";
 import type { EventContent, EventsPageContent } from "../lib/cms/types";
 
 interface Props { events: EventContent[]; page: EventsPageContent }
 const { events: eventData, page } = Astro.props;
-const events = eventData.sort((a, b) => a.order - b.order);
+const events = [...eventData].filter(isPublicFacingEvent).sort((a, b) => a.order - b.order);
 const recurring = events.filter((event) => event.recurring);
-const { months, grouped, undated } = groupEventsByMonth(events);
+const { upcoming, past, undated } = splitEventsByDate(events);
+const { months, grouped } = groupEventsByMonth(upcoming);
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const nextEvent = upcoming[0];
 
-const timeMarkup = (event: Pick<EventContent, "timeKind" | "timeLabel">) => event.timeKind === "seasonal" ? "seasonal" : event.timeKind === "label" ? event.timeLabel : undefined;
+const timeMarkup = (event: Pick<EventContent, "timeKind" | "timeLabel">) =>
+  event.timeKind === "seasonal" ? "seasonal" : event.timeKind === "label" ? event.timeLabel : undefined;
+
+/**
+ * Tabs are `<manner-tabs>` in its progressive profile: the tablist is a list of
+ * fragment links to panels that are all visible before the behavior module
+ * loads, so every group stays reachable and deep-linkable without JavaScript.
+ */
+const upcomingCount = upcoming.length + undated.length;
+const tabs: { id: string; label: string; count: number }[] = [];
+if (upcomingCount > 0) tabs.push({ id: "events-upcoming", label: "Upcoming", count: upcomingCount });
+if (recurring.length > 0) tabs.push({ id: "events-weekly", label: "Week by week", count: recurring.length });
+if (past.length > 0) tabs.push({ id: "events-past", label: "Past", count: past.length });
 ---
 
-<section class="section bg-background">
-  <div class="site-container"><div class="mx-auto max-w-4xl">
-    <div class="mb-16">
-      <div class="mb-6 flex items-center gap-3"><span class="flex size-10 items-center justify-center rounded-full bg-primary/10"><Calendar class="size-5 text-primary" aria-hidden="true" /></span><h2 class="font-serif text-2xl font-bold md:text-3xl">{page.regularTitle}</h2></div>
-      <div class="space-y-4">
-        {recurring.map((event) => (
-          <article class="card p-6">
-            <div class="flex flex-col gap-4 md:flex-row md:items-start">
-              <span class="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10"><Calendar class="size-6 text-primary" aria-hidden="true" /></span>
-              <div><h3 class="mb-2 font-serif text-xl font-semibold">{event.title}</h3><div class="mb-3 flex flex-wrap gap-4 text-sm text-muted-foreground"><span class="flex items-center gap-1"><Calendar class="size-4" />{event.dateLabel}</span>{timeMarkup(event) && <span class="flex items-center gap-1"><Clock class="size-4" />{timeMarkup(event) === "seasonal" ? <span data-service-time>3:00 PM standard / 3:30 PM daylight time</span> : timeMarkup(event)}</span>}<span class="flex items-center gap-1"><MapPin class="size-4" />{event.location}</span></div><p class="text-muted-foreground">{event.description}</p></div>
+<section class="section" aria-labelledby="upcoming-events-title">
+  <div class="site-container">
+    <div class="mx-auto max-w-4xl">
+      {nextEvent ? (
+        <article class="mb-16 grid overflow-hidden rounded-md bg-primary text-primary-foreground md:grid-cols-[10rem_1fr]">
+          <div class="flex min-h-40 flex-col items-center justify-center border-b border-cotton/20 bg-cotton/8 p-6 text-center md:border-b-0 md:border-r">
+            <p class="text-xs font-bold uppercase tracking-[.16em] text-cotton/70">Next event</p>
+            <p class="mt-3 font-serif text-5xl font-semibold leading-none">{nextEvent.day}</p>
+            <p class="mt-2 text-sm font-semibold uppercase tracking-[.12em] text-cotton/80">{monthNames[(nextEvent.month ?? 1) - 1]}</p>
+          </div>
+          <div class="p-7 md:p-9">
+            <p class="eyebrow text-cotton">Coming up</p>
+            <h2 id="upcoming-events-title" class="font-serif text-3xl font-semibold leading-tight md:text-4xl">{nextEvent.title}</h2>
+            <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-cotton/75">
+              <span class="inline-flex items-center gap-2"><Calendar class="size-4" aria-hidden="true" />{nextEvent.dateLabel}</span>
+              {timeMarkup(nextEvent) && <span class="inline-flex items-center gap-2"><Clock class="size-4" aria-hidden="true" />{timeMarkup(nextEvent) === "seasonal" ? <span data-service-time>3:00 PM standard / 3:30 PM daylight time</span> : timeMarkup(nextEvent)}</span>}
+              <span class="inline-flex items-center gap-2"><MapPin class="size-4" aria-hidden="true" />{nextEvent.location}</span>
             </div>
-          </article>
-        ))}
-      </div>
-    </div>
+            <p class="mt-5 max-w-2xl text-cotton/80">{nextEvent.description}</p>
+          </div>
+        </article>
+      ) : (
+        <div class="mb-16 border-l-2 border-oxblood bg-muted/50 p-6">
+          <p class="eyebrow">Upcoming events</p>
+          <h2 id="upcoming-events-title" class="font-serif text-2xl font-semibold">Join us any Sunday</h2>
+          <p class="mt-2 text-muted-foreground">New special events will appear here as soon as they are announced.</p>
+        </div>
+      )}
 
-    <div class="mb-6 flex items-center gap-3"><span class="flex size-10 items-center justify-center rounded-full bg-secondary/20"><CalendarDays class="size-5 text-secondary-foreground" aria-hidden="true" /></span><h2 class="font-serif text-2xl font-bold md:text-3xl">{page.specialTitle}</h2></div>
+      <manner-tabs>
+        <nav class="event-tablist" data-tablist aria-label="Event groups">
+          {tabs.map((tab) => (
+            <a data-tab href={`#${tab.id}`}>{tab.label}<span class="event-tab-count">{tab.count}</span></a>
+          ))}
+        </nav>
 
-    <nav class="event-month-nav mb-12" aria-label="Jump to a month">
-      <p class="event-month-nav-label">{page.calendarLabel}</p>
-      <div class="event-month-links">
-        {months.map((month) => <a href={`#month-${month}`}>{monthNames[month - 1].slice(0, 3)}</a>)}
-      </div>
-    </nav>
+        {upcomingCount > 0 && (
+          <section id="events-upcoming" class="event-panel" data-panel>
+            {months.length > 0 && (
+              <>
+                <div class="section-heading-grid mb-10">
+                  <div><p class="eyebrow">Church calendar</p><h3 id="calendar-title" class="section-title">{page.specialTitle}</h3></div>
+                  <p class="section-copy">Future gatherings are shown first so you can quickly see what is happening next.</p>
+                </div>
 
-    <div class="event-agenda">
-      {months.map((month) => {
-        const monthEvents = grouped.get(month) ?? [];
-        return (
-          <section id={`month-${month}`} class="event-month" aria-labelledby={`month-${month}-title`}>
-            <header class="event-month-heading">
-              <div><p>{monthNames[month - 1].slice(0, 3)}</p><h3 id={`month-${month}-title`}>{monthNames[month - 1]}</h3></div>
-              <p>{monthEvents[0]?.year ?? new Date().getFullYear()} <span aria-hidden="true">·</span> {monthEvents.length} {monthEvents.length === 1 ? "event" : "events"}</p>
-            </header>
-            <ol class="event-list">
-              {monthEvents.map((event) => (
-                <li class="event-row">
-                  <time class="event-date" datetime={event.day ? `${event.year}-${String(month).padStart(2, "0")}-${String(event.day).padStart(2, "0")}` : undefined}>
-                    <span>{event.day ?? "TBA"}</span>
-                    <small>{event.day ? monthNames[month - 1].slice(0, 3) : "Date"}</small>
-                  </time>
-                  <div class="event-details">
-                    <h4>{event.title}</h4>
-                    <div class="event-meta">
-                      <span><Calendar class="size-4" aria-hidden="true" />{event.dateLabel}</span>
-                      {timeMarkup(event) && <span><Clock class="size-4" aria-hidden="true" />{timeMarkup(event) === "seasonal" ? <span data-service-time>3:00 PM standard / 3:30 PM daylight time</span> : timeMarkup(event)}</span>}
-                      <span><MapPin class="size-4" aria-hidden="true" />{event.location}</span>
-                    </div>
-                    <p>{event.description}</p>
+                <nav class="event-month-nav mb-12" aria-label="Jump to an upcoming month">
+                  <p class="event-month-nav-label">{page.calendarLabel}</p>
+                  <div class="event-month-links">{months.map((month) => <a href={`#month-${month}`}>{monthNames[month - 1].slice(0, 3)}</a>)}</div>
+                </nav>
+
+                <div class="event-agenda">
+                  {months.map((month) => {
+                    const monthEvents = grouped.get(month) ?? [];
+                    return (
+                      <section id={`month-${month}`} class="event-month" aria-labelledby={`month-${month}-title`}>
+                        <header class="event-month-heading">
+                          <div><p>{monthNames[month - 1].slice(0, 3)}</p><h4 id={`month-${month}-title`}>{monthNames[month - 1]}</h4></div>
+                          <p>{monthEvents[0]?.year ?? new Date().getFullYear()} <span aria-hidden="true">·</span> {monthEvents.length} {monthEvents.length === 1 ? "event" : "events"}</p>
+                        </header>
+                        <ol class="event-list">
+                          {monthEvents.map((event) => (
+                            <li class="event-row">
+                              <time class="event-date" datetime={`${event.year}-${String(month).padStart(2, "0")}-${String(event.day).padStart(2, "0")}`}>
+                                <span>{event.day}</span><small>{monthNames[month - 1].slice(0, 3)}</small>
+                              </time>
+                              <div class="event-details">
+                                <h5>{event.title}</h5>
+                                <div class="event-meta">
+                                  <span><Calendar class="size-4" aria-hidden="true" />{event.dateLabel}</span>
+                                  {timeMarkup(event) && <span><Clock class="size-4" aria-hidden="true" />{timeMarkup(event) === "seasonal" ? <span data-service-time>3:00 PM standard / 3:30 PM daylight time</span> : timeMarkup(event)}</span>}
+                                  <span><MapPin class="size-4" aria-hidden="true" />{event.location}</span>
+                                </div>
+                                <p>{event.description}</p>
+                              </div>
+                            </li>
+                          ))}
+                        </ol>
+                      </section>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+
+            {undated.length > 0 && (
+              <section class:list={["border-t border-border pt-12", months.length > 0 ? "mt-16" : "mt-0 border-t-0 pt-0"]} aria-labelledby="pending-title">
+                <p class="eyebrow">Details pending</p>
+                <h3 id="pending-title" class="font-serif text-3xl font-semibold">{page.undatedTitle}</h3>
+                <p class="mt-2 mb-6 text-muted-foreground">{page.undatedDescription}</p>
+                <div class="grid gap-4 sm:grid-cols-2">
+                  {undated.map((event) => <article class="card border-l-2 border-l-oxblood p-6"><p class="text-xs font-bold uppercase tracking-[.12em] text-oxblood">{event.dateLabel}</p><h4 class="mt-2 font-serif text-xl font-semibold">{event.title}</h4><p class="mt-2 text-sm text-muted-foreground">{event.description}</p></article>)}
+                </div>
+              </section>
+            )}
+          </section>
+        )}
+
+        {recurring.length > 0 && (
+          <section id="events-weekly" class="event-panel" data-panel>
+            <div class="mb-8"><p class="eyebrow">Week by week</p><h3 class="section-title">{page.regularTitle}</h3></div>
+            <div class="grid gap-5 sm:grid-cols-2">
+              {recurring.map((event) => (
+                <article class="card border-t-4 border-t-primary p-6">
+                  <h4 class="font-serif text-xl font-semibold">{event.title}</h4>
+                  <div class="mt-3 flex flex-col gap-2 text-sm text-muted-foreground">
+                    <span class="flex items-center gap-2"><Calendar class="size-4" aria-hidden="true" />{event.dateLabel}</span>
+                    {timeMarkup(event) && <span class="flex items-center gap-2"><Clock class="size-4" aria-hidden="true" />{timeMarkup(event) === "seasonal" ? <span data-service-time>3:00 PM standard / 3:30 PM daylight time</span> : timeMarkup(event)}</span>}
+                    <span class="flex items-center gap-2"><MapPin class="size-4" aria-hidden="true" />{event.location}</span>
                   </div>
-                </li>
+                  <p class="mt-4 text-sm text-muted-foreground">{event.description}</p>
+                </article>
               ))}
+            </div>
+          </section>
+        )}
+
+        {past.length > 0 && (
+          <section id="events-past" class="event-panel" data-panel>
+            <div class="mb-8"><p class="eyebrow">Already gathered</p><h3 class="section-title">Past events</h3></div>
+            <ol class="mt-6 divide-y divide-border border-y border-border">
+              {past.map((event) => <li class="grid gap-1 py-5 sm:grid-cols-[10rem_1fr]"><p class="text-sm font-semibold text-oxblood">{event.dateLabel}</p><div><h4 class="font-serif text-lg font-semibold">{event.title}</h4><p class="mt-1 text-sm text-muted-foreground">{event.location}</p></div></li>)}
             </ol>
           </section>
-        );
-      })}
+        )}
+      </manner-tabs>
     </div>
-
-    {undated.length > 0 && <section class="mt-16"><h2 class="mb-3 font-serif text-2xl font-bold md:text-3xl">{page.undatedTitle}</h2><p class="mb-6 text-muted-foreground">{page.undatedDescription}</p>{undated.map((event) => <article class="card mb-4 border-2 border-dashed p-6"><h3 class="font-serif text-lg font-semibold">{event.title}</h3><p class="mt-2 text-sm text-muted-foreground">{event.description}</p></article>)}</section>}
-  </div></div>
+  </div>
 </section>
+
+<script>
+  import "mannerhtml";
+</script>

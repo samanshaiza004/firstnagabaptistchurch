@@ -23,9 +23,13 @@ export const siteConfig = {
 
 export const navigation = [
   { name: "Home", href: "/" },
+  { name: "Visit", href: "/visit" },
   { name: "About", href: "/about" },
+  { name: "Leadership", href: "/leadership" },
   { name: "Events", href: "/events" },
   { name: "Gallery", href: "/gallery" },
   { name: "Give", href: "/give" },
-  { name: "Contact", href: "/contact" },
 ] as const;
+
+/** Desktop header links; Home is omitted because the wordmark already links home. */
+export const primaryNavigation = navigation.filter((item) => item.href !== "/");

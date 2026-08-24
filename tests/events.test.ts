@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { groupEventsByMonth, type EventData } from "../src/lib/events";
+import { groupEventsByMonth, isPublicFacingEvent, type EventData } from "../src/lib/events";
 
 const base: EventData = { title: "Event", dateLabel: "TBA", timeKind: "none", location: "Church", description: "Description", recurring: false, order: 1 };
 
@@ -13,5 +13,11 @@ describe("event grouping", () => {
 
   test("keeps events without a month in the TBA group", () => {
     expect(groupEventsByMonth([{ ...base, month: null }]).undated).toHaveLength(1);
+  });
+
+  test("keeps internal governance meetings off the public calendar", () => {
+    expect(isPublicFacingEvent({ title: "Executive Meeting" })).toBeFalse();
+    expect(isPublicFacingEvent({ title: "Missions/Deacon Team Meeting" })).toBeFalse();
+    expect(isPublicFacingEvent({ title: "Church-wide Seminar" })).toBeTrue();
   });
 });

@@ -1,0 +1,203 @@
+---
+import { Accessibility, BookOpen, Clock, ExternalLink, Mail, MapPin, Phone, Users } from "@lucide/astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import { getCmsContent } from "../lib/cms/content";
+import { contactErrorFields, contactMessages } from "../lib/contact";
+
+const { settings, pages } = await getCmsContent();
+const page = pages.contact;
+const home = pages.home;
+
+const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${settings.venue}, ${settings.address}`)}`;
+
+const nameFields = [
+  { id: "firstName", label: "First Name", autocomplete: "given-name" },
+  { id: "lastName", label: "Last Name", autocomplete: "family-name" },
+] as const;
+---
+
+<BaseLayout title={`Visit | ${settings.name}`} description={page.seo.description} socialImage={page.seo.socialImage}>
+  <PageHero
+    eyebrow="Plan a Visit"
+    title="Visit First Naga Baptist Church"
+    description="We would love to welcome you. Here is everything you need to join us this Sunday."
+    image={page.hero.image}
+  />
+
+  <!-- Major band transition: hero -> Sunday essentials -->
+  <hr class="band-major" aria-hidden="true" />
+
+  <!-- Sunday essentials first -->
+  <section class="section" aria-labelledby="sunday-title">
+    <div class="site-container">
+      <div class="section-heading-grid mb-12">
+        <div>
+          <p class="eyebrow">{home.serviceEyebrow}</p>
+          <h2 id="sunday-title" class="section-title">{home.serviceTitle}</h2>
+        </div>
+        <p class="section-copy">{home.serviceDescription}</p>
+      </div>
+      <div class="service-grid grid gap-6 md:grid-cols-3">
+        <article class="card p-6">
+          <span class="mb-4 flex size-14 items-center justify-center rounded-md bg-primary/10"><Clock class="size-6 text-primary" /></span>
+          <h3 class="mb-2 font-serif text-xl font-semibold">Sunday Worship</h3>
+          <p class="mb-2 text-lg font-semibold"><span data-service-time>{settings.serviceTime.standard} standard / {settings.serviceTime.daylight} daylight time</span></p>
+          <p class="text-sm text-muted-foreground">{home.seasonalNote}</p>
+        </article>
+        <article class="card p-6">
+          <span class="mb-4 flex size-14 items-center justify-center rounded-md bg-primary/10"><MapPin class="size-6 text-primary" /></span>
+          <h3 class="mb-2 font-serif text-xl font-semibold">Location</h3>
+          <p class="mb-2 text-lg font-semibold">{settings.venue}</p>
+          <p class="text-sm text-muted-foreground">{settings.address}</p>
+        </article>
+        <article class="card p-6">
+          <span class="mb-4 flex size-14 items-center justify-center rounded-md bg-primary/10"><Mail class="size-6 text-primary" /></span>
+          <h3 class="mb-2 font-serif text-xl font-semibold">Fellowship</h3>
+          <p class="mb-2 text-lg font-semibold">After Service</p>
+          <p class="text-sm text-muted-foreground">Stay for refreshments and fellowship with the community after worship.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-muted/40" aria-labelledby="expect-title">
+    <div class="site-container">
+      <div class="section-heading-grid mb-12">
+        <div><p class="eyebrow">Your first Sunday</p><h2 id="expect-title" class="section-title">What to expect</h2></div>
+        <p class="section-copy">A reverent, welcoming gathering centered on Scripture, prayer, worship, and time together as a church family.</p>
+      </div>
+      <div class="grid gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
+        <article class="bg-card p-7"><BookOpen class="mb-5 size-7 text-primary" aria-hidden="true" /><h3 class="font-serif text-xl font-semibold">Worship together</h3><p class="mt-3 text-sm leading-relaxed text-muted-foreground">Our main service includes praise, prayer, and teaching from Scripture.</p></article>
+        <article class="bg-card p-7"><Users class="mb-5 size-7 text-primary" aria-hidden="true" /><h3 class="font-serif text-xl font-semibold">Stay for fellowship</h3><p class="mt-3 text-sm leading-relaxed text-muted-foreground">Refreshments and fellowship follow worship. Visitors are warmly invited to stay.</p></article>
+        <article class="bg-card p-7"><Accessibility class="mb-5 size-7 text-primary" aria-hidden="true" /><h3 class="font-serif text-xl font-semibold">Plan ahead</h3><p class="mt-3 text-sm leading-relaxed text-muted-foreground">For current building-access, children’s, or other accommodation details, contact us before your visit and we will help you prepare.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map and directions -->
+  <section class="bg-muted" aria-labelledby="map-title">
+    <div class="site-container py-12 text-center">
+      <h2 id="map-title" class="mb-2 font-serif text-2xl font-bold md:text-3xl">{page.mapTitle}</h2>
+      <p class="flex items-center justify-center gap-2 text-muted-foreground"><MapPin class="size-4" />{settings.venue}, {page.mapRegionLabel}</p>
+      <a href={directionsUrl} target="_blank" rel="noopener" class="button button-secondary mt-6">Open directions <ExternalLink class="size-4" aria-hidden="true" /></a>
+    </div>
+    <div class="h-[400px] w-full bg-muted-foreground/10"><iframe src={settings.mapEmbedUrl} width="100%" height="100%" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title={`Map showing ${settings.venue}`}></iframe></div>
+  </section>
+
+  <!-- Contact choices + form -->
+  <section class="section" aria-labelledby="contact-title">
+    <div class="site-container">
+      <div class="mb-12 text-center">
+        <p class="eyebrow">Contact Us</p>
+        <h2 id="contact-title" class="section-title mb-4">Get in Touch</h2>
+        <p class="section-copy mx-auto">Questions about visiting, a prayer request, or something else? Reach us directly or send a message below.</p>
+      </div>
+
+      <div class="mx-auto mb-12 grid max-w-3xl gap-4 sm:grid-cols-2">
+        <a href={`mailto:${settings.email}`} class="card flex items-center gap-4 p-5 no-underline transition-colors hover:border-primary">
+          <span class="flex size-12 shrink-0 items-center justify-center rounded-md bg-primary/10"><Mail class="size-5 text-primary" /></span>
+          <span><span class="block text-sm text-muted-foreground">Email</span><span class="break-all font-semibold">{settings.email}</span></span>
+        </a>
+        <a href={`tel:${settings.phoneHref}`} class="card flex items-center gap-4 p-5 no-underline transition-colors hover:border-primary">
+          <span class="flex size-12 shrink-0 items-center justify-center rounded-md bg-primary/10"><Phone class="size-5 text-primary" /></span>
+          <span><span class="block text-sm text-muted-foreground">Phone</span><span class="font-semibold">{settings.phoneDisplay}</span></span>
+        </a>
+      </div>
+
+      <div class="mx-auto max-w-2xl" id="form-region">
+        <div id="form-panel">
+          <h3 class="mb-2 font-serif text-2xl font-bold">{page.formTitle}</h3>
+          <p class="mb-8 text-muted-foreground">{page.formDescription}</p>
+          <div id="submit-error" class="mb-6 hidden rounded-md border border-oxblood/40 bg-oxblood/10 p-4 text-oxblood" role="alert" tabindex="-1"><h4 class="font-medium">Error sending message</h4><p class="mt-1 text-sm" data-error-message></p></div>
+          <manner-form>
+            <form id="contact-form" class="space-y-6">
+              <div class="absolute left-[-10000px]" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off" /></div>
+
+              <div class="form-error-summary" data-error-summary aria-live="polite" tabindex="-1" hidden>
+                <h4 class="font-serif text-lg font-semibold">Please check these fields</h4>
+                <ul class="mt-2 space-y-1 text-sm">
+                  {contactErrorFields.map((field) => <li data-summary-for={field} hidden><a href={`#${field}`}>{contactMessages[field]}</a></li>)}
+                </ul>
+              </div>
+
+              <div class="grid gap-4 sm:grid-cols-2">{nameFields.map((field) => <div><label class="mb-2 block font-medium" for={field.id}>{field.label} *</label><input class="field" id={field.id} name={field.id} autocomplete={field.autocomplete} minlength="2" maxlength="80" required /><p id={`${field.id}-error`} class="field-error" data-error-for={field.id} hidden>{contactMessages[field.id]}</p></div>)}</div>
+              <div><label class="mb-2 block font-medium" for="email">Email Address *</label><input class="field" id="email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="254" pattern="[^\s@]+@[^\s@]+\.[^\s@]+" required /><p id="email-error" class="field-error" data-error-for="email" hidden>{contactMessages.email}</p></div>
+              <div><label class="mb-2 block font-medium" for="phone">Phone Number</label><input class="field" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" pattern="[+]?[0-9][0-9\s\-().]{5,28}" aria-describedby="phone-help" /><p id="phone-error" class="field-error" data-error-for="phone" hidden>{contactMessages.phone}</p><p id="phone-help" class="mt-1 text-xs text-muted-foreground">Optional, but helpful if you would like us to call you.</p></div>
+              <div><label class="mb-2 block font-medium" for="subject">Subject *</label><input class="field" id="subject" name="subject" minlength="5" maxlength="150" required /><p id="subject-error" class="field-error" data-error-for="subject" hidden>{contactMessages.subject}</p></div>
+              <div><label class="mb-2 block font-medium" for="message">Message *</label><textarea class="field" id="message" name="message" rows="6" minlength="10" maxlength="5000" required></textarea><p id="message-error" class="field-error" data-error-for="message" hidden>{contactMessages.message}</p></div>
+              <button id="submit-button" class="button w-full" type="submit"><span data-idle>Send message</span><span data-pending class="hidden">Sending message…</span></button>
+              <p class="text-center text-xs text-muted-foreground">{page.privacyNotice}</p>
+              <p class="text-center text-xs text-muted-foreground">We aim to respond within a few days. This form is not monitored for emergencies.</p>
+            </form>
+          </manner-form>
+        </div>
+        <div id="success-panel" class="hidden rounded-md bg-muted p-8 text-center" role="status" tabindex="-1"><span class="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-primary/15 text-3xl text-primary" aria-hidden="true">✓</span><h3 class="mb-2 font-serif text-2xl font-semibold">{page.successTitle}</h3><p class="mb-6 text-muted-foreground">{page.successDescription}</p><button id="reset-form" class="button button-outline" type="button">Send another message</button></div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import "mannerhtml";
+  import { contactFields, normalizeContactPayload, validateContact } from "../lib/contact";
+
+  const form = document.querySelector<HTMLFormElement>("#contact-form");
+  const formPanel = document.querySelector<HTMLElement>("#form-panel");
+  const successPanel = document.querySelector<HTMLElement>("#success-panel");
+  const submitButton = document.querySelector<HTMLButtonElement>("#submit-button");
+  const submitError = document.querySelector<HTMLElement>("#submit-error");
+  const pending = submitButton?.querySelector<HTMLElement>("[data-pending]");
+  const idle = submitButton?.querySelector<HTMLElement>("[data-idle]");
+
+  /*
+   * <manner-form> owns error display and focus, but it reads native
+   * ValidityState. The shared rules in lib/contact are the same ones the
+   * Netlify function enforces, so they are pushed into each control with
+   * setCustomValidity. These listeners are registered in the capture phase so
+   * validity is current before <manner-form>'s own form-level listeners run.
+   */
+  const syncCustomValidity = () => {
+    if (!form) return;
+    const payload = normalizeContactPayload(Object.fromEntries(new FormData(form).entries()));
+    const errors = payload ? validateContact(payload) : {};
+    for (const field of contactFields) {
+      const control = form.elements.namedItem(field);
+      if (control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement) {
+        control.setCustomValidity(errors[field] ?? "");
+      }
+    }
+  };
+
+  for (const type of ["input", "change", "submit"] as const) {
+    form?.addEventListener(type, syncCustomValidity, { capture: true });
+  }
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    submitError?.classList.add("hidden");
+    // <manner-form> has already revealed the errors and focused the first one.
+    if (!form.checkValidity()) return;
+    const payload = normalizeContactPayload(Object.fromEntries(new FormData(form).entries()));
+    if (!payload) return;
+
+    if (submitButton) submitButton.disabled = true;
+    pending?.classList.remove("hidden"); idle?.classList.add("hidden");
+    try {
+      const response = await fetch("/.netlify/functions/contact-email", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const result = await response.json().catch(() => null) as { success?: boolean; error?: string } | null;
+      if (!response.ok || !result?.success) throw new Error(result?.error || "Failed to send your message. Please try again.");
+      form.reset(); formPanel?.classList.add("hidden"); successPanel?.classList.remove("hidden"); successPanel?.focus();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "An unexpected error occurred. Please try again.";
+      const output = submitError?.querySelector<HTMLElement>("[data-error-message]");
+      if (output) output.textContent = message;
+      submitError?.classList.remove("hidden"); submitError?.focus();
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+      pending?.classList.add("hidden"); idle?.classList.remove("hidden");
+    }
+  });
+
+  document.querySelector("#reset-form")?.addEventListener("click", () => { successPanel?.classList.add("hidden"); formPanel?.classList.remove("hidden"); document.querySelector<HTMLElement>("#firstName")?.focus(); });
+</script>

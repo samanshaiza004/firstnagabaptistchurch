@@ -1,7 +1,8 @@
 ---
+import { ArrowRight } from "@lucide/astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Page Not Found | First Naga Baptist Church" description="The requested page could not be found." noindex>
-  <section class="site-container flex min-h-[60vh] items-center justify-center py-20 text-center"><div class="max-w-xl"><p class="eyebrow text-secondary-foreground">Error 404</p><h1 class="mb-4 font-serif text-4xl font-bold md:text-5xl">We couldn't find that page</h1><p class="mb-8 text-muted-foreground">The page may have moved or the address may be incorrect.</p><a class="button" href="/">Return home</a></div></section>
+  <section class="site-container flex min-h-[60vh] items-center justify-center py-20 text-center"><div class="max-w-2xl"><p class="eyebrow">Error 404</p><h1 class="mb-4 font-serif text-4xl font-semibold md:text-5xl">We couldn't find that page</h1><p class="mb-8 text-muted-foreground">The page may have moved or the address may be incorrect. You can still find Sunday details and upcoming events below.</p><div class="flex flex-col justify-center gap-3 sm:flex-row"><a class="button" href="/">Return home</a><a class="button button-secondary" href="/visit">Plan a visit <ArrowRight class="size-4" aria-hidden="true" /></a><a class="button button-secondary" href="/events">View events</a></div></div></section>
 </BaseLayout>

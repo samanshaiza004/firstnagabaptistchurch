@@ -1,0 +1,135 @@
+---
+import { getImage } from "astro:assets";
+import { ChevronLeft, ChevronRight, Expand, X } from "@lucide/astro";
+import CmsImage from "./CmsImage.astro";
+import { sanityImageUrl } from "../lib/cms/image-url";
+import { localImages } from "../lib/cms/local-images";
+import type { GalleryPhotoContent } from "../lib/cms/types";
+
+interface Props { photos: GalleryPhotoContent[] }
+const { photos: sourcePhotos } = Astro.props;
+const photos = await Promise.all([...sourcePhotos].sort((a, b) => a.order - b.order).map(async (photo) => {
+  const cleanTitle = photo.title.replace(/\s*[·•]\s*\d+\s*$/, "").trim();
+  if (photo.image.source === "sanity") return { ...photo, title: cleanTitle, expandedSrc: sanityImageUrl(photo.image, 1800, 88) };
+  const local = localImages[photo.image.key];
+  if (!local) throw new Error(`Missing gallery image: ${photo.image.key}`);
+  if (typeof local === "string") return { ...photo, title: cleanTitle, expandedSrc: local };
+  const expanded = await getImage({ src: local, width: Math.min(local.width, 1800), format: "webp", quality: 88 });
+  return { ...photo, title: cleanTitle, expandedSrc: expanded.src };
+}));
+---
+
+<div class="gallery-masonry" id="gallery-grid" aria-label="Event photographs">
+  {photos.map((photo, index) => (
+    <figure class="gallery-item">
+      <button
+        type="button"
+        class="gallery-trigger"
+        data-gallery-index={index}
+        data-full-src={photo.expandedSrc}
+        data-alt={photo.image.alt}
+        data-title={photo.title}
+        data-caption={photo.caption}
+        aria-label={`View ${photo.title} in full`}
+      >
+        <CmsImage image={photo.image} widths={[360, 540, 720]} sizes="(min-width: 1100px) 28vw, (min-width: 640px) 44vw, 100vw" loading={index < 2 ? "eager" : "lazy"} class="gallery-photo" />
+        <span class="gallery-view"><Expand class="size-4" aria-hidden="true" />View photo</span>
+      </button>
+      <figcaption><h3>{photo.title}</h3></figcaption>
+    </figure>
+  ))}
+</div>
+
+<dialog id="gallery-lightbox" class="gallery-lightbox" aria-labelledby="lightbox-title">
+  <div class="lightbox-frame">
+    <button type="button" class="lightbox-close" data-lightbox-close aria-label="Close expanded photo"><X class="size-6" aria-hidden="true" /></button>
+    <button type="button" class="lightbox-nav lightbox-prev" data-lightbox-prev aria-label="View previous photo"><ChevronLeft class="size-7" aria-hidden="true" /></button>
+    <figure class="lightbox-figure">
+      <div class="lightbox-image-wrap"><img data-lightbox-image alt="" /></div>
+      <figcaption>
+        <p class="lightbox-position" data-lightbox-position></p>
+        <h2 id="lightbox-title" data-lightbox-title></h2>
+        <p data-lightbox-caption></p>
+      </figcaption>
+    </figure>
+    <button type="button" class="lightbox-nav lightbox-next" data-lightbox-next aria-label="View next photo"><ChevronRight class="size-7" aria-hidden="true" /></button>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>("#gallery-lightbox");
+  const triggers = [...document.querySelectorAll<HTMLButtonElement>("[data-gallery-index]")];
+  const image = dialog?.querySelector<HTMLImageElement>("[data-lightbox-image]");
+  const title = dialog?.querySelector<HTMLElement>("[data-lightbox-title]");
+  const caption = dialog?.querySelector<HTMLElement>("[data-lightbox-caption]");
+  const position = dialog?.querySelector<HTMLElement>("[data-lightbox-position]");
+  let currentIndex = 0;
+  let opener: HTMLButtonElement | undefined;
+
+  const showPhoto = (index: number) => {
+    if (!dialog || !image || !title || !caption || !position || triggers.length === 0) return;
+    currentIndex = (index + triggers.length) % triggers.length;
+    const trigger = triggers[currentIndex];
+    image.src = trigger.dataset.fullSrc ?? "";
+    image.alt = trigger.dataset.alt ?? "";
+    title.textContent = trigger.dataset.title ?? "";
+    caption.textContent = trigger.dataset.caption ?? "";
+    position.textContent = `${currentIndex + 1} / ${triggers.length}`;
+  };
+
+  triggers.forEach((trigger, index) => trigger.addEventListener("click", () => {
+    if (!dialog) return;
+    opener = trigger;
+    showPhoto(index);
+    dialog.showModal();
+  }));
+
+  dialog?.querySelector("[data-lightbox-close]")?.addEventListener("click", () => dialog.close());
+  dialog?.querySelector("[data-lightbox-prev]")?.addEventListener("click", () => showPhoto(currentIndex - 1));
+  dialog?.querySelector("[data-lightbox-next]")?.addEventListener("click", () => showPhoto(currentIndex + 1));
+  dialog?.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });
+  dialog?.addEventListener("close", () => opener?.focus());
+  dialog?.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") { event.preventDefault(); showPhoto(currentIndex - 1); }
+    if (event.key === "ArrowRight") { event.preventDefault(); showPhoto(currentIndex + 1); }
+  });
+</script>
+
+<style>
+  .gallery-masonry { column-count: 1; column-gap: 1.25rem; }
+  .gallery-item { display: inline-block; width: 100%; margin: 0 0 1.25rem; break-inside: avoid; border: 1px solid var(--color-border); background: var(--color-card); }
+  .gallery-trigger { position: relative; display: block; width: 100%; overflow: hidden; border: 0; padding: 0; background: var(--color-muted); color: inherit; cursor: zoom-in; text-align: left; }
+  .gallery-trigger::after { position: absolute; inset: 0; border: 0 solid var(--color-oxblood); content: ""; transition: border-width .18s ease; pointer-events: none; }
+  .gallery-trigger:hover::after, .gallery-trigger:focus-visible::after { border-width: 5px; }
+  .gallery-photo { display: block; width: 100%; height: auto; }
+  .gallery-view { position: absolute; right: .75rem; bottom: .75rem; display: inline-flex; align-items: center; gap: .4rem; padding: .45rem .65rem; background: rgb(23 27 25 / .9); color: var(--color-cotton); font-size: .7rem; font-weight: 720; letter-spacing: .04em; }
+  .gallery-item figcaption { padding: .9rem 1rem 1rem; }
+  .gallery-item figcaption h3 { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600; line-height: 1.25; }
+
+  .gallery-lightbox { box-sizing: border-box; width: min(94vw, 88rem); max-width: none; height: min(92dvh, 60rem); max-height: calc(100dvh - 2rem); overflow: hidden; margin: 1rem auto; border: 1px solid rgb(255 255 255 / .2); padding: 0; background: var(--color-ink); color: var(--color-cotton); }
+  .gallery-lightbox::backdrop { background: rgb(8 11 10 / .92); }
+  .lightbox-frame { position: relative; display: grid; min-height: 0; height: 100%; place-items: center; }
+  .lightbox-close, .lightbox-nav { position: absolute; z-index: 2; display: grid; place-items: center; border: 1px solid rgb(255 255 255 / .26); background: rgb(23 27 25 / .88); color: white; cursor: pointer; }
+  .lightbox-close:hover, .lightbox-nav:hover { border-color: var(--color-cotton); background: var(--color-indigo); }
+  .lightbox-close { top: .75rem; right: .75rem; width: 2.75rem; height: 2.75rem; }
+  .lightbox-nav { top: 42%; width: 3rem; height: 3.5rem; }
+  .lightbox-prev { left: .75rem; }
+  .lightbox-next { right: .75rem; }
+  .lightbox-figure { display: grid; min-height: 0; width: 100%; height: 100%; grid-template-rows: minmax(0, 1fr) auto; }
+  .lightbox-image-wrap { display: grid; min-height: 0; overflow: hidden; place-items: center; padding: 3.75rem 3.25rem 1rem; }
+  .lightbox-image-wrap img { display: block; width: auto; max-width: 100%; height: auto; max-height: min(calc(100dvh - 14rem), 48rem); object-fit: contain; }
+  .lightbox-figure figcaption { position: relative; border-top: 1px solid rgb(255 255 255 / .14); padding: 1.1rem 1.25rem 1.25rem; }
+  .lightbox-position { position: absolute; top: 1.25rem; right: 1.25rem; color: rgb(243 239 230 / .6); font-size: .7rem; font-weight: 700; letter-spacing: .08em; }
+  .lightbox-figure h2 { padding-right: 4rem; font-family: var(--font-serif); font-size: clamp(1.45rem, 4vw, 2rem); font-weight: 600; line-height: 1.1; }
+  .lightbox-figure figcaption > p:last-child { max-width: 48rem; margin-top: .45rem; color: rgb(243 239 230 / .7); font-size: .85rem; line-height: 1.55; }
+
+  @media (min-width: 640px) { .gallery-masonry { column-count: 2; } }
+  @media (min-width: 768px) { .lightbox-figure figcaption { padding-inline: 4.5rem; } .lightbox-position { right: 4.5rem; } }
+  @media (min-width: 1100px) { .gallery-masonry { column-count: 3; column-gap: 1.5rem; } .gallery-item { margin-bottom: 1.5rem; } }
+  @media (max-width: 639px) {
+    .gallery-lightbox { width: 100vw; height: calc(100dvh - 1rem); max-height: calc(100dvh - 1rem); margin: .5rem auto; border: 0; }
+    .lightbox-nav { top: 38%; width: 2.75rem; height: 3.25rem; }
+    .lightbox-prev { left: .35rem; } .lightbox-next { right: .35rem; }
+    .lightbox-image-wrap { padding: 3.75rem .5rem .75rem; }
+  }
+</style>

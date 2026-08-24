@@ -9,6 +9,11 @@ const leaders = people.filter((person) => person.group === "leadership").sort((a
 const trustees = people.filter((person) => person.group === "trustee").sort((a, b) => a.order - b.order);
 const peopleById = new Map(people.map((person) => [person.id, person]));
 const iconMap = { music: Music, heart: Heart };
+const leaderSections = [
+  { id: "pastoral", title: "Pastoral leadership", description: "Pastors who lead preaching, care, discipleship, and mission.", people: leaders.filter((person) => ["Pastoral Staff", "Missions Team"].includes(person.category)) },
+  { id: "deacons", title: "Deacons", description: "Servant leaders supporting worship, care, and church ministry.", people: leaders.filter((person) => person.category === "Deacon") },
+  { id: "administration", title: "Administration and finance", description: "Leaders stewarding the church's operations, records, finances, and digital ministry.", people: leaders.filter((person) => ["Administration", "Finance"].includes(person.category)) },
+];
 ---
 
 <section class="section bg-muted/30" aria-labelledby="leadership-title">
@@ -18,60 +23,68 @@ const iconMap = { music: Music, heart: Heart };
       <p class="section-copy">{description}</p>
     </div>
 
-    <div class="mb-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {leaders.map((leader) => (
-        <details class="leadership-card card group overflow-hidden">
-          <summary class="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-            <div class="aspect-[4/3] overflow-hidden bg-muted">
-              <CmsImage image={leader.image} widths={[320, 480, 640]} sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw" loading="lazy" class="size-full object-cover" />
-            </div>
-            <div class="p-5 pb-3">
-              <span class="mb-2 inline-flex rounded-full bg-secondary/20 px-2.5 py-1 text-xs text-secondary-foreground">{leader.category}</span>
-              <h3 class="mb-1 font-serif text-lg font-semibold">{leader.name}</h3>
-              <p class="text-sm font-medium text-secondary-foreground">{leader.role}</p>
-              <span class="mt-3 flex items-center gap-1 text-xs text-muted-foreground"><ChevronDown class="size-4 transition-transform group-open:rotate-180" aria-hidden="true" /><span class="closed-label">Read biography</span><span class="open-label hidden">Hide biography</span></span>
-            </div>
-          </summary>
-          <div class="px-5 pb-5"><p class="border-t border-border pt-4 text-sm leading-relaxed text-muted-foreground">{leader.bio}</p></div>
-        </details>
+    <div class="mb-16 space-y-14">
+      {leaderSections.map((section) => section.people.length > 0 && (
+        <section aria-labelledby={`leader-section-${section.id}`}>
+          <div class="mb-6 border-b border-border pb-4"><h3 id={`leader-section-${section.id}`} class="font-serif text-2xl font-semibold">{section.title}</h3><p class="mt-1 text-sm text-muted-foreground">{section.description}</p></div>
+          <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {section.people.map((leader) => (
+              <details class="leadership-card card group overflow-hidden">
+                <summary class="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                  <div class="aspect-[4/3] overflow-hidden bg-muted">
+                    <CmsImage image={leader.image} widths={[320, 480, 640]} sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw" loading="lazy" class="size-full object-cover" />
+                  </div>
+                  <div class="p-5 pb-3">
+                    <p class="mb-2 text-xs font-bold uppercase tracking-[.1em] text-primary">{leader.category}</p>
+                    <h4 class="mb-1 font-serif text-lg font-semibold">{leader.name}</h4>
+                    <p class="text-sm font-medium text-oxblood">{leader.role}</p>
+                    <span class="mt-3 flex items-center gap-1 text-xs text-muted-foreground"><ChevronDown class="size-4 transition-transform group-open:rotate-180" aria-hidden="true" /><span class="closed-label">Read biography</span><span class="open-label hidden">Hide biography</span></span>
+                  </div>
+                </summary>
+                <div class="px-5 pb-5"><p class="border-t border-border pt-4 text-sm leading-relaxed text-muted-foreground">{leader.bio}</p></div>
+              </details>
+            ))}
+          </div>
+        </section>
       ))}
     </div>
 
-    <div class="mb-12 grid gap-5 lg:grid-cols-2">
-      {ministries.map((ministry) => {
-        const teamLeader = peopleById.get(ministry.leaderId);
-        const Icon = iconMap[ministry.icon];
-        if (!teamLeader) throw new Error(`Missing ministry leader: ${ministry.leaderId}`);
-        return (
-          <article id={`ministry-${ministry.id}`} class="ministry-panel">
-            <header class="ministry-heading">
-              <span class="ministry-icon"><Icon class="size-5" aria-hidden="true" /></span>
-              <div><h3>{ministry.name}</h3><p>{ministry.members.length} team members</p></div>
-            </header>
-            <div class="ministry-leader">
-              <CmsImage image={teamLeader.image} widths={[80, 160]} sizes="80px" loading="lazy" class="size-16 shrink-0 rounded-full object-cover" />
-              <div><span>Ministry leader</span><h4>{teamLeader.name}</h4><p>{teamLeader.role}</p></div>
-            </div>
-            <ul class="ministry-roster" aria-label={`${ministry.name} members`}>
-              {ministry.members.map((member) => <li>{member}</li>)}
-            </ul>
-          </article>
-        );
-      })}
-    </div>
+    <section class="mb-12" aria-labelledby="ministry-teams-title">
+      <div class="mb-6 border-b border-border pb-4"><h3 id="ministry-teams-title" class="font-serif text-2xl font-semibold">Ministry teams</h3><p class="mt-1 text-sm text-muted-foreground">The people serving our worship and children’s ministries.</p></div>
+      <div class="grid gap-5 lg:grid-cols-2">
+        {ministries.map((ministry) => {
+          const teamLeader = peopleById.get(ministry.leaderId);
+          const Icon = iconMap[ministry.icon];
+          if (!teamLeader) throw new Error(`Missing ministry leader: ${ministry.leaderId}`);
+          return (
+            <article id={`ministry-${ministry.id}`} class="ministry-panel">
+              <header class="ministry-heading">
+                <span class="ministry-icon"><Icon class="size-5" aria-hidden="true" /></span>
+                <div><h4>{ministry.name}</h4><p>{ministry.members.length} team members</p></div>
+              </header>
+              <div class="ministry-leader">
+                <CmsImage image={teamLeader.image} widths={[80, 160]} sizes="80px" loading="lazy" class="size-16 shrink-0 rounded-md object-cover" />
+                <div><span>Ministry leader</span><h5>{teamLeader.name}</h5><p>{teamLeader.role}</p></div>
+              </div>
+              <ul class="ministry-roster" aria-label={`${ministry.name} members`}>{ministry.members.map((member) => <li>{member}</li>)}</ul>
+            </article>
+          );
+        })}
+      </div>
+    </section>
 
-    <div class="rounded-xl bg-primary/5 p-6 md:p-8">
-      <h3 class="mb-2 font-serif text-xl font-semibold">{trusteesTitle}</h3>
+    <section class="rounded-md bg-muted/50 p-6 md:p-8" aria-labelledby="trustees-title">
+      <h3 id="trustees-title" class="mb-2 font-serif text-2xl font-semibold">{trusteesTitle}</h3>
       <p class="mb-6 max-w-2xl text-sm text-muted-foreground">{trusteesDescription}</p>
       <div class="mx-auto max-w-4xl space-y-4">
         {trustees.map((trustee) => (
           <article class="card flex overflow-hidden">
             <CmsImage image={trustee.image} widths={[192, 288]} sizes="(min-width: 640px) 144px, 112px" loading="lazy" class="w-28 shrink-0 object-cover sm:w-36" />
-            <div class="p-5"><span class="mb-2 inline-flex rounded-full bg-secondary/20 px-2.5 py-1 text-xs">{trustee.role}</span><h4 class="mb-1 font-serif text-lg font-semibold">{trustee.name}</h4><p class="text-sm leading-relaxed text-muted-foreground sm:text-base">{trustee.bio}</p></div>
+            <div class="p-5"><p class="mb-2 text-xs font-bold uppercase tracking-[.1em] text-primary">{trustee.role}</p><h4 class="mb-1 font-serif text-lg font-semibold">{trustee.name}</h4><p class="text-sm leading-relaxed text-muted-foreground sm:text-base">{trustee.bio}</p></div>
           </article>
         ))}
       </div>
-    </div>
+    </section>
   </div>
 </section>
 
@@ -79,11 +92,3 @@ const iconMap = { music: Music, heart: Heart };
   details[open] .closed-label { display: none; }
   details[open] .open-label { display: inline; }
 </style>
-
-<script>
-  const cards = [...document.querySelectorAll<HTMLDetailsElement>(".leadership-card")];
-  const query = window.matchMedia("(max-width: 767px)");
-  const setMobileState = (event: MediaQueryList | MediaQueryListEvent) => cards.forEach((card) => { card.open = event.matches; });
-  setMobileState(query);
-  query.addEventListener("change", setMobileState);
-</script>
