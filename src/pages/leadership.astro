@@ -1,0 +1,41 @@
+---
+import { ArrowRight } from "@lucide/astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import Leadership from "../components/Leadership.astro";
+import { getCmsContent } from "../lib/cms/content";
+
+const { settings, pages, people, ministries } = await getCmsContent();
+const home = pages.home;
+---
+
+<BaseLayout
+  title={`Leadership | ${settings.name}`}
+  description="Meet the pastors, ministry leaders, officers, and trustees who serve First Naga Baptist Church."
+  socialImage={home.hero.image}
+>
+  <PageHero
+    eyebrow="Our Leaders"
+    title="Leadership"
+    description="The pastors, ministry leaders, officers, and trustees who guide and serve our church family."
+    image={home.hero.image}
+  />
+
+  <Leadership
+    people={people}
+    ministries={ministries}
+    eyebrow={home.leadershipEyebrow}
+    title={home.leadershipTitle}
+    description={home.leadershipDescription}
+    trusteesTitle={home.trusteesTitle}
+    trusteesDescription={home.trusteesDescription}
+  />
+
+  <section class="section bg-muted/40 on-dark-none">
+    <div class="site-container text-center">
+      <h2 class="section-title mb-4">Serve With Us</h2>
+      <p class="section-copy mx-auto mb-8">Interested in serving, or have a question for one of our leaders? We would love to hear from you.</p>
+      <a class="button" href="/visit">Get in touch <ArrowRight class="size-4" aria-hidden="true" /></a>
+    </div>
+  </section>
+</BaseLayout>

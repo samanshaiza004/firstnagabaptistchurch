@@ -6,6 +6,16 @@
 [build.environment]
   NODE_VERSION = "22.21.1"
 
+[[redirects]]
+  from = "/contact"
+  to = "/visit"
+  status = 301
+
+[[redirects]]
+  from = "/contact/*"
+  to = "/visit"
+  status = 301
+
 [[headers]]
   for = "/*"
   [headers.values]

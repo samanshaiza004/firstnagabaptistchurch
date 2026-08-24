@@ -1,6 +1,6 @@
 ---
 import { Menu, X } from "@lucide/astro";
-import { navigation } from "../site-config";
+import { navigation, primaryNavigation } from "../site-config";
 import type { SiteSettings } from "../lib/cms/types";
 
 interface Props { settings: SiteSettings }
@@ -12,18 +12,18 @@ const currentPath = routePath === "/" ? "/" : routePath.replace(/\/$/, "");
 
 <header class="site-header sticky top-0 z-50 border-b">
   <nav class="site-container" aria-label="Main navigation">
-    <div class="header-inner flex items-center justify-between">
+    <div class="header-inner flex items-center justify-between gap-4">
       <a href="/" class="flex items-center gap-3 no-underline" aria-label={`${settings.name} home`}>
-        <span class="brand-mark" aria-hidden="true">F</span>
+        <span class="brand-mark" aria-hidden="true">FNBC</span>
         <span class="hidden sm:block">
           <span class="block font-serif text-lg font-semibold leading-tight">{settings.name}</span>
           <span class="wordmark-location block text-[.65rem] font-semibold uppercase tracking-[.18em]">{settings.region}</span>
         </span>
       </a>
 
-      <div class="hidden items-center gap-8 md:flex">
-        {navigation.map((item) => (
-          <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined} class="nav-link text-sm font-medium transition-colors">
+      <div class="hidden items-center gap-7 md:flex">
+        {primaryNavigation.map((item) => (
+          <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined} class="nav-link text-sm transition-colors">
             {item.name}
           </a>
         ))}
@@ -42,7 +42,6 @@ const currentPath = routePath === "/" ? "/" : routePath.replace(/\/$/, "");
             {item.name}
           </a>
         ))}
-        <a href="/contact" class="button mt-3">Join Us</a>
       </div>
     </div>
   </nav>

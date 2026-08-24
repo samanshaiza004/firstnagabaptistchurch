@@ -12,7 +12,7 @@ interface Props {
 const { eyebrow, title, description, image } = Astro.props;
 ---
 
-<section class="page-hero">
+<section class="page-hero on-dark">
   <div class="page-hero-grid">
     <div class="page-hero-copy">
       <p class="eyebrow">{eyebrow}</p>
@@ -22,6 +22,5 @@ const { eyebrow, title, description, image } = Astro.props;
     <div class="page-hero-media">
       <CmsImage image={image} widths={[640, 960, 1280, 1600]} sizes="(min-width: 768px) 58vw, 100vw" loading="eager" fetchpriority="high" class="size-full object-cover" />
     </div>
-    <div class="page-hero-seam woven-band" aria-hidden="true"></div>
   </div>
 </section>

@@ -13,10 +13,11 @@ interface Props {
   description?: string;
   noindex?: boolean;
   socialImage?: CmsImage;
+  redirectTo?: string;
 }
 
 const { settings } = await getCmsContent();
-const { title, description = settings.description, noindex = false, socialImage } = Astro.props;
+const { title, description = settings.description, noindex = false, socialImage, redirectTo } = Astro.props;
 const routePath = Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
 const canonicalPath = routePath === "/" ? "/" : routePath.replace(/\/$/, "");
 const canonical = new URL(canonicalPath, settings.domain);
@@ -53,11 +54,12 @@ const structuredData = {
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#171b19" />
+    <meta name="theme-color" content="#243343" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     {noindex && <meta name="robots" content="noindex, follow" />}
+    {redirectTo && <meta http-equiv="refresh" content={`0; url=${redirectTo}`} />}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={settings.name} />
     <meta property="og:title" content={title} />

@@ -1,5 +1,5 @@
 ---
-import { BookOpen, Globe, HandHeart, Link2, Users } from "@lucide/astro";
+import { ArrowRight, BookOpen, Globe, Users } from "@lucide/astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CmsImage from "../components/CmsImage.astro";
 import PageHero from "../components/PageHero.astro";
@@ -8,22 +8,96 @@ import { getCmsContent } from "../lib/cms/content";
 
 const { pages, objectives } = await getCmsContent();
 const page = pages.about;
-const icons = { book: BookOpen, users: Users, globe: Globe, service: HandHeart, connection: Link2, house: HandHeart, heart: HandHeart };
+const missionThemes = [
+  { title: "Rooted in the Gospel", icon: BookOpen, items: objectives.slice(0, 1) },
+  { title: "A home for Naga families", icon: Users, items: objectives.slice(1, 3) },
+  { title: "Building bridges", icon: Globe, items: objectives.slice(3, 5) },
+];
 ---
 
 <BaseLayout title={page.seo.title} description={page.seo.description} socialImage={page.seo.socialImage}>
   <PageHero {...page.hero} />
 
-  <section class="section"><div class="site-container"><div class="mx-auto max-w-4xl"><div class="mb-12 text-center"><p class="eyebrow">{page.historyEyebrow}</p><h2 class="section-title">{page.historyTitle}</h2></div>
-    <div class="mb-12 grid items-start gap-8 lg:grid-cols-5"><RichText value={page.historyLead} class="space-y-6 leading-relaxed text-muted-foreground lg:col-span-3" /><CmsImage image={page.historyImage} widths={[360, 540, 720]} sizes="(min-width: 1024px) 40vw, 100vw" loading="lazy" class="aspect-[3/4] w-full rounded-lg object-cover shadow-xl lg:col-span-2" /></div>
-    <blockquote class="mb-12 rounded-lg border-l-4 border-secondary bg-muted/50 p-6 font-serif text-lg italic leading-relaxed lg:p-8 lg:text-xl">“{page.quote}”<footer class="mt-4 font-sans text-sm not-italic text-muted-foreground">— {page.quoteAttribution}</footer></blockquote>
-    <RichText value={page.historyMiddle} class="space-y-6 leading-relaxed text-muted-foreground" />
-    <div class="my-12 rounded-lg bg-primary p-6 text-primary-foreground lg:p-8"><div class="mb-4 flex items-center gap-4"><span class="flex size-16 shrink-0 items-center justify-center rounded-full bg-secondary font-serif text-xl font-bold text-secondary-foreground">{page.founding.year}</span><div><h3 class="font-serif text-xl font-semibold">{page.founding.title}</h3><p class="text-primary-foreground/80">{page.founding.date}</p></div></div><p class="leading-relaxed text-primary-foreground/90">{page.founding.body}</p></div>
-    <RichText value={page.historyFinal} class="space-y-6 leading-relaxed text-muted-foreground" />
-    <div class="mt-12 rounded-lg bg-muted p-6 lg:p-8"><h3 class="mb-4 font-serif text-xl font-semibold">{page.inauguration.title}</h3><p class="mb-4 leading-relaxed text-muted-foreground">{page.inauguration.body}</p><p class="mb-2 text-sm font-semibold">Distinguished Guest Speakers:</p><ul class="grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">{page.inauguration.guestSpeakers.map((speaker) => <li>{speaker}</li>)}</ul></div><p class="mt-8 text-right text-sm italic text-muted-foreground">{page.inauguration.historyDate}</p>
-  </div></div></section>
+  <section class="section" aria-labelledby="identity-title">
+    <div class="site-container">
+      <header class="section-heading-grid mb-12">
+        <div><p class="eyebrow">Who we are now</p><h2 id="identity-title" class="section-title">One church, serving across communities</h2></div>
+        <p class="section-copy">First Naga Baptist Church is a Christian home for worship, discipleship, fellowship, and mission in the Dallas–Fort Worth area. We support Naga students and families while strengthening connections with churches and neighbors across America.</p>
+      </header>
 
-  <section class="section bg-muted"><div class="site-container"><div class="mb-12 text-center"><p class="eyebrow">{page.founders.eyebrow}</p><h2 class="section-title mb-4">{page.founders.title}</h2><p class="section-copy mx-auto">{page.founders.description}</p></div><div class="mx-auto mb-10 max-w-4xl"><CmsImage image={page.founders.image} widths={[640, 960, 1280]} sizes="100vw" loading="lazy" class="h-auto max-h-[32rem] w-full rounded-lg object-cover shadow-lg" /><p class="mt-3 text-center text-sm italic text-muted-foreground">{page.founders.caption}</p></div><h3 class="mb-8 text-center font-serif text-2xl font-bold">Founding Members</h3><ul class="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">{page.founders.names.map((founder) => <li class="card p-5 text-center font-medium">{founder}</li>)}</ul></div></section>
+      <div class="grid gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
+        {missionThemes.map((theme) => {
+          const Icon = theme.icon;
+          return (
+            <article class="bg-card p-7">
+              <Icon class="mb-5 size-7 text-primary" aria-hidden="true" />
+              <h3 class="font-serif text-xl font-semibold">{theme.title}</h3>
+              <ul class="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
+                {theme.items.map((item) => <li class="border-l-2 border-oxblood pl-3">{item.shortDescription}</li>)}
+              </ul>
+            </article>
+          );
+        })}
+      </div>
 
-  <section class="section"><div class="site-container"><div class="mb-12 text-center"><p class="eyebrow">{page.objectivesEyebrow}</p><h2 class="section-title mb-4">{page.objectivesTitle}</h2><p class="section-copy mx-auto">{page.objectivesDescription}</p></div><div class="mx-auto max-w-4xl space-y-6">{objectives.map((objective) => { const Icon = icons[objective.icon]; return <article class="flex gap-5 rounded-lg border border-border bg-muted/30 p-6"><span class="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"><Icon class="size-6" /></span><div><h3 class="mb-2 font-serif text-lg font-semibold">{objective.title}</h3><p class="leading-relaxed text-muted-foreground">{objective.description}</p></div></article>; })}</div><div class="mt-12 text-center"><a class="button" href={page.objectivesCta.href}>{page.objectivesCta.label}</a></div></div></section>
+      <div class="mt-10 flex flex-col justify-between gap-5 border-y border-border py-6 sm:flex-row sm:items-center">
+        <div><p class="font-serif text-xl font-semibold">Meet the people who guide and serve FNBC</p><p class="mt-1 text-sm text-muted-foreground">Pastoral leaders, ministry teams, officers, and trustees.</p></div>
+        <a class="button button-secondary w-fit" href="/leadership">Meet our leaders <ArrowRight class="size-4" aria-hidden="true" /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-muted/40" aria-labelledby="history-title">
+    <div class="site-container">
+      <div class="mx-auto max-w-4xl">
+        <div class="mb-12"><p class="eyebrow">{page.historyEyebrow}</p><h2 id="history-title" class="section-title">{page.historyTitle}</h2></div>
+
+        <div class="grid gap-8 border-l-2 border-primary pl-6 md:grid-cols-[8rem_1fr] md:gap-10 md:pl-10">
+          <p class="font-serif text-3xl font-semibold text-oxblood">2006</p>
+          <div><h3 class="mb-4 font-serif text-2xl font-semibold">A vision for fellowship</h3><RichText value={page.historyLead} class="space-y-5 leading-relaxed text-muted-foreground" /></div>
+
+          <p class="font-serif text-3xl font-semibold text-oxblood">2018</p>
+          <div>
+            <h3 class="mb-4 font-serif text-2xl font-semibold">{page.founding.title}</h3>
+            <p class="mb-4 text-sm font-semibold uppercase tracking-[.1em] text-primary">{page.founding.date}</p>
+            <p class="leading-relaxed text-muted-foreground">{page.founding.body}</p>
+            <blockquote class="quote-scripture my-9">“{page.quote}”<footer>— {page.quoteAttribution}</footer></blockquote>
+            <RichText value={page.historyMiddle} class="space-y-5 leading-relaxed text-muted-foreground" />
+          </div>
+
+          <p class="font-serif text-3xl font-semibold text-oxblood">2019</p>
+          <div>
+            <h3 class="mb-4 font-serif text-2xl font-semibold">{page.inauguration.title}</h3>
+            <RichText value={page.historyFinal} class="mb-5 space-y-5 leading-relaxed text-muted-foreground" />
+            <p class="leading-relaxed text-muted-foreground">{page.inauguration.body}</p>
+            <details class="mt-6 border-y border-border py-4">
+              <summary class="cursor-pointer font-semibold text-primary underline decoration-2 underline-offset-4">View distinguished guest speakers</summary>
+              <ul class="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">{page.inauguration.guestSpeakers.map((speaker) => <li>{speaker}</li>)}</ul>
+            </details>
+            <p class="mt-5 text-sm italic text-muted-foreground">{page.inauguration.historyDate}</p>
+          </div>
+        </div>
+
+        <div class="mt-14"><CmsImage image={page.historyImage} widths={[640, 960, 1280]} sizes="100vw" loading="lazy" class="max-h-[34rem] w-full rounded-md object-cover" /></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="founders-title">
+    <div class="site-container">
+      <header class="section-heading-grid mb-12">
+        <div><p class="eyebrow">{page.founders.eyebrow}</p><h2 id="founders-title" class="section-title">{page.founders.title}</h2></div>
+        <p class="section-copy">{page.founders.description}</p>
+      </header>
+      <div class="mx-auto mb-10 max-w-4xl"><CmsImage image={page.founders.image} widths={[640, 960, 1280]} sizes="100vw" loading="lazy" class="h-auto max-h-[32rem] w-full rounded-md object-cover" /><p class="mt-3 text-center text-sm italic text-muted-foreground">{page.founders.caption}</p></div>
+      <details class="mx-auto max-w-4xl border-y border-border py-5">
+        <summary class="cursor-pointer text-center font-semibold text-primary underline decoration-2 underline-offset-4">View all founding members</summary>
+        <ul class="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">{page.founders.names.map((founder) => <li class="border-l-2 border-oxblood pl-3 text-sm font-medium">{founder}</li>)}</ul>
+      </details>
+    </div>
+  </section>
+
+  <section class="section bg-primary text-primary-foreground on-dark">
+    <div class="site-container text-center"><h2 class="font-serif text-3xl font-semibold md:text-4xl">Come worship with us</h2><p class="mx-auto mt-4 max-w-2xl text-cotton/80">Our story continues each Sunday through worship, fellowship, and service together.</p><div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><a class="button" href="/visit">Plan a visit</a><a class="button button-outline" href="/gallery">See church life</a></div></div>
+  </section>
 </BaseLayout>
