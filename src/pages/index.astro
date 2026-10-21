@@ -5,9 +5,13 @@ import CmsImage from "../components/CmsImage.astro";
 import RichText from "../components/RichText.astro";
 import { getCmsContent } from "../lib/cms/content";
 import { isPublicFacingEvent, splitEventsByDate } from "../lib/events";
+import { formatScholarshipDeadline, getScholarshipCycleStatus } from "../lib/cms/scholarship";
 
-const { settings, pages, events: allEvents, people, gallery } = await getCmsContent();
+const { settings, pages, events: allEvents, people, gallery, scholarship } = await getCmsContent();
 const page = pages.home;
+const scholarshipCycle = scholarship.currentCycle;
+const scholarshipOpen = getScholarshipCycleStatus(scholarshipCycle) === "open";
+const scholarshipDeadline = formatScholarshipDeadline(scholarshipCycle);
 const { upcoming } = splitEventsByDate(allEvents.filter(isPublicFacingEvent));
 const nextEvents = upcoming.slice(0, 3);
 
@@ -75,6 +79,19 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
       <p class="mx-auto mt-8 max-w-3xl rounded-md bg-muted/60 px-4 py-3 text-center text-sm text-muted-foreground"><strong>Seasonal schedule:</strong> {page.seasonalNote}</p>
     </div>
   </section>
+
+  {scholarshipOpen && scholarshipDeadline && (
+    <section class="scholarship-announcement" aria-labelledby="scholarship-announcement-title">
+      <div class="site-container scholarship-announcement-inner">
+        <div>
+          <p class="eyebrow">{scholarship.eyebrow}</p>
+          <h2 id="scholarship-announcement-title">{scholarship.title}</h2>
+          <p>{scholarshipCycle.awardCount} awards of ${scholarshipCycle.awardAmount?.toLocaleString("en-US")} for eligible students preparing for full-time Christian ministry. Applications close {scholarshipDeadline}.</p>
+        </div>
+        <a class="button button-secondary" href="/scholarship">Scholarship details and application <ArrowRight class="size-4" aria-hidden="true" /></a>
+      </div>
+    </section>
+  )}
 
   <!-- 3. Next gatherings (dated, future-first) -->
   <section class="section bg-primary text-primary-foreground on-dark" aria-labelledby="gatherings-title">
@@ -191,4 +208,10 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
   .home-community-controls { display: flex; justify-content: space-between; gap: .75rem; margin-top: 1rem; }
   .home-community-controls button { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid var(--color-border); padding: .62rem .8rem; background: var(--color-card); color: var(--color-ink); font-size: .75rem; font-weight: 720; letter-spacing: .06em; text-transform: uppercase; }
   .home-community-controls button:hover, .home-community-controls button:focus-visible { border-color: var(--color-indigo); background: var(--color-indigo); color: var(--color-cotton); }
+  .scholarship-announcement { border-block: 1px solid var(--color-border); border-left: 5px solid var(--color-oxblood); background: #faf7f0; }
+  .scholarship-announcement-inner { display: flex; flex-direction: column; align-items: start; justify-content: space-between; gap: 1.5rem; padding-block: 2rem; }
+  .scholarship-announcement .eyebrow { margin-bottom: .4rem; }
+  .scholarship-announcement h2 { margin-bottom: .5rem; color: var(--color-indigo); font-family: var(--font-serif); font-size: clamp(1.45rem,3vw,2rem); font-weight: 600; line-height: 1.2; }
+  .scholarship-announcement p:not(.eyebrow) { max-width: 48rem; color: var(--color-muted-foreground); line-height: 1.65; }
+  @media (min-width: 850px) { .scholarship-announcement-inner { flex-direction: row; align-items: center; } }
 </style>

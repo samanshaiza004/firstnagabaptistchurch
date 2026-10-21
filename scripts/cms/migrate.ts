@@ -64,6 +64,22 @@ documents.push({ _id: "galleryPage", _type: "galleryPage", ...pages.gallery, seo
 documents.push({ _id: "givingPage", _type: "givingPage", securityNotice: "Verify every payment contact and QR code against official church records before publishing.", ...pages.giving, seo: await seo(pages.giving.seo), hero: await hero(pages.giving.hero) });
 documents.push({ _id: "contactPage", _type: "contactPage", ...pages.contact, seo: await seo(pages.contact.seo), hero: await hero(pages.contact.hero) });
 
+const existingScholarshipPage = await client.fetch<string | null>(`*[_id == "scholarshipPage"][0]._id`);
+if (!existingScholarshipPage) {
+  const scholarship = localContent.scholarship;
+  documents.push({
+    _id: "scholarshipPage",
+    _type: "scholarshipPage",
+    ...scholarship,
+    seo: await seo(scholarship.seo),
+    currentCycle: { ...scholarship.currentCycle },
+    memorial: {
+      ...scholarship.memorial,
+      ...(scholarship.memorial.photograph ? { photograph: await imageReference(scholarship.memorial.photograph) } : {}),
+    },
+  });
+}
+
 for (const item of localContent.events) documents.push({ _id: `event-${item.id}`, _type: "event", stableId: { _type: "slug", current: item.id }, title: item.title, dateLabel: item.dateLabel, timeKind: item.timeKind, ...(item.timeLabel ? { timeLabel: item.timeLabel } : {}), location: item.location, description: item.description, recurring: item.recurring, ...(!item.recurring ? { calendarDate: { month: item.month, day: item.day, year: item.year } } : {}), order: item.order });
 for (const item of localContent.people) documents.push({ _id: `person-${item.id}`, _type: "person", stableId: { _type: "slug", current: item.id }, name: item.name, role: item.role, category: item.category, bio: item.bio, image: await imageReference(item.image), group: item.group, order: item.order });
 for (const item of localContent.ministries) documents.push({ _id: `ministry-${item.id}`, _type: "ministry", stableId: { _type: "slug", current: item.id }, name: item.name, icon: item.icon, leader: { _type: "reference", _ref: `person-${item.leaderId}` }, members: item.members, order: item.order });

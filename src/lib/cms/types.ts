@@ -66,6 +66,57 @@ export interface GalleryPageContent { seo: SeoContent; hero: HeroContent; introE
 export interface GivingPageContent { seo: SeoContent; hero: HeroContent; waysEyebrow: string; waysTitle: string; waysDescription: string; verificationNotice: string; impactEyebrow: string; impactTitle: string; impactDescription: string; scripture: string; scriptureCitation: string; thanksTitle: string; thanksDescription: string; lastReviewedAt?: string; lastReviewedBy?: string }
 export interface ContactPageContent { seo: SeoContent; hero: HeroContent; formTitle: string; formDescription: string; privacyNotice: string; successTitle: string; successDescription: string; infoTitle: string; infoDescription: string; locationNote: string; fellowshipNote: string; joinTitle: string; fellowshipLabel: string; mapTitle: string; mapRegionLabel: string }
 
+export type ScholarshipCycleStatus = "draft" | "open" | "closed" | "selection" | "concluded" | "awaiting";
+export interface ScholarshipPdf { url: string; filename: string; label?: string; size?: number }
+export interface ScholarshipCycleContent {
+  status: ScholarshipCycleStatus;
+  year?: number;
+  applicationDeadlineDate?: string;
+  applicationDeadlineAt?: string;
+  deadlineTimeZone?: string;
+  awardDate?: string;
+  awardCount?: number;
+  awardAmount?: number;
+  eligibilityRequirements: string[];
+  selectionPreferences: string[];
+  applicationSteps: string[];
+  applicationFile?: ScholarshipPdf;
+  printableFile?: ScholarshipPdf;
+  submissionEmail?: string;
+  submissionSubject?: string;
+  professorRecommendationInstructions?: string;
+  privacyStatement?: string;
+}
+export interface ScholarshipMemorialContent {
+  approvalStatus: "draft" | "approved";
+  heading: string;
+  story: PortableBlock[];
+  storyAttribution?: string;
+  photograph?: CmsImage;
+  photographCaption?: string;
+  personalWords?: string;
+  personalWordsAttribution?: string;
+  personalWordsContext?: string;
+}
+export interface ScholarshipPastCycleContent {
+  _key?: string;
+  year: number;
+  awardDate?: string;
+  awardCount?: number;
+  awardAmount?: number;
+  note?: string;
+}
+export interface ScholarshipPageContent {
+  seo: SeoContent;
+  eyebrow: string;
+  title: string;
+  summary: string;
+  cyclePendingMessage: string;
+  currentCycle: ScholarshipCycleContent;
+  pastCycles: ScholarshipPastCycleContent[];
+  memorial: ScholarshipMemorialContent;
+}
+
 export interface EventContent { id: string; title: string; dateLabel: string; timeKind: "seasonal" | "label" | "none"; timeLabel?: string; location: string; description: string; recurring: boolean; month?: number | null; day?: number | null; year?: number; order: number }
 export interface PersonContent { id: string; name: string; role: string; category: string; bio: string; image: CmsImage; group: "leadership" | "trustee" | "ministry"; order: number }
 export interface MinistryContent { id: string; name: string; icon: "music" | "heart"; leaderId: string; members: string[]; order: number }
@@ -78,6 +129,7 @@ export interface ImpactAreaContent { id: string; icon: IconKey; title: string; d
 export interface CmsContent {
   settings: SiteSettings;
   pages: { home: HomePageContent; about: AboutPageContent; events: EventsPageContent; gallery: GalleryPageContent; giving: GivingPageContent; contact: ContactPageContent };
+  scholarship: ScholarshipPageContent;
   events: EventContent[]; people: PersonContent[]; ministries: MinistryContent[]; objectives: ObjectiveContent[];
   gallery: GalleryPhotoContent[]; givingMethods: GivingMethodContent[]; impactAreas: ImpactAreaContent[];
 }

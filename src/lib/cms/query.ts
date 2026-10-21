@@ -8,6 +8,18 @@ export const contentQuery = String.raw`{
     "giving": *[_id == "givingPage"][0]{..., hero{eyebrow,title,description,"image":image{"source":"sanity","url":asset->url,"width":asset->metadata.dimensions.width,"height":asset->metadata.dimensions.height,"lqip":asset->metadata.lqip,"alt":alt}},seo{title,description,"socialImage":socialImage{"source":"sanity","url":asset->url,"width":asset->metadata.dimensions.width,"height":asset->metadata.dimensions.height,"lqip":asset->metadata.lqip,"alt":alt}}},
     "contact": *[_id == "contactPage"][0]{..., hero{eyebrow,title,description,"image":image{"source":"sanity","url":asset->url,"width":asset->metadata.dimensions.width,"height":asset->metadata.dimensions.height,"lqip":asset->metadata.lqip,"alt":alt}},seo{title,description,"socialImage":socialImage{"source":"sanity","url":asset->url,"width":asset->metadata.dimensions.width,"height":asset->metadata.dimensions.height,"lqip":asset->metadata.lqip,"alt":alt}}}
   },
+  "scholarship": *[_id == "scholarshipPage"][0]{
+    seo{title,description,"socialImage":socialImage{"source":"sanity","url":asset->url,"width":asset->metadata.dimensions.width,"height":asset->metadata.dimensions.height,"lqip":asset->metadata.lqip,"alt":alt}},
+    eyebrow,title,summary,cyclePendingMessage,
+    currentCycle{status,year,applicationDeadlineDate,applicationDeadlineAt,deadlineTimeZone,awardDate,awardCount,awardAmount,eligibilityRequirements,selectionPreferences,applicationSteps,submissionEmail,submissionSubject,professorRecommendationInstructions,privacyStatement,
+      "applicationFile":applicationFile{"url":asset->url,"filename":asset->originalFilename,label,"size":asset->size},
+      "printableFile":printableFile{"url":asset->url,"filename":asset->originalFilename,label,"size":asset->size}
+    },
+    "pastCycles":pastCycles[]{_key,year,awardDate,awardCount,awardAmount,note},
+    memorial{approvalStatus,heading,story,storyAttribution,photographCaption,personalWords,personalWordsAttribution,personalWordsContext,
+      "photograph":photograph{"source":"sanity","url":asset->url,"width":asset->metadata.dimensions.width,"height":asset->metadata.dimensions.height,"lqip":asset->metadata.lqip,"alt":alt}
+    }
+  },
   "events": *[_type == "event"] | order(order asc){"id":stableId.current,title,dateLabel,timeKind,timeLabel,location,description,recurring,"month":calendarDate.month,"day":calendarDate.day,"year":calendarDate.year,order},
   "people": *[_type == "person"] | order(group asc, order asc){"id":stableId.current,name,role,category,bio,"image":image{"source":"sanity","url":asset->url,"width":asset->metadata.dimensions.width,"height":asset->metadata.dimensions.height,"lqip":asset->metadata.lqip,"alt":alt},group,order},
   "ministries": *[_type == "ministry"] | order(order asc){"id":stableId.current,name,icon,"leaderId":leader->stableId.current,members,order},

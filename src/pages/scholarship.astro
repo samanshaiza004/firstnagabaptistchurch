@@ -1,0 +1,274 @@
+---
+import { ArrowDownToLine, ArrowRight, Clock3, Mail } from "@lucide/astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CmsImage from "../components/CmsImage.astro";
+import RichText from "../components/RichText.astro";
+import { getCmsContent } from "../lib/cms/content";
+import { formatScholarshipDate, formatScholarshipDeadline, getScholarshipCycleStatus, hasPublishedCycleDetails } from "../lib/cms/scholarship";
+
+const { scholarship } = await getCmsContent();
+const page = scholarship;
+const cycle = page.currentCycle;
+const status = getScholarshipCycleStatus(cycle);
+const detailsVisible = hasPublishedCycleDetails(status);
+const isOpen = status === "open";
+const deadline = formatScholarshipDeadline(cycle);
+const deadlineDate = formatScholarshipDate(cycle.applicationDeadlineDate);
+const awardDate = formatScholarshipDate(cycle.awardDate);
+const fileSize = (bytes?: number) => bytes ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : "PDF";
+
+const statusText = {
+  draft: "Application details are being confirmed",
+  open: "Applications are open",
+  closed: "Applications are closed",
+  selection: "Applications are closed; selection is underway",
+  concluded: "This scholarship cycle has concluded",
+  awaiting: "The next application cycle has not been announced",
+}[status];
+---
+
+<BaseLayout title={page.seo.title} description={page.seo.description} socialImage={page.seo.socialImage}>
+  <section class="scholarship-hero on-dark">
+    <div class="site-container scholarship-hero-grid">
+      <div class="scholarship-intro">
+        <p class="eyebrow">{page.eyebrow}</p>
+        <h1>{page.title}</h1>
+        <p class="scholarship-summary">{page.summary}</p>
+          <a class="button button-outline on-dark" href="#application-cycle">View application status <ArrowRight class="size-4" aria-hidden="true" /></a>
+      </div>
+      <div class="scholarship-weave" aria-hidden="true">
+        <span class="weave-panel weave-panel-one"></span>
+        <span class="weave-panel weave-panel-two"></span>
+        <span class="weave-panel weave-panel-three"></span>
+      </div>
+    </div>
+  </section>
+  <hr class="band-major" aria-hidden="true" />
+
+  <section class="section scholarship-cycle" id="application-cycle" aria-labelledby="cycle-heading">
+    <div class="site-container">
+      <div class="cycle-heading">
+        <div>
+          <p class="eyebrow">{detailsVisible && cycle.year ? `${cycle.year} Application Cycle` : "Application Cycle"}</p>
+          <h2 id="cycle-heading" class="section-title">{statusText}</h2>
+        </div>
+        {isOpen && deadline && <p class="deadline-callout"><Clock3 class="size-5" aria-hidden="true" /><span>Applications close <strong>{deadline}</strong></span></p>}
+      </div>
+
+      {!detailsVisible && <p class="section-copy cycle-pending">{page.cyclePendingMessage}</p>}
+
+      {detailsVisible && (
+        <>
+          <dl class="cycle-facts" aria-label="Scholarship award details">
+            {cycle.awardCount && <div><dt>Awards</dt><dd>{cycle.awardCount}</dd><p>recipients</p></div>}
+            {cycle.awardAmount && <div><dt>Each award</dt><dd>${cycle.awardAmount.toLocaleString("en-US")}</dd><p>per recipient</p></div>}
+            {deadlineDate && <div><dt>Application deadline</dt><dd class="fact-date">{deadlineDate}</dd>{deadline && <p>{deadline}</p>}</div>}
+            {awardDate && <div><dt>Award date</dt><dd class="fact-date">{awardDate}</dd></div>}
+          </dl>
+
+          <div class="scholarship-content-grid">
+            <section aria-labelledby="eligibility-heading">
+              <p class="eyebrow">The requirements</p>
+              <h3 id="eligibility-heading">Who can apply?</h3>
+              <ul class="scholarship-list">
+                {cycle.eligibilityRequirements.map((requirement) => <li>{requirement}</li>)}
+              </ul>
+              {cycle.selectionPreferences.length > 0 && (
+                <div class="preferences">
+                  <h4>Selection preferences</h4>
+                  <p>These preferences guide selection; they are not additional eligibility requirements.</p>
+                  <ul class="scholarship-list">
+                    {cycle.selectionPreferences.map((preference) => <li>{preference}</li>)}
+                  </ul>
+                </div>
+              )}
+            </section>
+
+            {isOpen && (
+              <section class="application-panel" aria-labelledby="apply-heading">
+                <p class="eyebrow">How to apply</p>
+                <h3 id="apply-heading">Prepare your application</h3>
+                <ol class="scholarship-list numbered">
+                  {cycle.applicationSteps.map((step) => <li>{step}</li>)}
+                </ol>
+                {cycle.professorRecommendationInstructions && <p class="recommendation-instructions">{cycle.professorRecommendationInstructions}</p>}
+
+                {cycle.applicationFile && (
+                  <div class="application-downloads">
+                    <a class="button" href={cycle.applicationFile.url} target="_blank" rel="noopener noreferrer">
+                      <ArrowDownToLine class="size-4" aria-hidden="true" />
+                      Download {cycle.applicationFile.label || "the fillable scholarship application"} ({fileSize(cycle.applicationFile.size)})
+                    </a>
+                    <p>PDF · Opens in a new tab. Save the completed form before emailing it.</p>
+                    {cycle.printableFile && <a class="printable-link" href={cycle.printableFile.url} target="_blank" rel="noopener noreferrer">Download the printable scholarship application (PDF, {fileSize(cycle.printableFile.size)})</a>}
+                  </div>
+                )}
+
+                {cycle.submissionEmail && cycle.submissionSubject && (
+                  <div class="submission-panel">
+                    <h4>Send your materials by email</h4>
+                    <p>Send the completed application and the required recommendation to <a href={`mailto:${cycle.submissionEmail}`}>{cycle.submissionEmail}</a>.</p>
+                    <p class="subject-row"><span>Required subject:</span> <code data-submission-subject>{cycle.submissionSubject}</code> <button type="button" data-copy-subject={cycle.submissionSubject} aria-label={`Copy required email subject: ${cycle.submissionSubject}`} aria-describedby="subject-copy-status">Copy</button></p>
+                    <p id="subject-copy-status" class="copy-status" role="status" aria-live="polite">The subject line is shown above; select it to copy if the copy button is unavailable.</p>
+                    <p class="mail-link-note"><Mail class="size-4" aria-hidden="true" /><a href={`mailto:${cycle.submissionEmail}?subject=${encodeURIComponent(cycle.submissionSubject)}`}>Start an email with this subject line</a></p>
+                  </div>
+                )}
+
+                {cycle.privacyStatement && <p class="privacy-statement"><strong>How applications are handled:</strong> {cycle.privacyStatement}</p>}
+              </section>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+
+  {page.pastCycles.length > 0 && (
+    <section class="section scholarship-archive" aria-labelledby="past-cycles-heading">
+      <div class="site-container">
+        <p class="eyebrow">The program over time</p>
+        <h2 id="past-cycles-heading" class="section-title">Past scholarship cycles</h2>
+        <ul class="cycle-archive-list">
+          {[...page.pastCycles].sort((a, b) => b.year - a.year).map((pastCycle) => (
+            <li>
+              <h3>{pastCycle.year}</h3>
+              <p>{pastCycle.awardCount} awards of ${pastCycle.awardAmount?.toLocaleString("en-US")} each{pastCycle.awardDate ? ` · awarded ${formatScholarshipDate(pastCycle.awardDate)}` : ""}</p>
+              {pastCycle.note && <p>{pastCycle.note}</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {page.memorial.approvalStatus === "approved" && page.memorial.story.length > 0 && (
+    <section class="section scholarship-memorial" aria-labelledby="memorial-heading">
+      <div class="site-container memorial-grid">
+        <div class="memorial-copy">
+          <p class="eyebrow">In remembrance</p>
+          <h2 id="memorial-heading" class="section-title">{page.memorial.heading}</h2>
+          <RichText value={page.memorial.story} class="memorial-story" />
+          {page.memorial.storyAttribution && <p class="memorial-attribution">{page.memorial.storyAttribution}</p>}
+          {page.memorial.personalWords && (
+            <figure class="memorial-words">
+              <blockquote>{page.memorial.personalWords}</blockquote>
+              {page.memorial.personalWordsAttribution && <figcaption>{page.memorial.personalWordsAttribution}</figcaption>}
+              {page.memorial.personalWordsContext && <p>{page.memorial.personalWordsContext}</p>}
+            </figure>
+          )}
+        </div>
+        {page.memorial.photograph && (
+          <figure class="memorial-photo">
+            <CmsImage image={page.memorial.photograph} widths={[480, 720, 960]} sizes="(min-width: 900px) 38vw, 100vw" loading="lazy" class="size-full object-cover" />
+            {page.memorial.photographCaption && <figcaption>{page.memorial.photographCaption}</figcaption>}
+          </figure>
+        )}
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<script>
+  const copyButton = document.querySelector<HTMLButtonElement>("[data-copy-subject]");
+  const copyStatus = document.querySelector<HTMLElement>("#subject-copy-status");
+
+  copyButton?.addEventListener("click", async () => {
+    if (!copyStatus) return;
+    try {
+      await navigator.clipboard.writeText(copyButton.dataset.copySubject ?? "");
+      copyStatus.textContent = "Email subject copied.";
+    } catch {
+      copyStatus.textContent = "Copy is unavailable here. Select the subject line above to copy it.";
+    }
+  });
+</script>
+
+<style>
+  .scholarship-hero { overflow: hidden; background: var(--color-indigo); color: var(--color-cotton); }
+  .scholarship-hero-grid { display: grid; min-height: 31rem; align-items: center; gap: 3rem; padding-block: clamp(4rem, 9vw, 7rem); }
+  .scholarship-intro { position: relative; z-index: 1; max-width: 48rem; }
+  .scholarship-intro h1 { max-width: 12ch; margin-bottom: 1.25rem; font-family: var(--font-serif); font-size: clamp(3rem, 7.5vw, 5.5rem); font-weight: 560; line-height: .98; text-wrap: balance; }
+  .scholarship-intro .eyebrow { color: var(--color-cotton); }
+  .scholarship-intro .eyebrow::before { background: var(--color-cotton); }
+  .scholarship-summary { max-width: 40rem; margin-bottom: 2rem; color: rgba(243,239,230,.84); font-size: clamp(1.05rem,2vw,1.25rem); line-height: 1.7; }
+  .scholarship-weave { display: none; height: 18rem; align-items: stretch; justify-content: end; gap: .35rem; transform: rotate(-5deg); }
+  .weave-panel { display: block; width: 27%; border-block: 1px solid rgba(243,239,230,.45); }
+  .weave-panel-one { margin-block: 2.5rem 0; background: var(--color-cotton); }
+  .weave-panel-two { margin-block: 0 2.2rem; background: var(--color-oxblood); }
+  .weave-panel-three { margin-block: 4.4rem .8rem; background: rgba(243,239,230,.18); }
+  .scholarship-cycle { background: var(--color-cotton); }
+  .cycle-heading { display: flex; flex-direction: column; align-items: start; justify-content: space-between; gap: 1.5rem; margin-bottom: 2rem; }
+  .cycle-heading .section-title { max-width: 19ch; }
+  .deadline-callout { display: flex; max-width: 27rem; align-items: start; gap: .75rem; border-left: 4px solid var(--color-oxblood); padding: .75rem 0 .75rem 1rem; color: var(--color-ink); line-height: 1.55; }
+  .deadline-callout svg { flex: none; margin-top: .15rem; color: var(--color-oxblood); }
+  .cycle-pending { max-width: 50rem; border-left: 4px solid var(--color-indigo); padding: 1rem 1.25rem; background: rgba(36,51,67,.06); }
+  .cycle-facts { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,10rem),1fr)); border-block: 1px solid var(--color-border); margin: 2rem 0 3.5rem; }
+  .cycle-facts div { min-width: 0; padding: 1.3rem 1rem 1.4rem; }
+  .cycle-facts div + div { border-top: 1px solid var(--color-border); }
+  .cycle-facts dt { color: var(--color-muted-foreground); font-size: .75rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+  .cycle-facts dd { margin: .5rem 0 0; color: var(--color-indigo); font-family: var(--font-serif); font-size: clamp(2.2rem,5vw,3rem); font-weight: 600; line-height: 1; }
+  .cycle-facts dd.fact-date { max-width: 12ch; font-size: 1.35rem; line-height: 1.2; }
+  .cycle-facts p { margin: .45rem 0 0; color: var(--color-muted-foreground); font-size: .85rem; }
+  .scholarship-content-grid { display: grid; gap: 3rem; }
+  .scholarship-content-grid h3, .application-panel h3 { margin: .25rem 0 1rem; font-family: var(--font-serif); font-size: clamp(1.6rem,3vw,2.1rem); font-weight: 580; line-height: 1.2; }
+  .scholarship-list { display: grid; gap: .85rem; margin: 0; padding-left: 1.25rem; color: var(--color-muted-foreground); line-height: 1.7; }
+  .scholarship-list li { padding-left: .25rem; }
+  .scholarship-list li::marker { color: var(--color-oxblood); font-weight: 750; }
+  .preferences { margin-top: 2rem; border-top: 1px solid var(--color-border); padding-top: 1.25rem; }
+  .preferences h4, .submission-panel h4 { margin-bottom: .35rem; font-family: var(--font-serif); font-size: 1.25rem; font-weight: 650; }
+  .preferences > p { margin-bottom: .85rem; color: var(--color-muted-foreground); font-size: .9rem; }
+  .application-panel { border-top: 5px solid var(--color-indigo); padding: 1.5rem; background: #faf7f0; }
+  .application-panel .eyebrow { margin-top: .15rem; }
+  .numbered { padding-left: 1.4rem; }
+  .recommendation-instructions { margin-top: 1.25rem; color: var(--color-muted-foreground); line-height: 1.7; }
+  .application-downloads { display: grid; justify-items: start; gap: .6rem; margin-top: 1.5rem; }
+  .application-downloads .button { text-align: left; }
+  .application-downloads > p { margin: 0; color: var(--color-muted-foreground); font-size: .85rem; }
+  .printable-link { margin-top: .35rem; font-weight: 650; }
+  .submission-panel { margin-top: 2rem; border-top: 1px solid var(--color-border); padding-top: 1.25rem; }
+  .submission-panel > p { color: var(--color-muted-foreground); line-height: 1.65; }
+  .submission-panel a { color: var(--color-indigo); font-weight: 650; text-decoration-thickness: 1px; }
+  .subject-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+  .subject-row > span { font-weight: 650; }
+  .subject-row code { max-width: 100%; overflow-wrap: anywhere; border: 1px solid var(--color-border); padding: .35rem .5rem; background: var(--color-cotton); color: var(--color-ink); font-family: var(--font-sans); }
+  .subject-row button { min-height: 2.5rem; border: 1px solid var(--color-indigo); padding: .4rem .75rem; background: transparent; color: var(--color-indigo); font-size: .82rem; font-weight: 700; cursor: pointer; }
+  .subject-row button:hover { background: var(--color-indigo); color: var(--color-cotton); }
+  .copy-status { min-height: 1.35rem; margin-top: -.25rem; font-size: .8rem; }
+  .mail-link-note { display: flex; align-items: center; gap: .5rem; }
+  .mail-link-note svg { flex: none; color: var(--color-oxblood); }
+  .privacy-statement { margin-top: 1.5rem; border-left: 3px solid var(--color-oxblood); padding-left: .9rem; color: var(--color-muted-foreground); font-size: .88rem; line-height: 1.7; }
+  .scholarship-archive { border-block: 1px solid var(--color-border); background: rgba(36,51,67,.04); }
+  .scholarship-archive .section-title { margin-bottom: 1.75rem; }
+  .cycle-archive-list { display: grid; gap: .75rem; margin: 0; padding: 0; list-style: none; }
+  .cycle-archive-list li { border-left: 4px solid var(--color-indigo); padding: 1rem 1.2rem; background: var(--color-card); }
+  .cycle-archive-list h3 { margin: 0 0 .2rem; color: var(--color-indigo); font-family: var(--font-serif); font-size: 1.5rem; }
+  .cycle-archive-list p { margin: .25rem 0 0; color: var(--color-muted-foreground); }
+  .scholarship-memorial { border-top: 1px solid var(--color-border); background: #faf7f0; }
+  .memorial-grid { display: grid; align-items: start; gap: 2.5rem; }
+  .memorial-copy { max-width: 48rem; }
+  .memorial-story { display: grid; gap: 1rem; color: var(--color-muted-foreground); line-height: 1.8; }
+  .memorial-attribution { margin-top: 1.25rem; color: var(--color-muted-foreground); font-size: .9rem; font-weight: 650; }
+  .memorial-words { margin: 2rem 0 0; border-left: 4px solid var(--color-oxblood); padding: .5rem 0 .5rem 1.25rem; }
+  .memorial-words blockquote { margin: 0 0 .7rem; color: var(--color-indigo); font-family: var(--font-serif); font-size: clamp(1.35rem,3vw,1.8rem); line-height: 1.45; }
+  .memorial-words figcaption { color: var(--color-ink); font-weight: 650; }
+  .memorial-words p { margin-top: .45rem; color: var(--color-muted-foreground); font-size: .85rem; }
+  .memorial-photo { margin: 0; }
+  .memorial-photo :global(img) { aspect-ratio: 4/5; border: 1px solid var(--color-border); object-position: center; }
+  .memorial-photo figcaption { margin-top: .75rem; color: var(--color-muted-foreground); font-size: .85rem; }
+  @media (min-width: 720px) {
+    .scholarship-weave { display: flex; }
+    .scholarship-hero-grid { grid-template-columns: minmax(0,1.2fr) minmax(16rem,.8fr); }
+    .cycle-heading { flex-direction: row; align-items: end; }
+    .cycle-facts div + div { border-top: 0; border-left: 1px solid var(--color-border); }
+    .scholarship-content-grid { grid-template-columns: minmax(0,1fr) minmax(21rem,.92fr); gap: clamp(2.5rem,6vw,5.5rem); }
+    .memorial-grid { grid-template-columns: minmax(0,1.2fr) minmax(15rem,.65fr); gap: 4rem; }
+    .cycle-archive-list { grid-template-columns: repeat(auto-fit,minmax(14rem,1fr)); }
+  }
+  @media (max-width: 520px) {
+    .application-panel { margin-inline: -1rem; padding: 1.25rem 1rem; }
+    .cycle-facts { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .cycle-facts div:nth-child(odd) { border-left: 0; }
+    .cycle-facts div + div { border-left: 1px solid var(--color-border); }
+    .cycle-facts div:nth-child(2) { border-top: 0; }
+  }
+</style>
