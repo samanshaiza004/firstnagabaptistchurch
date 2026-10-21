@@ -1,41 +1,38 @@
 # Lungpeola Sayai Scholarship — publishing workflow
 
-The scholarship page is a permanent `/scholarship` route with one Sanity singleton for program content and the current annual cycle. Annual information is not rolled forward automatically; staff must review and explicitly publish each new cycle.
+The scholarship page is a permanent `/scholarship` route with one Sanity singleton for program content and the current annual cycle. Annual information is not rolled forward automatically; staff must review and explicitly update each new cycle.
 
-## Before opening an application cycle
+## Current 2026 application
 
-In Sanity, edit **Lungpeola Sayai Scholarship** and complete the current cycle. Leave its status at **Draft — not announced** until all of the following are confirmed:
+The supplied 2026 application and website brief are the temporary source of truth. The page displays their date, award facts, eligibility, preferences, application steps, contact details, and memorial account. Since the application says November 8, 2026 but gives no cutoff hour or timezone, the page shows the date only and does not claim an exact cutoff time.
 
-- The eligibility and selection wording is approved for that cycle.
-- The exact deadline time, date, and timezone are known. A calendar date alone is not enough to open applications.
-- The approved fillable PDF is ready. Confirm that controls have accessible labels and logical reading/tab order, and resolve the recommendation-letter page before uploading. A printable companion PDF is optional.
-- The submission address and exact email subject are correct, and the application mailbox is secured and monitored.
-- The professor recommendation instructions say whether the applicant attaches the letter and whether a professor may send it separately and confidentially.
-- The privacy statement reflects actual committee access, handling/sharing, retention, deletion, and a contact for questions.
+The website embeds the original four-page printable PDF at `public/documents/lungpeola-sayai-scholarship-application.pdf`. It has no interactive fillable fields. The page tells applicants to print, complete, sign, and email the application with one professor recommendation letter. A descriptive download link is provided before the embedded preview for mobile devices and PDF viewers that do not display the iframe.
 
-Once complete, set the status to **Applications open** and publish. The Studio prevents an incomplete cycle from being marked open. The open state displays the application instructions/download and adds the compact homepage announcement. The footer link remains available at all times; scholarship is intentionally not added to the crowded primary navigation.
+The memorial narrative and remembered words are attributed to the supplied scholarship information sheet. No photograph is used. If church leadership or the family provides corrected or approved wording, update the Sanity singleton and replace the temporary copy.
 
-## Cycle status behavior
+## Sanity editing and cycle status
 
-- **Draft — not announced:** the page remains available, but no cycle facts, application requirements, or application links are shown.
-- **Applications open:** shows approved cycle details and the fillable PDF. The homepage announcement appears.
-- **Applications closed:** shows the published cycle facts and requirements, but removes application and submission actions.
-- **Selection underway:** keeps the cycle information available without an application action.
+In Sanity, edit **Lungpeola Sayai Scholarship**. The web page can display a complete set of current application details while its status is **Draft**, labeling them **Current application information** rather than claiming the cycle is open. Set the status to **Applications open** only when the church is ready to accept applications.
+
+- **Draft:** if year, deadline date, award facts, eligibility, steps, submission email, and subject are present, the current information and application actions are displayed. Incomplete drafts remain hidden.
+- **Applications open:** displays the explicit open status and current application details.
+- **Applications closed:** keeps cycle facts and eligibility visible but removes application and submission actions.
+- **Selection underway:** keeps cycle information available without application actions.
 - **Cycle concluded:** preserves the past cycle information on the permanent page.
 - **Awaiting next cycle:** shows the no-cycle message. Staff must enter and explicitly publish a new cycle; dates never recur automatically.
 
-If an open cycle's exact cutoff passes, the Astro page derives a closed state from the deadline timestamp. A Netlify Scheduled Function checks the published Sanity cycle hourly and asks Netlify to rebuild the static site once the old page build predates the cutoff. This keeps the static HTML from advertising an expired application while preserving an explicit staff-controlled transition to **Selection underway**.
+The original PDF is included with the Astro site as a fallback. An optional PDF uploaded to the Sanity `Application PDF` or `Additional printable application PDF` field replaces it on the page.
 
-## Netlify requirement for automatic deadline refresh
+## Deadline behavior
 
-Create a Netlify Build Hook for the production branch and set its URL as the secret environment variable `NETLIFY_BUILD_HOOK_URL`. The scheduled function also needs the existing public Sanity project and dataset environment values. `SCHOLARSHIP_SITE_URL` is optional; by default it checks `https://firstnagabaptistchurch.org`.
+When an exact cutoff timestamp and timezone are confirmed, Astro derives the closed state from that timestamp. The Netlify Scheduled Function can then request a rebuild after the cutoff so the static page refreshes. If only a calendar date is known, the website displays that date without inventing a time and does not auto-close; staff must change the status to **Applications closed** after the deadline. The supplied 2026 materials provide no exact cutoff, so manually close that cycle.
 
-The build-hook URL is a secret and must not be committed. Without it, ordinary publishing still works, but the hourly function cannot refresh the static page at a deadline. Netlify schedules functions in UTC and only runs them for published deploys; the code compares the actual ISO deadline, so the schedule's timezone does not change the cutoff calculation.
+For automatic refresh after a future timestamped cutoff, create a Netlify Build Hook for the production branch and save its URL as the secret environment variable `NETLIFY_BUILD_HOOK_URL`. The scheduled function also needs the existing public Sanity project and dataset values. `SCHOLARSHIP_SITE_URL` is optional; by default it checks `https://firstnagabaptistchurch.org`. The hook URL is secret and must not be committed.
 
-## Memorial story
+## Applicant information and privacy
 
-Keep the memorial story in Draft until the Sayai family approves its wording and any photograph. Attribute the biography as a family account. If adding Lungpeola's remembered words, attribute them as remembered or recorded by the family and explain any related scripture as context, not as a direct Bible quotation. The page does not show memorial copy or photography before family approval.
+The application requests contact information, financial-need details, and a professor recommendation. The current page follows the PDF's email-submission instructions and does not make a promise about confidentiality or record retention. Before the next cycle, confirm who may access submissions, how they are shared with reviewers, when they are deleted, and how applicants can ask questions. Keep the application mailbox secured and monitored.
 
 ## Initial content migration
 
-The CMS migration creates the scholarship singleton only when it does not already exist, so rerunning the import will not replace scholarship edits made in Sanity. The initial cycle remains a draft and has no application file or privacy statement; it is intentionally not launch-ready.
+The CMS migration creates the scholarship singleton only when it does not already exist, so rerunning the import will not replace scholarship edits made in Sanity. The initial cycle remains in Draft status; its supplied application facts are shown as current information. The operations and privacy details above should be reviewed and updated when church staff confirms them.

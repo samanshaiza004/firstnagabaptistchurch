@@ -6,9 +6,26 @@ export function getScholarshipCycleStatus(
 ): ScholarshipCycleStatus {
   if (cycle.status !== "open") return cycle.status;
 
-  const cutoff = cycle.applicationDeadlineAt ? Date.parse(cycle.applicationDeadlineAt) : Number.NaN;
+  // The supplied application states a date but no cutoff time. Keep an explicitly
+  // open cycle open until staff close it unless an exact cutoff is available.
+  if (!cycle.applicationDeadlineAt) return "open";
+  const cutoff = Date.parse(cycle.applicationDeadlineAt);
   if (!Number.isFinite(cutoff)) return "draft";
   return now.getTime() >= cutoff ? "closed" : "open";
+}
+
+export function hasApplicationInformation(cycle: ScholarshipCycleContent) {
+  return Boolean(
+    cycle.year &&
+    cycle.applicationDeadlineDate &&
+    cycle.awardDate &&
+    cycle.awardCount &&
+    cycle.awardAmount &&
+    cycle.eligibilityRequirements?.length &&
+    cycle.applicationSteps?.length &&
+    cycle.submissionEmail &&
+    cycle.submissionSubject,
+  );
 }
 
 export function hasPublishedCycleDetails(status: ScholarshipCycleStatus) {
@@ -28,9 +45,11 @@ export function formatScholarshipDate(value?: string) {
 }
 
 export function formatScholarshipDeadline(cycle: ScholarshipCycleContent) {
-  if (!cycle.applicationDeadlineAt || !cycle.deadlineTimeZone) return undefined;
+  if (!cycle.applicationDeadlineAt || !cycle.deadlineTimeZone) {
+    return formatScholarshipDate(cycle.applicationDeadlineDate);
+  }
   const date = new Date(cycle.applicationDeadlineAt);
-  if (!Number.isFinite(date.getTime())) return undefined;
+  if (!Number.isFinite(date.getTime())) return formatScholarshipDate(cycle.applicationDeadlineDate);
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "long",

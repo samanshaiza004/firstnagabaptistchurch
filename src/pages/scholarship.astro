@@ -4,21 +4,28 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import CmsImage from "../components/CmsImage.astro";
 import RichText from "../components/RichText.astro";
 import { getCmsContent } from "../lib/cms/content";
-import { formatScholarshipDate, formatScholarshipDeadline, getScholarshipCycleStatus, hasPublishedCycleDetails } from "../lib/cms/scholarship";
+import { formatScholarshipDate, formatScholarshipDeadline, getScholarshipCycleStatus, hasApplicationInformation, hasPublishedCycleDetails } from "../lib/cms/scholarship";
 
 const { scholarship } = await getCmsContent();
 const page = scholarship;
 const cycle = page.currentCycle;
 const status = getScholarshipCycleStatus(cycle);
-const detailsVisible = hasPublishedCycleDetails(status);
-const isOpen = status === "open";
+const hasCurrentApplicationInformation = hasApplicationInformation(cycle);
+const detailsVisible = hasPublishedCycleDetails(status) || (status === "draft" && hasCurrentApplicationInformation);
+const applicationAvailable = status === "open" || (status === "draft" && hasCurrentApplicationInformation);
 const deadline = formatScholarshipDeadline(cycle);
 const deadlineDate = formatScholarshipDate(cycle.applicationDeadlineDate);
 const awardDate = formatScholarshipDate(cycle.awardDate);
-const fileSize = (bytes?: number) => bytes ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : "PDF";
+const applicationPdf = (cycle.printableFile?.url ? cycle.printableFile : undefined) ?? (cycle.applicationFile?.url ? cycle.applicationFile : undefined) ?? {
+  url: "/documents/lungpeola-sayai-scholarship-application.pdf",
+  filename: "lungpeola-sayai-scholarship-application.pdf",
+  label: "Printable application form",
+  size: 332230,
+};
+const fileSize = applicationPdf.size ? `${(applicationPdf.size / 1024 / 1024).toFixed(1)} MB` : "PDF";
 
 const statusText = {
-  draft: "Application details are being confirmed",
+  draft: hasCurrentApplicationInformation ? "Current application information" : "Application details are being confirmed",
   open: "Applications are open",
   closed: "Applications are closed",
   selection: "Applications are closed; selection is underway",
@@ -34,7 +41,7 @@ const statusText = {
         <p class="eyebrow">{page.eyebrow}</p>
         <h1>{page.title}</h1>
         <p class="scholarship-summary">{page.summary}</p>
-          <a class="button button-outline on-dark" href="#application-cycle">View application status <ArrowRight class="size-4" aria-hidden="true" /></a>
+          <a class="button button-outline on-dark" href="#application-cycle">View application information <ArrowRight class="size-4" aria-hidden="true" /></a>
       </div>
       <div class="scholarship-weave" aria-hidden="true">
         <span class="weave-panel weave-panel-one"></span>
@@ -52,7 +59,7 @@ const statusText = {
           <p class="eyebrow">{detailsVisible && cycle.year ? `${cycle.year} Application Cycle` : "Application Cycle"}</p>
           <h2 id="cycle-heading" class="section-title">{statusText}</h2>
         </div>
-        {isOpen && deadline && <p class="deadline-callout"><Clock3 class="size-5" aria-hidden="true" /><span>Applications close <strong>{deadline}</strong></span></p>}
+        {applicationAvailable && deadline && <p class="deadline-callout"><Clock3 class="size-5" aria-hidden="true" /><span>Applications are due <strong>{deadline}</strong></span></p>}
       </div>
 
       {!detailsVisible && <p class="section-copy cycle-pending">{page.cyclePendingMessage}</p>}
@@ -84,7 +91,7 @@ const statusText = {
               )}
             </section>
 
-            {isOpen && (
+            {applicationAvailable && (
               <section class="application-panel" aria-labelledby="apply-heading">
                 <p class="eyebrow">How to apply</p>
                 <h3 id="apply-heading">Prepare your application</h3>
@@ -93,16 +100,18 @@ const statusText = {
                 </ol>
                 {cycle.professorRecommendationInstructions && <p class="recommendation-instructions">{cycle.professorRecommendationInstructions}</p>}
 
-                {cycle.applicationFile && (
-                  <div class="application-downloads">
-                    <a class="button" href={cycle.applicationFile.url} target="_blank" rel="noopener noreferrer">
+                <section class="application-document" aria-labelledby="application-pdf-heading">
+                  <h4 id="application-pdf-heading">Application form</h4>
+                  <p>This is the standard printable PDF, not a fillable form. Print and complete it, then sign and email it with the professor recommendation letter.</p>
+                  <p class="application-downloads">
+                    <a class="button" href={applicationPdf.url} target="_blank" rel="noopener noreferrer">
                       <ArrowDownToLine class="size-4" aria-hidden="true" />
-                      Download {cycle.applicationFile.label || "the fillable scholarship application"} ({fileSize(cycle.applicationFile.size)})
+                      Download the Lungpeola Sayai Scholarship application (PDF, 4 pages · {fileSize})
                     </a>
-                    <p>PDF · Opens in a new tab. Save the completed form before emailing it.</p>
-                    {cycle.printableFile && <a class="printable-link" href={cycle.printableFile.url} target="_blank" rel="noopener noreferrer">Download the printable scholarship application (PDF, {fileSize(cycle.printableFile.size)})</a>}
-                  </div>
-                )}
+                    <span>If the preview below does not appear on your device, use this download link.</span>
+                  </p>
+                  <iframe class="application-pdf-preview" src={`${applicationPdf.url}#view=FitH`} title="Preview of the Lungpeola Sayai Scholarship application form, a four-page printable PDF" loading="lazy"></iframe>
+                </section>
 
                 {cycle.submissionEmail && cycle.submissionSubject && (
                   <div class="submission-panel">
@@ -215,15 +224,18 @@ const statusText = {
   .scholarship-list li { padding-left: .25rem; }
   .scholarship-list li::marker { color: var(--color-oxblood); font-weight: 750; }
   .preferences { margin-top: 2rem; border-top: 1px solid var(--color-border); padding-top: 1.25rem; }
-  .preferences h4, .submission-panel h4 { margin-bottom: .35rem; font-family: var(--font-serif); font-size: 1.25rem; font-weight: 650; }
+  .preferences h4, .submission-panel h4, .application-document h4 { margin-bottom: .35rem; font-family: var(--font-serif); font-size: 1.25rem; font-weight: 650; }
   .preferences > p { margin-bottom: .85rem; color: var(--color-muted-foreground); font-size: .9rem; }
   .application-panel { border-top: 5px solid var(--color-indigo); padding: 1.5rem; background: #faf7f0; }
   .application-panel .eyebrow { margin-top: .15rem; }
   .numbered { padding-left: 1.4rem; }
   .recommendation-instructions { margin-top: 1.25rem; color: var(--color-muted-foreground); line-height: 1.7; }
-  .application-downloads { display: grid; justify-items: start; gap: .6rem; margin-top: 1.5rem; }
+  .application-document { margin-top: 1.75rem; border-top: 1px solid var(--color-border); padding-top: 1.25rem; }
+  .application-document > p { color: var(--color-muted-foreground); line-height: 1.65; }
+  .application-downloads { display: grid; justify-items: start; gap: .6rem; margin-top: 1rem; }
   .application-downloads .button { text-align: left; }
-  .application-downloads > p { margin: 0; color: var(--color-muted-foreground); font-size: .85rem; }
+  .application-downloads > span { margin: 0; color: var(--color-muted-foreground); font-size: .85rem; }
+  .application-pdf-preview { display: block; width: 100%; height: min(76vh, 68rem); min-height: 34rem; border: 1px solid var(--color-border); background: white; }
   .printable-link { margin-top: .35rem; font-weight: 650; }
   .submission-panel { margin-top: 2rem; border-top: 1px solid var(--color-border); padding-top: 1.25rem; }
   .submission-panel > p { color: var(--color-muted-foreground); line-height: 1.65; }

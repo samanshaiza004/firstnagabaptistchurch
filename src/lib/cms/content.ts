@@ -47,21 +47,23 @@ export function assertScholarshipContent(value: unknown): asserts value is Schol
     throw new Error("Scholarship cycle status is invalid.");
   }
   if (cycle.status === "open") {
-    const hasValidCutoff = typeof cycle.applicationDeadlineAt === "string" && Number.isFinite(Date.parse(cycle.applicationDeadlineAt));
-    const hasFillablePdf = typeof cycle.applicationFile?.url === "string" && /\.pdf(?:$|\?)/i.test(cycle.applicationFile.filename);
+    const hasValidCutoff = !cycle.applicationDeadlineAt || (typeof cycle.applicationDeadlineAt === "string" && Number.isFinite(Date.parse(cycle.applicationDeadlineAt)));
     const hasValidEmail = typeof cycle.submissionEmail === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cycle.submissionEmail);
     if (
-      !cycle.year || !cycle.applicationDeadlineDate || !hasValidCutoff || !cycle.deadlineTimeZone ||
-      !cycle.awardDate || !cycle.awardCount || !cycle.awardAmount || !hasFillablePdf || !hasValidEmail ||
-      !cycle.submissionSubject || !cycle.professorRecommendationInstructions || !cycle.privacyStatement ||
+      !cycle.year || !cycle.applicationDeadlineDate || !hasValidCutoff ||
+      !cycle.awardDate || !cycle.awardCount || !cycle.awardAmount || !hasValidEmail ||
+      !cycle.submissionSubject ||
       !cycle.eligibilityRequirements?.length || !cycle.applicationSteps?.length
     ) {
-      throw new Error("A scholarship cycle cannot be open until its cutoff, fillable PDF, instructions, contact, and privacy statement are complete.");
+      throw new Error("A scholarship cycle cannot be open until its application facts, requirements, instructions, and contact are complete.");
     }
-    try {
-      new Intl.DateTimeFormat("en-US", { timeZone: cycle.deadlineTimeZone });
-    } catch {
-      throw new Error("The scholarship deadline timezone is invalid.");
+    if (cycle.applicationDeadlineAt) {
+      if (!cycle.deadlineTimeZone) throw new Error("An exact scholarship cutoff requires a timezone.");
+      try {
+        new Intl.DateTimeFormat("en-US", { timeZone: cycle.deadlineTimeZone });
+      } catch {
+        throw new Error("The scholarship deadline timezone is invalid.");
+      }
     }
   }
   if (memorial.approvalStatus === "approved" && (!memorial.story?.length || !memorial.storyAttribution)) {
@@ -89,8 +91,15 @@ export function getCmsContent(environment: Record<string, string | undefined> = 
   contentPromise = client.fetch<unknown>(contentQuery).then((content) => {
     const response = content && typeof content === "object" ? content as Record<string, unknown> : {};
     const cmsScholarship = response.scholarship;
-    const scholarship = cmsScholarship && typeof cmsScholarship === "object"
-      ? { ...(cmsScholarship as Record<string, unknown>), pastCycles: Array.isArray((cmsScholarship as Record<string, unknown>).pastCycles) ? (cmsScholarship as Record<string, unknown>).pastCycles : [] }
+    const cmsScholarshipRecord = cmsScholarship && typeof cmsScholarship === "object" ? cmsScholarship as Record<string, unknown> : undefined;
+    const cmsMemorial = cmsScholarshipRecord?.memorial;
+    const memorialHasStory = cmsMemorial && typeof cmsMemorial === "object" && Array.isArray((cmsMemorial as Record<string, unknown>).story) && ((cmsMemorial as Record<string, unknown>).story as unknown[]).length > 0;
+    const scholarship = cmsScholarshipRecord
+      ? {
+          ...cmsScholarshipRecord,
+          pastCycles: Array.isArray(cmsScholarshipRecord.pastCycles) ? cmsScholarshipRecord.pastCycles : [],
+          memorial: memorialHasStory ? cmsMemorial : localContent.scholarship.memorial,
+        }
       : localContent.scholarship;
     const normalized = { ...response, scholarship };
     assertCmsContent(normalized);

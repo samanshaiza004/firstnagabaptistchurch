@@ -5,12 +5,13 @@ import CmsImage from "../components/CmsImage.astro";
 import RichText from "../components/RichText.astro";
 import { getCmsContent } from "../lib/cms/content";
 import { isPublicFacingEvent, splitEventsByDate } from "../lib/events";
-import { formatScholarshipDeadline, getScholarshipCycleStatus } from "../lib/cms/scholarship";
+import { formatScholarshipDeadline, getScholarshipCycleStatus, hasApplicationInformation } from "../lib/cms/scholarship";
 
 const { settings, pages, events: allEvents, people, gallery, scholarship } = await getCmsContent();
 const page = pages.home;
 const scholarshipCycle = scholarship.currentCycle;
-const scholarshipOpen = getScholarshipCycleStatus(scholarshipCycle) === "open";
+const scholarshipStatus = getScholarshipCycleStatus(scholarshipCycle);
+const scholarshipAnnouncementVisible = scholarshipStatus === "open" || (scholarshipStatus === "draft" && hasApplicationInformation(scholarshipCycle));
 const scholarshipDeadline = formatScholarshipDeadline(scholarshipCycle);
 const { upcoming } = splitEventsByDate(allEvents.filter(isPublicFacingEvent));
 const nextEvents = upcoming.slice(0, 3);
@@ -80,13 +81,13 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
     </div>
   </section>
 
-  {scholarshipOpen && scholarshipDeadline && (
+  {scholarshipAnnouncementVisible && scholarshipDeadline && (
     <section class="scholarship-announcement" aria-labelledby="scholarship-announcement-title">
       <div class="site-container scholarship-announcement-inner">
         <div>
           <p class="eyebrow">{scholarship.eyebrow}</p>
           <h2 id="scholarship-announcement-title">{scholarship.title}</h2>
-          <p>{scholarshipCycle.awardCount} awards of ${scholarshipCycle.awardAmount?.toLocaleString("en-US")} for eligible students preparing for full-time Christian ministry. Applications close {scholarshipDeadline}.</p>
+          <p>{scholarshipCycle.awardCount} awards of ${scholarshipCycle.awardAmount?.toLocaleString("en-US")} each for eligible students preparing for full-time Christian ministry. Applications are due {scholarshipDeadline}.</p>
         </div>
         <a class="button button-secondary" href="/scholarship">Scholarship details and application <ArrowRight class="size-4" aria-hidden="true" /></a>
       </div>
