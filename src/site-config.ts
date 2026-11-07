@@ -26,6 +26,7 @@ export const navigation = [
   { name: "Visit", href: "/visit" },
   { name: "About", href: "/about" },
   { name: "Leadership", href: "/leadership" },
+  { name: "Scholarship", href: "/scholarship" },
   { name: "Events", href: "/events" },
   { name: "Gallery", href: "/gallery" },
   { name: "Give", href: "/give" },
