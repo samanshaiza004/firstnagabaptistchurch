@@ -30,8 +30,8 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
   <section class="home-hero on-dark">
     <div class="home-hero-grid">
       <div class="home-hero-copy">
-        <p class="eyebrow">{page.hero.eyebrow}</p>
         <h1 class="home-hero-title">{titleParts[0]}{titleParts[1] && <em>{titleParts[1]}</em>}</h1>
+        <p class="home-hero-context">{page.hero.eyebrow}</p>
         <p class="home-hero-copy-text">{page.hero.description}</p>
         <p class="mt-6 flex items-center gap-2 text-cotton/90"><Clock class="size-5 text-cotton/70" aria-hidden="true" /><span class="font-semibold">Sundays at <span data-service-time>{settings.serviceTime.standard} standard / {settings.serviceTime.daylight} daylight time</span></span></p>
         <div class="mt-8 flex flex-col gap-4 sm:flex-row">
@@ -53,7 +53,7 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
   <section class="section" aria-labelledby="service-title">
     <div class="site-container">
       <div class="section-heading-grid mb-12">
-        <div><p class="eyebrow">{page.serviceEyebrow}</p><h2 id="service-title" class="section-title">{page.serviceTitle}</h2></div>
+        <div><h2 id="service-title" class="section-title">{page.serviceTitle}</h2></div>
         <p class="section-copy">{page.serviceDescription}</p>
       </div>
       <div class="service-grid grid gap-6 md:grid-cols-3">
@@ -85,7 +85,7 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
     <section class="scholarship-announcement" aria-labelledby="scholarship-announcement-title">
       <div class="site-container scholarship-announcement-inner">
         <div>
-          <p class="eyebrow">{scholarship.eyebrow}</p>
+
           <h2 id="scholarship-announcement-title">{scholarship.title}</h2>
           <p>{scholarshipCycle.awardCount} awards of ${scholarshipCycle.awardAmount?.toLocaleString("en-US")} each for eligible students preparing for full-time Christian ministry. Applications are due {scholarshipDeadline}.</p>
         </div>
@@ -98,7 +98,7 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
   <section class="section bg-primary text-primary-foreground on-dark" aria-labelledby="gatherings-title">
     <div class="site-container">
       <div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div><p class="eyebrow">{page.eventsEyebrow}</p><h2 id="gatherings-title" class="font-serif text-3xl font-bold md:text-4xl">Next Gatherings</h2></div>
+        <div><h2 id="gatherings-title" class="font-serif text-3xl font-bold md:text-4xl">Next Gatherings</h2></div>
         <a class="button button-outline w-fit" href={page.eventsCta.href}>{page.eventsCta.label} <ArrowRight class="size-4" /></a>
       </div>
       {nextEvents.length > 0 ? (
@@ -121,7 +121,7 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
   <section class="section" aria-labelledby="mission-title">
     <div class="site-container grid items-center gap-12 lg:grid-cols-2">
       <div>
-        <p class="eyebrow">{page.objectivesEyebrow}</p>
+
         <h2 id="mission-title" class="section-title mb-6">A church for the Naga family in DFW</h2>
         <p class="section-copy mb-4">First Naga Baptist Church exists to share the Word, support Naga students and families across the Dallas–Fort Worth area, and connect Naga and American churches in fellowship and mission.</p>
         <p class="section-copy mb-8">As the first Naga church established in America, we gather scattered believers into one body for worship, discipleship, and outreach.</p>
@@ -152,9 +152,9 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
           </manner-carousel>
         </div>
         <div class="order-1 lg:order-2">
-          <p class="eyebrow">Our Community</p>
+
           <h2 id="community-title" class="section-title mb-6">Life together</h2>
-          <p class="section-copy mb-8">A living record of worship, fellowship, and the people who make this church home.</p>
+          <p class="section-copy mb-8">Photographs of worship, fellowship, and the people who make this church home.</p>
           <a class="button button-secondary" href="/gallery">Visit the gallery <ArrowRight class="size-4" /></a>
         </div>
       </div>
@@ -165,7 +165,7 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
   <section class="section" aria-labelledby="leadership-intro-title">
     <div class="site-container grid items-center gap-12 lg:grid-cols-2">
       <div>
-        <p class="eyebrow">Our Leadership</p>
+
         <h2 id="leadership-intro-title" class="section-title mb-6">Shepherded by faithful servants</h2>
         <p class="section-copy mb-4">{page.leadershipDescription}</p>
         {pastor && <p class="section-copy mb-8"><strong class="text-foreground">{pastor.name}</strong> serves as our {pastor.role.toLowerCase()}, leading worship, teaching, and pastoral care.</p>}
@@ -180,7 +180,7 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
   <!-- 7. Short history distinction -->
   <section class="section bg-muted/40" aria-labelledby="story-title">
     <div class="site-container max-w-3xl">
-      <p class="eyebrow">{page.storyEyebrow}</p>
+
       <h2 id="story-title" class="section-title mb-6">{page.storyTitle}</h2>
       <RichText value={page.storyBody.slice(0, 1)} class="space-y-4 leading-relaxed text-muted-foreground" />
       <a class="button mt-8" href={page.storyCta.href}>{page.storyCta.label}</a>
@@ -207,12 +207,11 @@ const timeMarkup = (event: (typeof nextEvents)[number]) =>
   .home-community-carousel figure { margin: 0; }
   .home-community-carousel figure[hidden] { display: none; }
   .home-community-controls { display: flex; justify-content: space-between; gap: .75rem; margin-top: 1rem; }
-  .home-community-controls button { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid var(--color-border); padding: .62rem .8rem; background: var(--color-card); color: var(--color-ink); font-size: .75rem; font-weight: 720; letter-spacing: .06em; text-transform: uppercase; }
+  .home-community-controls button { display: inline-flex; min-height: 2.75rem; align-items: center; gap: .5rem; border: 1px solid var(--color-border); padding: .62rem .8rem; background: var(--color-card); color: var(--color-ink); font-size: .75rem; font-weight: 720; letter-spacing: .06em; text-transform: uppercase; }
   .home-community-controls button:hover, .home-community-controls button:focus-visible { border-color: var(--color-indigo); background: var(--color-indigo); color: var(--color-cotton); }
-  .scholarship-announcement { border-block: 1px solid var(--color-border); border-left: 5px solid var(--color-oxblood); background: #faf7f0; }
+  .scholarship-announcement { border-block: 1px solid var(--color-border); border-left: 1px solid var(--color-oxblood); background: #faf7f0; }
   .scholarship-announcement-inner { display: flex; flex-direction: column; align-items: start; justify-content: space-between; gap: 1.5rem; padding-block: 2rem; }
-  .scholarship-announcement .eyebrow { margin-bottom: .4rem; }
   .scholarship-announcement h2 { margin-bottom: .5rem; color: var(--color-indigo); font-family: var(--font-serif); font-size: clamp(1.45rem,3vw,2rem); font-weight: 600; line-height: 1.2; }
-  .scholarship-announcement p:not(.eyebrow) { max-width: 48rem; color: var(--color-muted-foreground); line-height: 1.65; }
+  .scholarship-announcement p { max-width: 48rem; color: var(--color-muted-foreground); line-height: 1.65; }
   @media (min-width: 850px) { .scholarship-announcement-inner { flex-direction: row; align-items: center; } }
 </style>

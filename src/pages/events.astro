@@ -9,6 +9,6 @@ const page = pages.events;
 ---
 
 <BaseLayout title={page.seo.title} description={page.seo.description} socialImage={page.seo.socialImage}>
-  <PageHero {...page.hero} />
+  <PageHero {...page.hero} compact />
   <EventsList events={events} page={page} />
 </BaseLayout>

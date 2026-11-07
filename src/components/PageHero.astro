@@ -7,15 +7,15 @@ interface Props {
   title: string;
   description: string;
   image: CmsImageValue;
+  compact?: boolean;
 }
 
-const { eyebrow, title, description, image } = Astro.props;
+const { title, description, image, compact = false } = Astro.props;
 ---
 
-<section class="page-hero on-dark">
+<section class:list={["page-hero on-dark", compact && "page-hero-compact"]}>
   <div class="page-hero-grid">
     <div class="page-hero-copy">
-      <p class="eyebrow">{eyebrow}</p>
       <h1 class="text-balance">{title}</h1>
       <p class="mt-6 text-lg leading-relaxed md:text-xl">{description}</p>
     </div>

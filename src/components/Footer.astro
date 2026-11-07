@@ -1,5 +1,6 @@
 ---
-import { Clock, Mail, MapPin, Phone } from "@lucide/astro";
+import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "@lucide/astro";
+import { socialLinks } from "../site-config";
 import type { SiteSettings } from "../lib/cms/types";
 
 interface Props { settings: SiteSettings }
@@ -19,8 +20,8 @@ const explore = [
 <footer class="site-footer relative bg-indigo text-cotton">
   <hr class="band-major on-dark" aria-hidden="true" />
   <div class="site-container py-12 lg:py-16">
-    <div class="grid gap-10 pt-6 md:grid-cols-2 lg:grid-cols-4">
-      <div class="lg:col-span-2">
+    <div class="footer-grid pt-6">
+      <div>
         <div class="mb-4 flex items-center gap-3">
           <span class="brand-mark" aria-hidden="true">FNBC</span>
           <div>
@@ -49,14 +50,24 @@ const explore = [
 
       <div>
         <h2 class="mb-4 font-serif text-lg font-semibold">Explore</h2>
-        <ul class="space-y-2">
+        <ul class="footer-links">
           {explore.map((link) => <li><a href={link.href} class="text-sm text-cotton/80 transition-colors hover:text-white">{link.name}</a></li>)}
         </ul>
-        <h2 class="mb-4 mt-8 font-serif text-lg font-semibold">Contact</h2>
+      </div>
+      <div>
+        <h2 class="mb-4 font-serif text-lg font-semibold">Contact</h2>
         <ul class="space-y-3">
           <li class="flex items-start gap-3"><Mail class="mt-1 size-4 shrink-0 text-cotton/70" aria-hidden="true" /><a href={`mailto:${settings.email}`} class="break-all text-sm text-cotton/80 hover:text-white">{settings.email}</a></li>
           <li class="flex items-center gap-3"><Phone class="size-4 shrink-0 text-cotton/70" aria-hidden="true" /><a href={`tel:${settings.phoneHref}`} class="text-sm text-cotton/80 hover:text-white">{settings.phoneDisplay}</a></li>
         </ul>
+        <h2 class="mb-3 mt-8 font-serif text-lg font-semibold">Follow along</h2>
+        <div class="flex flex-wrap gap-2">
+          {socialLinks.map((link) => (
+            <a href={link.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 border border-cotton/25 px-3 py-2 text-sm font-medium text-cotton/85 transition-colors hover:border-cotton hover:bg-cotton/10 hover:text-white">
+              {link.name}<ArrowUpRight class="size-3.5" aria-hidden="true" />
+            </a>
+          ))}
+        </div>
       </div>
     </div>
     <div class="mt-12 border-t border-cotton/20 pt-8"><p class="text-center text-sm text-cotton/60">&copy; {new Date().getFullYear()} {settings.name}. All rights reserved.</p></div>

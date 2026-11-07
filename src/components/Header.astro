@@ -8,6 +8,7 @@ const { settings } = Astro.props;
 
 const routePath = Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
 const currentPath = routePath === "/" ? "/" : routePath.replace(/\/$/, "");
+const isCurrent = (href: string) => currentPath === href || (href !== "/" && currentPath.startsWith(`${href}/`));
 ---
 
 <header class="site-header sticky top-0 z-50 border-b">
@@ -15,30 +16,30 @@ const currentPath = routePath === "/" ? "/" : routePath.replace(/\/$/, "");
     <div class="header-inner flex items-center justify-between gap-4">
       <a href="/" class="flex items-center gap-3 no-underline" aria-label={`${settings.name} home`}>
         <span class="brand-mark" aria-hidden="true">FNBC</span>
-        <span class="hidden sm:block">
-          <span class="block font-serif text-lg font-semibold leading-tight">{settings.name}</span>
+        <span>
+          <span class="block max-w-52 font-serif text-sm font-semibold leading-tight sm:max-w-none sm:text-lg">{settings.name}</span>
           <span class="wordmark-location block text-[.65rem] font-semibold uppercase tracking-[.18em]">{settings.region}</span>
         </span>
       </a>
 
-      <div class="hidden items-center gap-7 md:flex">
+      <div class="hidden items-center gap-6 lg:flex">
         {primaryNavigation.map((item) => (
-          <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined} class="nav-link text-sm transition-colors">
+          <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined} class="nav-link text-sm transition-colors">
             {item.name}
           </a>
         ))}
       </div>
 
-      <button id="menu-button" class="menu-control flex size-11 items-center justify-center rounded-sm md:hidden" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation menu">
+      <button id="menu-button" class="menu-control flex size-11 shrink-0 items-center justify-center rounded-sm lg:hidden" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation menu">
         <Menu data-menu-open class="size-6" aria-hidden="true" />
         <X data-menu-close class="hidden size-6" aria-hidden="true" />
       </button>
     </div>
 
-    <div id="mobile-menu" class="hidden border-t border-white/15 py-4 md:hidden">
+    <div id="mobile-menu" class="hidden border-t border-white/15 py-4 lg:hidden">
       <div class="flex flex-col gap-1">
         {navigation.map((item) => (
-          <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined} class:list={["rounded-sm px-3 py-3 font-medium hover:bg-white/10", currentPath === item.href ? "bg-white/10 text-white" : "text-white/70"]}>
+          <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined} class:list={["rounded-sm px-3 py-3 font-medium hover:bg-white/10", isCurrent(item.href) ? "bg-white/10 text-white underline underline-offset-4" : "text-white/80"]}>
             {item.name}
           </a>
         ))}
@@ -63,6 +64,13 @@ const currentPath = routePath === "/" ? "/" : routePath.replace(/\/$/, "");
   };
 
   button?.addEventListener("click", () => setMenu(button.getAttribute("aria-expanded") !== "true"));
+  menu?.addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest("a")) setMenu(false);
+  });
+  document.addEventListener("click", (event) => {
+    if (event.target instanceof Node && !button?.contains(event.target) && !menu?.contains(event.target)) setMenu(false);
+  });
+  window.matchMedia("(min-width: 1024px)").addEventListener("change", () => setMenu(false));
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && button?.getAttribute("aria-expanded") === "true") {
       setMenu(false);

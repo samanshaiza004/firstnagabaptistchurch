@@ -19,9 +19,10 @@ const nameFields = [
 
 <BaseLayout title={`Visit | ${settings.name}`} description={page.seo.description} socialImage={page.seo.socialImage}>
   <PageHero
+    compact
     eyebrow="Plan a Visit"
     title="Visit First Naga Baptist Church"
-    description="We would love to welcome you. Here is everything you need to join us this Sunday."
+    description="We would love to welcome you. Find service times, directions, and contact information for your Sunday visit."
     image={page.hero.image}
   />
 
@@ -33,7 +34,7 @@ const nameFields = [
     <div class="site-container">
       <div class="section-heading-grid mb-12">
         <div>
-          <p class="eyebrow">{home.serviceEyebrow}</p>
+
           <h2 id="sunday-title" class="section-title">{home.serviceTitle}</h2>
         </div>
         <p class="section-copy">{home.serviceDescription}</p>
@@ -64,7 +65,7 @@ const nameFields = [
   <section class="section bg-muted/40" aria-labelledby="expect-title">
     <div class="site-container">
       <div class="section-heading-grid mb-12">
-        <div><p class="eyebrow">Your first Sunday</p><h2 id="expect-title" class="section-title">What to expect</h2></div>
+        <div><h2 id="expect-title" class="section-title">What to expect</h2></div>
         <p class="section-copy">A reverent, welcoming gathering centered on Scripture, prayer, worship, and time together as a church family.</p>
       </div>
       <div class="grid gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
@@ -89,7 +90,7 @@ const nameFields = [
   <section class="section" aria-labelledby="contact-title">
     <div class="site-container">
       <div class="mb-12 text-center">
-        <p class="eyebrow">Contact Us</p>
+
         <h2 id="contact-title" class="section-title mb-4">Get in Touch</h2>
         <p class="section-copy mx-auto">Questions about visiting, a prayer request, or something else? Reach us directly or send a message below.</p>
       </div>
@@ -109,6 +110,7 @@ const nameFields = [
         <div id="form-panel">
           <h3 class="mb-2 font-serif text-2xl font-bold">{page.formTitle}</h3>
           <p class="mb-8 text-muted-foreground">{page.formDescription}</p>
+          <p class="mb-6 text-sm text-muted-foreground">Fields marked * are required.</p>
           <div id="submit-error" class="mb-6 hidden rounded-md border border-oxblood/40 bg-oxblood/10 p-4 text-oxblood" role="alert" tabindex="-1"><h4 class="font-medium">Error sending message</h4><p class="mt-1 text-sm" data-error-message></p></div>
           <manner-form>
             <form id="contact-form" class="space-y-6">

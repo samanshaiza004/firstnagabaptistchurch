@@ -33,3 +33,8 @@ export const navigation = [
 
 /** Desktop header links; Home is omitted because the wordmark already links home. */
 export const primaryNavigation = navigation.filter((item) => item.href !== "/");
+
+export const socialLinks = [
+  { name: "Facebook", href: "https://www.facebook.com/share/1EUo1Etp5P/" },
+  { name: "YouTube", href: "https://m.youtube.com/@FNBC-316" },
+] as const;

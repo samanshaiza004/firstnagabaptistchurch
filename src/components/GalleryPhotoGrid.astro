@@ -43,16 +43,16 @@ const photos = await Promise.all([...sourcePhotos].sort((a, b) => a.order - b.or
 <dialog id="gallery-lightbox" class="gallery-lightbox" aria-labelledby="lightbox-title">
   <div class="lightbox-frame">
     <button type="button" class="lightbox-close" data-lightbox-close aria-label="Close expanded photo"><X class="size-6" aria-hidden="true" /></button>
-    <button type="button" class="lightbox-nav lightbox-prev" data-lightbox-prev aria-label="View previous photo"><ChevronLeft class="size-7" aria-hidden="true" /></button>
+    <button type="button" class="lightbox-nav lightbox-prev" data-lightbox-prev aria-label="View previous photo" hidden={photos.length < 2}><ChevronLeft class="size-7" aria-hidden="true" /></button>
     <figure class="lightbox-figure">
       <div class="lightbox-image-wrap"><img data-lightbox-image alt="" /></div>
       <figcaption>
-        <p class="lightbox-position" data-lightbox-position></p>
+        <p class="lightbox-position" data-lightbox-position role="status" aria-live="polite"></p>
         <h2 id="lightbox-title" data-lightbox-title></h2>
         <p data-lightbox-caption></p>
       </figcaption>
     </figure>
-    <button type="button" class="lightbox-nav lightbox-next" data-lightbox-next aria-label="View next photo"><ChevronRight class="size-7" aria-hidden="true" /></button>
+    <button type="button" class="lightbox-nav lightbox-next" data-lightbox-next aria-label="View next photo" hidden={photos.length < 2}><ChevronRight class="size-7" aria-hidden="true" /></button>
   </div>
 </dialog>
 
@@ -99,8 +99,9 @@ const photos = await Promise.all([...sourcePhotos].sort((a, b) => a.order - b.or
   .gallery-masonry { column-count: 1; column-gap: 1.25rem; }
   .gallery-item { display: inline-block; width: 100%; margin: 0 0 1.25rem; break-inside: avoid; border: 1px solid var(--color-border); background: var(--color-card); }
   .gallery-trigger { position: relative; display: block; width: 100%; overflow: hidden; border: 0; padding: 0; background: var(--color-muted); color: inherit; cursor: zoom-in; text-align: left; }
-  .gallery-trigger::after { position: absolute; inset: 0; border: 0 solid var(--color-oxblood); content: ""; transition: border-width .18s ease; pointer-events: none; }
-  .gallery-trigger:hover::after, .gallery-trigger:focus-visible::after { border-width: 5px; }
+  .gallery-trigger::after { position: absolute; inset: 0; border: 3px solid var(--color-cotton); content: ""; opacity: 0; transition: opacity .16s ease; pointer-events: none; }
+  .gallery-trigger:focus-visible::after { opacity: 1; transition: none; }
+  @media (hover: hover) and (pointer: fine) { .gallery-trigger:hover::after { opacity: 1; } }
   .gallery-photo { display: block; width: 100%; height: auto; }
   .gallery-view { position: absolute; right: .75rem; bottom: .75rem; display: inline-flex; align-items: center; gap: .4rem; padding: .45rem .65rem; background: rgb(23 27 25 / .9); color: var(--color-cotton); font-size: .7rem; font-weight: 720; letter-spacing: .04em; }
   .gallery-item figcaption { padding: .9rem 1rem 1rem; }

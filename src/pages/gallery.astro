@@ -24,7 +24,7 @@ const collections = [...eventMap.values()].sort((a, b) => b.firstOrder - a.first
   <section class="section" aria-labelledby="gallery-title">
     <div class="site-container">
       <header class="section-heading-grid mb-12">
-        <div><p class="eyebrow">{page.introEyebrow}</p><h2 id="gallery-title" class="section-title">Event collections</h2></div>
+        <div><h2 id="gallery-title" class="section-title">Event collections</h2></div>
         <div><p class="section-copy">{page.introDescription}</p><p class="mt-4 inline-flex items-center gap-2 text-sm font-semibold"><Images class="size-4 text-oxblood" aria-hidden="true" />{gallery.length} photographs across {collections.length} collections</p></div>
       </header>
 
@@ -47,7 +47,7 @@ const collections = [...eventMap.values()].sort((a, b) => b.firstOrder - a.first
       </div>
 
       <aside class="mt-16 grid items-center gap-6 border-t-[6px] border-primary bg-card p-7 md:grid-cols-[1fr_1fr_auto]" aria-labelledby="share-photos-title">
-        <div><p class="eyebrow">{page.shareEyebrow}</p><h2 id="share-photos-title" class="font-serif text-3xl font-semibold">{page.shareTitle}</h2></div>
+        <div><h2 id="share-photos-title" class="font-serif text-3xl font-semibold">{page.shareTitle}</h2></div>
         <p class="text-muted-foreground">{page.shareDescription}</p>
         <a class="button w-fit" href={`mailto:${settings.email}?subject=Church%20gallery%20photos`}>{page.shareButtonLabel}</a>
       </aside>

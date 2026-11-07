@@ -12,8 +12,8 @@ const studioUrl = import.meta.env.PUBLIC_SANITY_STUDIO_URL ?? "https://first-nag
     <div class="site-container admin-grid">
       <div class="admin-copy">
         <span class="admin-icon" aria-hidden="true"><LockKeyhole class="size-7" /></span>
-        <p class="eyebrow">Authorized staff</p>
         <h1>Church Website Admin</h1>
+        <p class="staff-notice">For authorized staff</p>
         <p>Update events, photographs, ministry teams, church information, page text, and giving details through the church’s secure content studio.</p>
         <a class="button" href={studioUrl} rel="nofollow noopener">Open content studio <ExternalLink class="size-4" aria-hidden="true" /></a>
       </div>
@@ -31,7 +31,8 @@ const studioUrl = import.meta.env.PUBLIC_SANITY_STUDIO_URL ?? "https://first-nag
   .admin-copy { max-width: 46rem; }
   .admin-icon { display: grid; width: 3.5rem; height: 3.5rem; margin-bottom: 1.5rem; place-items: center; background: var(--color-indigo); color: var(--color-cotton); }
   .admin-copy h1 { max-width: 12ch; font-family: var(--font-serif); font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 600; line-height: .95; }
-  .admin-copy > p:not(.eyebrow) { max-width: 42rem; margin-block: 1.75rem; color: var(--color-muted-foreground); font-size: 1.05rem; line-height: 1.7; }
+  .admin-copy > p { max-width: 42rem; margin-block: 1.75rem; color: var(--color-muted-foreground); font-size: 1.05rem; line-height: 1.7; }
+  .admin-copy .staff-notice { margin-block: 1rem; color: var(--color-oxblood); font-size: .875rem; font-weight: 650; }
   .admin-note { display: flex; gap: 1rem; border: 1px solid var(--color-border); border-top: 5px solid var(--color-oxblood); padding: 1.5rem; background: var(--color-card); }
   .admin-note h2 { margin-bottom: .4rem; font-family: var(--font-serif); font-size: 1.3rem; font-weight: 650; }
   .admin-note p { color: var(--color-muted-foreground); font-size: .9rem; line-height: 1.6; }
